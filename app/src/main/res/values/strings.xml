@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Echo Music</string>
-
+    <string name="tooltip_search_text">Search</string>
+    <string name="tooltip_settings_text">Settings</string>
+    <string name="tooltip_songs_text">All songs</string>
+    <string name="tooltip_albums_text">Albums</string>
+    <string name="tooltip_artists_text">Artists</string>
+    <string name="tooltip_playlists_text">Playlists</string>
+    <string name="tooltip_options_text">Options/Menu</string>
+    <string name="tooltip_play_pause_song_text">Play/Pause song</string>
+    <string name="tooltip_next_song_text">Next song</string>
+    <string name="tooltip_previous_song_text">Previous song</string>
+    <string name="tooltip_repeat_mode_text">Repeat song</string>
+    <string name="tooltip_shuffle_mode_text">Shuffle songs</string>
 </resources>

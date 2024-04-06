@@ -1,6 +1,7 @@
 
 package com.itsmcodez.echomusic;
 
+import android.view.Menu;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.itsmcodez.echomusic.databinding.ActivityMainBinding;
@@ -17,6 +18,35 @@ public class MainActivity extends AppCompatActivity {
 
         // set content view to binding's root
         setContentView(binding.getRoot());
+        
+        // ActionBar
+        setSupportActionBar(binding.toolbar);
+        
+        // BottomNavigation
+        binding.bottomNav.setOnItemSelectedListener( item -> {
+                
+                if(item.getItemId() == R.id.songs_menu_item) {
+                    
+                    return true;
+                }
+                
+                if(item.getItemId() == R.id.albums_menu_item) {
+                    
+                    return true;
+                }
+                
+                if(item.getItemId() == R.id.artists_menu_item) {
+                    
+                    return true;
+                }
+                
+                if(item.getItemId() == R.id.playlists_menu_item) {
+                    
+                    return true;
+                }
+                
+                return false;
+        });
     }
     
     @Override
@@ -24,4 +54,12 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         this.binding = null;
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_action_bar_menu, menu);
+        
+        return super.onCreateOptionsMenu(menu);
+    }
+    
 }
