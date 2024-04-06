@@ -1,0 +1,20 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/AndroidManifest.xml",
+      "selection": {
+        "end": {
+          "column": 74,
+          "index": 738,
+          "line": 12
+        },
+        "start": {
+          "column": 74,
+          "index": 738,
+          "line": 12
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/AndroidManifest.xml"
+}
