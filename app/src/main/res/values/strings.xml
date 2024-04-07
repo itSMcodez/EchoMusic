@@ -13,4 +13,8 @@
     <string name="tooltip_previous_song_text">Previous song</string>
     <string name="tooltip_repeat_mode_text">Repeat song</string>
     <string name="tooltip_shuffle_mode_text">Shuffle songs</string>
+    <string name="fragment_songs_title">Songs</string>
+    <string name="fragment_albums_title">Albums</string>
+    <string name="fragment_artists_title">Artists</string>
+    <string name="fragment_playlists_title">Playlists</string>
 </resources>

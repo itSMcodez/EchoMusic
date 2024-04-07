@@ -14,7 +14,8 @@
         android:textAlignment="textStart"
         android:textStyle="bold"
         android:typeface="serif"
-        android:textSize="24sp"/>
+        android:textSize="24sp"
+        android:text="@string/fragment_songs_title"/>
     
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
