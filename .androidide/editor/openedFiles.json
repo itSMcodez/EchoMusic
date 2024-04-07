@@ -1,0 +1,110 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/preferences/fragments/GeneralPreferenceFragment.java",
+      "selection": {
+        "end": {
+          "column": 8,
+          "index": 570,
+          "line": 16
+        },
+        "start": {
+          "column": 8,
+          "index": 570,
+          "line": 16
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/SettingsActivity.java",
+      "selection": {
+        "end": {
+          "column": 62,
+          "index": 764,
+          "line": 19
+        },
+        "start": {
+          "column": 62,
+          "index": 764,
+          "line": 19
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/res/layout/activity_settings.xml",
+      "selection": {
+        "end": {
+          "column": 42,
+          "index": 922,
+          "line": 23
+        },
+        "start": {
+          "column": 42,
+          "index": 922,
+          "line": 23
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/MainActivity.java",
+      "selection": {
+        "end": {
+          "column": 8,
+          "index": 3099,
+          "line": 89
+        },
+        "start": {
+          "column": 8,
+          "index": 3099,
+          "line": 89
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/AndroidManifest.xml",
+      "selection": {
+        "end": {
+          "column": 41,
+          "index": 1531,
+          "line": 36
+        },
+        "start": {
+          "column": 41,
+          "index": 1531,
+          "line": 36
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/res/layout/activity_main.xml",
+      "selection": {
+        "end": {
+          "column": 39,
+          "index": 245,
+          "line": 4
+        },
+        "start": {
+          "column": 39,
+          "index": 245,
+          "line": 4
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/res/values/strings.xml",
+      "selection": {
+        "end": {
+          "column": 70,
+          "index": 169,
+          "line": 3
+        },
+        "start": {
+          "column": 70,
+          "index": 169,
+          "line": 3
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/AndroidManifest.xml"
+}

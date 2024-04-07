@@ -1,7 +1,9 @@
 
 package com.itsmcodez.echomusic;
 
+import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -81,6 +83,17 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.activity_main_action_bar_menu, menu);
         
         return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        
+        if(item.getItemId() == R.id.settings_menu_item) {
+        	startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            return true;
+        }
+        
+        return super.onOptionsItemSelected(item);
     }
     
 }
