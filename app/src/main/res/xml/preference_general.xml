@@ -1,0 +1,49 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:icon="@drawable/ic_settings"
+        app:title="@string/app_name">
+
+        <EditTextPreference
+            app:key="signature"
+            app:title="@string/tooltip_options_text"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:icon="@drawable/ic_music_note_outline"
+        app:title="@string/fragment_songs_title">
+
+        <SwitchPreferenceCompat
+            app:key="sync"
+            app:title="@string/fragment_albums_title" />
+
+        <SwitchPreferenceCompat
+            app:dependency="sync"
+            app:key="attachment"
+            app:summaryOff="@string/app_name"
+            app:summaryOn="@string/tooltip_play_pause_song_text"
+            app:title="@string/app_name" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:icon="@drawable/ic_sort"
+        app:title="Notifications">
+
+        <SeekBarPreference
+            app:key="volume_notifications"
+            app:title="Volume"
+            app:showSeekBarValue="true"
+            app:defaultValue= "60" />
+
+        <SwitchPreferenceCompat
+            app:key="notifications"
+            app:title="Disable notifications"
+            app:summaryOn="You will no longer receive any notifications"
+           app:summaryOff="You will receive all notifications"/>
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
