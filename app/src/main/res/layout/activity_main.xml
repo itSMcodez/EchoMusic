@@ -23,6 +23,11 @@
         android:layout_below="@id/appbar"
         android:layout_above="@id/bottom_nav">
         
+        <FrameLayout
+            android:id="@+id/fragmentHolder"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+        
     </FrameLayout>
     
     <com.google.android.material.bottomnavigation.BottomNavigationView
