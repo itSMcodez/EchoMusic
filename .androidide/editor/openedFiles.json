@@ -1,0 +1,50 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/fragments/PlaylistsFragment.java",
+      "selection": {
+        "end": {
+          "column": 4,
+          "index": 648,
+          "line": 18
+        },
+        "start": {
+          "column": 4,
+          "index": 648,
+          "line": 18
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/res/layout/fragment_playlists.xml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 833,
+          "line": 24
+        },
+        "start": {
+          "column": 0,
+          "index": 833,
+          "line": 24
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/res/layout/fragment_artists.xml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 833,
+          "line": 24
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/fragments/PlaylistsFragment.java"
+}
