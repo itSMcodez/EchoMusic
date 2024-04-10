@@ -28,8 +28,8 @@ public class SettingsActivity extends AppCompatActivity {
         
         // Preference items
         PreferenceItem generalPrefItem = new PreferenceItem.Builder(getLayoutInflater())
-        .setItemTitle("General Preferences")
-        .setItemSummary("Settings for app")
+        .setItemTitle(getString(R.string.pref_item_general_title))
+        .setItemSummary(getString(R.string.pref_item_general_subtitle))
         .setItemIcon(getDrawable(R.drawable.ic_settings))
         .setItemFragment(new GeneralPreferenceFragment(this))
         .setSettingsActivity(this)

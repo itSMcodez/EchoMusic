@@ -1,0 +1,50 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/build.gradle",
+      "selection": {
+        "end": {
+          "column": 56,
+          "index": 1225,
+          "line": 51
+        },
+        "start": {
+          "column": 56,
+          "index": 1225,
+          "line": 51
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/SettingsActivity.java",
+      "selection": {
+        "end": {
+          "column": 69,
+          "index": 1395,
+          "line": 31
+        },
+        "start": {
+          "column": 69,
+          "index": 1395,
+          "line": 31
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/res/values/strings.xml",
+      "selection": {
+        "end": {
+          "column": 70,
+          "index": 1289,
+          "line": 21
+        },
+        "start": {
+          "column": 70,
+          "index": 1289,
+          "line": 21
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/SettingsActivity.java"
+}
