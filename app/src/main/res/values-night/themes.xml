@@ -13,5 +13,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="@android:statusBarColor">@android:color/transparent</item>
         <item name="@android:windowLightStatusBar">false</item>
+        <item name="roundSelector">@drawable/round_selector</item>
+        <item name="rectSelector">@drawable/rect_selector</item>
     </style>
 </resources>
