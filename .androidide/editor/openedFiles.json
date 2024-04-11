@@ -1,67 +1,37 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/adapters/ArtistsAdapter.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/repositories/ArtistsRepository.java",
       "selection": {
         "end": {
-          "column": 16,
-          "index": 1950,
-          "line": 52
+          "column": 38,
+          "index": 2127,
+          "line": 56
         },
         "start": {
-          "column": 16,
-          "index": 1950,
-          "line": 52
+          "column": 38,
+          "index": 2127,
+          "line": 56
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/adapters/AlbumsAdapter.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/repositories/AlbumsRepository.java",
       "selection": {
         "end": {
-          "column": 100,
-          "index": 2141,
-          "line": 54
+          "column": 24,
+          "index": 1308,
+          "line": 35
         },
         "start": {
-          "column": 100,
-          "index": 2141,
-          "line": 54
+          "column": 24,
+          "index": 1308,
+          "line": 35
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/res/layout/layout_album_item.xml",
-      "selection": {
-        "end": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        },
-        "start": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/res/layout/layout_artist_item.xml",
-      "selection": {
-        "end": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        },
-        "start": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/adapters/SongsAdapter.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/repositories/SongsRepository.java",
       "selection": {
         "end": {
           "column": 0,
@@ -76,5 +46,5 @@
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/adapters/ArtistsAdapter.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/repositories/ArtistsRepository.java"
 }
