@@ -29,7 +29,7 @@ public final class AlbumsRepository {
         if(instance == null) {
         	instance = new AlbumsRepository();
         }
-        return instance;
+        return AlbumsRepository.instance;
     }
     
     public ArrayList<AlbumsModel> getAlbums() {
