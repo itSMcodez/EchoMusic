@@ -26,9 +26,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.AlbumsView
     }
 
     public static class AlbumsViewHolder extends RecyclerView.ViewHolder {
-        private RelativeLayout itemView;
-        private CircleImageView albumArtwork;
-        private TextView title;
+        public RelativeLayout itemView;
+        public CircleImageView albumArtwork;
+        public TextView title;
 
         public AlbumsViewHolder(LayoutAlbumItemBinding binding) {
             super(binding.getRoot());
@@ -52,7 +52,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.AlbumsView
         viewHolder.title.setText(album.getAlbum());
         viewHolder.albumArtwork.setImageURI(album.getAlbumArtwork());
         if(viewHolder.albumArtwork.getDrawable() == null) {
-        	viewHolder.albumArtwork.setImageDrawable(context.getDrawable(R.drawable.ic_album_outline));
+        	viewHolder.albumArtwork.setImageDrawable(context.getDrawable(R.drawable.ic_album_artwork));
         }
         
         viewHolder.itemView.setOnClickListener(view -> {
