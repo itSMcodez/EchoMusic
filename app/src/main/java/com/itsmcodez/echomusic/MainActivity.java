@@ -102,6 +102,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         
+        if(item.getItemId() == R.id.search_menu_item) {
+        	startActivity(new Intent(MainActivity.this, SearchableActivity.class));
+            return true;
+        }
+        
         return super.onOptionsItemSelected(item);
     }
     
