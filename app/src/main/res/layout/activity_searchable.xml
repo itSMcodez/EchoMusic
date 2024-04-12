@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_view"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="match_parent"
+            app:iconifiedByDefault="false"
+            app:queryHint="@string/activity_searchable_action_bar_title"/>
+        
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/search_filters"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            app:singleSelection="true"
+            app:selectionRequired="true">
+            
+            <com.google.android.material.chip.Chip
+                android:id="@+id/filter_all"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:checked="true"
+                android:text="All"
+                style="@style/Widget.Material3.Chip.Filter"/>
+            
+            <com.google.android.material.chip.Chip
+                android:id="@+id/filter_songs"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Songs"
+                style="@style/Widget.Material3.Chip.Filter"/>
+            
+            <com.google.android.material.chip.Chip
+                android:id="@+id/filter_artists"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Artists"
+                style="@style/Widget.Material3.Chip.Filter"/>
+            
+        </com.google.android.material.chip.ChipGroup>
+        
+    </com.google.android.material.appbar.AppBarLayout>
+    
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
+    
+</LinearLayout>
