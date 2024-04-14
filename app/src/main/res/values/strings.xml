@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Echo Music</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
     <string name="activity_settings_action_bar_title">Settings</string>
     <string name="activity_searchable_action_bar_title">Search for songs/artists</string>
+    <string name="add_playlist_textinput_hint">Enter playlist name</string>
+    <string name="add_playlist_dialog_title">Add new playlist</string>
+    <string name="add_playlist_dialog_empty_input_rationale">Please type a name for the playlist!</string>
     <string name="tooltip_search_text">Search</string>
     <string name="tooltip_settings_text">Settings</string>
     <string name="tooltip_songs_text">All songs</string>

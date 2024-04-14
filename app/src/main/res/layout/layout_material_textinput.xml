@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+        
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_input"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:inputType="textCapSentences"/>
+        
+    </com.google.android.material.textfield.TextInputLayout>
+    
+</RelativeLayout>

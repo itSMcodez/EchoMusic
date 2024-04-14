@@ -17,6 +17,35 @@
         android:textSize="24sp"
         android:text="@string/fragment_playlists_title"/>
     
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        
+        <Button
+            android:id="@+id/fav_bt"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Favourites"
+            android:layout_weight="1"
+            app:icon="@drawable/ic_heart"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"/>
+        
+        <Button
+            android:id="@+id/add_playlist_bt"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Add playlist"
+            android:layout_weight="1"
+            app:icon="@drawable/ic_playlist_plus"
+            style="@style/Widget.Material3.Button.TonalButton.Icon"/>
+        
+    </LinearLayout>
+    
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_height="match_parent"
