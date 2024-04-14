@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/delete_playlist_menu_item"
+        android:name="@string/delete"
+        android:title="@string/delete" />
+    
+    <item
+        android:id="@+id/rename_playlist_menu_item"
+        android:name="@string/rename"
+        android:title="@string/rename" />
+    
+    <item
+        android:id="@+id/add_playlist_to_queue_menu_item"
+        android:name="@string/add_to_queue"
+        android:title="@string/add_to_queue" />
+
+</menu>

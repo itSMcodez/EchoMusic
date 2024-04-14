@@ -2,9 +2,11 @@ package com.itsmcodez.echomusic.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.itsmcodez.echomusic.R;
@@ -75,7 +77,17 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
         });
         
         viewHolder.itemMenu.setOnClickListener(view -> {
-                
+                PopupMenu menu = new PopupMenu(context, view);
+                menu.inflate(R.menu.menu_playlist_item);
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            
+                            return false;
+                        }
+                        
+                });
+                menu.show();
         });
     }
 
