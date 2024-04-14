@@ -4,16 +4,16 @@
 
     <item
         android:id="@+id/search_menu_item"
-        android:name="Search"
-        android:title="Search"
+        android:name="@string/tooltip_search_text"
+        android:title="@string/tooltip_search_text"
         android:icon="@drawable/ic_search"
         app:tooltipText="@string/tooltip_search_text"
         app:showAsAction="ifRoom" />
     
     <item
         android:id="@+id/settings_menu_item"
-        android:name="Settings"
-        android:title="Settings"
+        android:name="@string/tooltip_settings_text"
+        android:title="@string/tooltip_settings_text"
         android:icon="@drawable/ic_settings"
         app:tooltipText="@string/tooltip_settings_text"
         app:showAsAction="ifRoom" />
