@@ -20,6 +20,12 @@ public final class PlaylistUtils {
         savePlaylistsToDB(application, allPlaylists);
     }
     
+    public static void deletePlaylistAt(Application application, int position) {
+    	allPlaylists = getPlaylistsFromDB(application);
+        allPlaylists.remove(position);
+        savePlaylistsToDB(application, allPlaylists);
+    }
+    
     private static void savePlaylistsToDB(Application application, ArrayList<PlaylistsModel> playlists) {
     	Gson gson = new Gson();
         String playlistsData = gson.toJson(playlists);
@@ -47,4 +53,5 @@ public final class PlaylistUtils {
         
     	return playlists;
     }
+    
 }

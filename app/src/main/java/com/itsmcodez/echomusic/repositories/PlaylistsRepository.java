@@ -37,4 +37,10 @@ public final class PlaylistsRepository {
         playlists = PlaylistUtils.getAllPlaylists(application);
         allPlaylists.setValue(playlists);
     }
+    
+    public void deletePlaylistAt(int position) {
+    	PlaylistUtils.deletePlaylistAt(application, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
 }

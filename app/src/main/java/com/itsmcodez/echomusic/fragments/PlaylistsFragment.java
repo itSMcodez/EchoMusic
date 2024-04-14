@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class PlaylistsFragment extends Fragment {
     private FragmentPlaylistsBinding binding;
     private PlaylistsAdapter playlistsAdapter;
-    private PlaylistsViewModel playlistsViewModel;
+    private static PlaylistsViewModel playlistsViewModel;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,4 +84,7 @@ public class PlaylistsFragment extends Fragment {
         addPlaylistDialog.show();
     }
     
+    public static void deletePlaylistAt(int position) {
+    	playlistsViewModel.deletePlaylistAt(position);
+    }
 }
