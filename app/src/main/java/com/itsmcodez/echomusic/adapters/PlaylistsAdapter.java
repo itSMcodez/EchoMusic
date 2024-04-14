@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.R;
+import com.itsmcodez.echomusic.databinding.LayoutMaterialTextinputBinding;
 import com.itsmcodez.echomusic.databinding.LayoutPlaylistItemBinding;
 import com.itsmcodez.echomusic.fragments.PlaylistsFragment;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
@@ -108,6 +109,40 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
                                 dialog.show();
                                 
                             	return true;
+                            }
+                            
+                            if(item.getItemId() == R.id.rename_playlist_menu_item) {
+                                
+                            	LayoutMaterialTextinputBinding textInputBinding = LayoutMaterialTextinputBinding.inflate(inflater);
+                                textInputBinding.textInputLayout.setHint(R.string.add_playlist_textinput_hint);
+                                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context)
+                                .setView(textInputBinding.getRoot())
+                                .setTitle(R.string.rename)
+                                .setMessage("You are renaming " + playlist.getTitle() + "\nType the new name below")
+                                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                })
+                                .setPositiveButton(R.string.rename, new DialogInterface.OnClickListener(){
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            
+                                            // check for null input 
+                                            if(textInputBinding.textInput.getText().toString().trim().isEmpty()){
+                                                Toast.makeText(context, R.string.add_playlist_dialog_empty_input_rationale, Toast.LENGTH_LONG).show();
+                                            } else {
+                                                String newPlaylistName = textInputBinding.textInput.getText().toString();
+                                                Toast.makeText(context, "Renamed " + playlist.getTitle() + " to " + newPlaylistName, Toast.LENGTH_LONG).show();
+                                                PlaylistsFragment.renamePlaylistAt(newPlaylistName, position);
+                                            }
+                                            
+                                        }
+                                });
+                                dialog.show();
+                                
+                                return true;
                             }
                             
                             return false;

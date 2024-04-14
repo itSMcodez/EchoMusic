@@ -43,4 +43,10 @@ public final class PlaylistsRepository {
         playlists = PlaylistUtils.getAllPlaylists(application);
         allPlaylists.setValue(playlists);
     }
+    
+    public void renamePlaylistAt(String name, int position) {
+    	PlaylistUtils.renamePlaylistAt(application, name, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
 }

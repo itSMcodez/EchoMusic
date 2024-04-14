@@ -26,6 +26,12 @@ public final class PlaylistUtils {
         savePlaylistsToDB(application, allPlaylists);
     }
     
+    public static void renamePlaylistAt(Application application, String name, int position) {
+    	allPlaylists = getPlaylistsFromDB(application);
+        allPlaylists.get(position).setTitle(name);
+        savePlaylistsToDB(application, allPlaylists);
+    }
+    
     private static void savePlaylistsToDB(Application application, ArrayList<PlaylistsModel> playlists) {
     	Gson gson = new Gson();
         String playlistsData = gson.toJson(playlists);
