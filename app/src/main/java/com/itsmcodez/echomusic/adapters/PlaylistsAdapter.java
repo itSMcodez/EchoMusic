@@ -60,20 +60,15 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
         
         viewHolder.title.setText(playlist.getTitle());
         if(playlist.getSongs() != null && playlist.getSongs().size() != 0) {
-            
-        	if(playlist.getSongs().size() == 1) {
-        		viewHolder.info.setText("1 song • ");
-        	} else {
-        		var songCount = String.valueOf(playlist.getSongs().size());
-                viewHolder.info.setText(songCount + " songs • ");
-        	}
-            
+            var songsCount = playlist.getSongs().size();
+            viewHolder.info.setText(context.getResources().getQuantityString(R.plurals.playlist_songs_count, songsCount, songsCount));
             viewHolder.albumArtwork.setImageURI(ArtworkUtils.getArtworkFrom(Long.parseLong(playlist.getSongs().get(playlist.getSongs().size() - 1).getAlbumId())));
             if(viewHolder.albumArtwork.getDrawable() == null) {
             	viewHolder.albumArtwork.setImageDrawable(context.getDrawable(R.drawable.ic_library_music_outline));
             }
         } else {
-            viewHolder.info.setText("0 songs • 00:00");
+            var songsCount = 0;
+            viewHolder.info.setText(context.getResources().getQuantityString(R.plurals.playlist_songs_count, songsCount, songsCount));
             viewHolder.albumArtwork.setImageDrawable(context.getDrawable(R.drawable.ic_library_music_outline));
         }
         
@@ -92,7 +87,7 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
                                 
                                 MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context)
                                 .setTitle(R.string.delete_playlist_confirmation_dialog_title)
-                                .setMessage("Are you sure you want to delete " + playlist.getTitle() + "? This will not delete any songs in the playlist")
+                                .setMessage(context.getString(R.string.msg_delete_playlist_rationale, playlist.getTitle()))
                                 .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -102,7 +97,7 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
                                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener(){
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            Toast.makeText(context, "Deleted " + playlist.getTitle(), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(context, context.getString(R.string.msg_delete_playlist_success, playlist.getTitle()), Toast.LENGTH_LONG).show();
                                             PlaylistsFragment.deletePlaylistAt(position);
                                         }
                                 });
@@ -118,7 +113,7 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
                                 MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context)
                                 .setView(textInputBinding.getRoot())
                                 .setTitle(R.string.rename)
-                                .setMessage("You are renaming " + playlist.getTitle() + "\nType the new name below")
+                                .setMessage(context.getString(R.string.msg_rename_playlist_rationale, playlist.getTitle()))
                                 .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -134,7 +129,7 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
                                                 Toast.makeText(context, R.string.add_playlist_dialog_empty_input_rationale, Toast.LENGTH_LONG).show();
                                             } else {
                                                 String newPlaylistName = textInputBinding.textInput.getText().toString();
-                                                Toast.makeText(context, "Renamed " + playlist.getTitle() + " to " + newPlaylistName, Toast.LENGTH_LONG).show();
+                                                Toast.makeText(context, context.getString(R.string.msg_rename_playlist_success, playlist.getTitle(), newPlaylistName), Toast.LENGTH_LONG).show();
                                                 PlaylistsFragment.renamePlaylistAt(newPlaylistName, position);
                                             }
                                             
