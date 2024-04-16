@@ -15,6 +15,12 @@
     <string name="msg_delete_playlist_success">Deleted %s</string>
     <string name="msg_rename_playlist_rationale">You are renaming %s. \nType the new name below.</string>
     <string name="msg_rename_playlist_success">Renamed %1$s to %2$s</string>
+    <string name="play_next">Play next</string>
+    <string name="add_to_playlist">Add to playlist</string>
+    <string name="edit_metadata">Edit metadata</string>
+    <string name="set_ringtone">Set as ringtone</string>
+    <string name="share">Share</string>
+    <string name="details">Details</string>
     <string name="tooltip_search_text">Search</string>
     <string name="tooltip_settings_text">Settings</string>
     <string name="tooltip_songs_text">All songs</string>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/play_next_menu_item"
+        android:name="@string/play_next"
+        android:title="@string/play_next" />
+    
+    <item
+        android:id="@+id/add_to_playlist_menu_item"
+        android:name="@string/add_to_playlist"
+        android:title="@string/add_to_playlist" />
+    
+    <item
+        android:id="@+id/edit_metadata_menu_item"
+        android:name="@string/edit_metadata"
+        android:title="@string/edit_metadata" />
+    
+    <item
+        android:id="@+id/set_ringtone_menu_item"
+        android:name="@string/set_ringtone"
+        android:title="@string/set_ringtone" />
+    
+    <item
+        android:id="@+id/share_menu_item"
+        android:name="@string/share"
+        android:title="@string/share" />
+    
+    <item
+        android:id="@+id/delete_song_menu_item"
+        android:name="@string/delete"
+        android:title="@string/delete" />
+    
+    <item
+        android:id="@+id/song_details_menu_item"
+        android:name="@string/details"
+        android:title="@string/details" />
+
+</menu>
