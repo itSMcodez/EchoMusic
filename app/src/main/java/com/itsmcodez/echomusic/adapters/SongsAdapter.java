@@ -144,6 +144,18 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
                             
                             if(item.getItemId() == R.id.song_details_menu_item) {
                             	
+                                AlertDialog dialog = new MaterialAlertDialogBuilder(context)
+                                .setTitle(R.string.details)
+                                .setMessage(context.getString(R.string.song_details, song.getTitle(), song.getPath(), song.getArtist(), song.getAlbum(), song.getDuration()))
+                                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                })
+                                .create();
+                                dialog.show();
+                                
                                 return true;
                             }
                             

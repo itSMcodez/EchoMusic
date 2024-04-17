@@ -48,4 +48,5 @@
         <item quantity="one">%d song found.</item>
         <item quantity="other">%d songs found.</item>
     </plurals>
+    <string name="song_details">Name: %1$s \n \nPath: %2$s \n \nArtist: %3$s \n \nAlbum: %4$s \n \nDuration: %5$s</string>
 </resources>
