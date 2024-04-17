@@ -1,6 +1,7 @@
 package com.itsmcodez.echomusic.repositories;
 import android.app.Application;
 import androidx.lifecycle.MutableLiveData;
+import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.utils.PlaylistUtils;
 import java.util.ArrayList;
@@ -46,6 +47,12 @@ public final class PlaylistsRepository {
     
     public void renamePlaylistAt(String name, int position) {
     	PlaylistUtils.renamePlaylistAt(application, name, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
+    
+    public void addSongToPlaylistAt(PlaylistSongsModel song, int position) {
+    	PlaylistUtils.addSongToPlaylistAt(application, song, position);
         playlists = PlaylistUtils.getAllPlaylists(application);
         allPlaylists.setValue(playlists);
     }

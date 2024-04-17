@@ -10,11 +10,14 @@
     <string name="activity_searchable_action_bar_title">Search for songs/artists</string>
     <string name="add_playlist_textinput_hint">Enter playlist name</string>
     <string name="add_playlist_dialog_title">Add new playlist</string>
+    <string name="choose_playlist_dialog_title">Choose playlist</string>
     <string name="add_playlist_dialog_empty_input_rationale">Please type a name for the playlist!</string>
     <string name="msg_delete_playlist_rationale">Are you sure you want to delete %s? \nThis will not delete any songs in the playlist.</string>
     <string name="msg_delete_playlist_success">Deleted %s</string>
     <string name="msg_rename_playlist_rationale">You are renaming %s. \nType the new name below.</string>
     <string name="msg_rename_playlist_success">Renamed %1$s to %2$s</string>
+    <string name="msg_add_to_playlist_succes">Added %1$s to %2$s</string>
+    <string name="msg_add_to_playlist_exists">Song already exists!</string>
     <string name="play_next">Play next</string>
     <string name="add_to_playlist">Add to playlist</string>
     <string name="edit_metadata">Edit metadata</string>

@@ -1,8 +1,11 @@
 package com.itsmcodez.echomusic.utils;
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.itsmcodez.echomusic.R;
+import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import java.util.ArrayList;
 
@@ -29,6 +32,23 @@ public final class PlaylistUtils {
     public static void renamePlaylistAt(Application application, String name, int position) {
     	allPlaylists = getPlaylistsFromDB(application);
         allPlaylists.get(position).setTitle(name);
+        savePlaylistsToDB(application, allPlaylists);
+    }
+    
+    public static void addSongToPlaylistAt(Application application, PlaylistSongsModel song, int position) {
+    	allPlaylists = getPlaylistsFromDB(application);
+        ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs() != null ? allPlaylists.get(position).getSongs() : new ArrayList<>();
+        ArrayList<String> titles = new ArrayList<>();
+        for(PlaylistSongsModel _song : songs) {
+        	titles.add(_song.getTitle());
+        }
+        if(titles.contains(song.getTitle())) {
+        	Toast.makeText(application, R.string.msg_add_to_playlist_exists, Toast.LENGTH_LONG).show();
+        } else {
+            songs.add(song);
+            Toast.makeText(application, application.getString(R.string.msg_add_to_playlist_succes, song.getTitle(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
+        }
+        allPlaylists.get(position).setSongs(songs);
         savePlaylistsToDB(application, allPlaylists);
     }
     

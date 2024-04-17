@@ -15,6 +15,7 @@ import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.adapters.PlaylistsAdapter;
 import com.itsmcodez.echomusic.databinding.FragmentPlaylistsBinding;
 import com.itsmcodez.echomusic.databinding.LayoutMaterialTextinputBinding;
+import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.viewmodels.PlaylistsViewModel;
 import java.util.ArrayList;

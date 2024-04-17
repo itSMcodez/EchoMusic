@@ -2,6 +2,7 @@ package com.itsmcodez.echomusic.viewmodels;
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
 import com.itsmcodez.echomusic.utils.PlaylistUtils;
@@ -43,6 +44,12 @@ public class PlaylistsViewModel extends AndroidViewModel {
     
     public void renamePlaylistAt(String name, int position) {
     	playlistsRepository.renamePlaylistAt(name, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
+    
+    public void addSongToPlaylistAt(PlaylistSongsModel song, int position) {
+    	playlistsRepository.addSongToPlaylistAt(song, position);
         playlists = PlaylistUtils.getAllPlaylists(application);
         allPlaylists.setValue(playlists);
     }
