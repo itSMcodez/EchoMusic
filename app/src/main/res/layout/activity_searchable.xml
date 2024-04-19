@@ -15,7 +15,7 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
             app:iconifiedByDefault="false"
-            app:queryHint="@string/activity_searchable_action_bar_title"/>
+            app:queryHint="@string/search_query_hint"/>
         
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/search_filters"

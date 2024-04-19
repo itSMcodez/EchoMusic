@@ -7,7 +7,8 @@
     <string name="rename">Rename</string>
     <string name="add_to_queue">Add to playing queue</string>
     <string name="activity_settings_action_bar_title">Settings</string>
-    <string name="activity_searchable_action_bar_title">Search for songs/artists</string>
+    <string name="activity_searchable_action_bar_title">Echo Music - Search</string>
+    <string name="search_query_hint">Search for songs/artists</string>
     <string name="add_playlist_textinput_hint">Enter playlist name</string>
     <string name="add_playlist_dialog_title">Add new playlist</string>
     <string name="choose_playlist_dialog_title">Choose playlist</string>
