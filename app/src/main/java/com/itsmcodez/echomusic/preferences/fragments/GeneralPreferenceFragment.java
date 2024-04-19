@@ -14,7 +14,7 @@ public class GeneralPreferenceFragment extends PreferencesFragment {
     
     @Override
     protected void onPrefScreenAttached(final SharedPreferences KEY) {
-        
+        // TODO: implement this in the next update 
     }
     
 }

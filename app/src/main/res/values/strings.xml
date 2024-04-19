@@ -42,6 +42,10 @@
     <string name="fragment_playlists_title">Playlists</string>
     <string name="pref_item_general_title">General Preferences</string>
     <string name="pref_item_general_subtitle">Settings for Echo Music app</string>
+    <string name="pref_category_ui">UI Mode</string>
+    <string name="pref_mode_dark">Enable dark mode</string>
+    <string name="mode_dark_on">Requires restart \nDark mode has been enabled</string>
+    <string name="mode_dark_off">Requires restart \nDark mode has been disabled</string>
     <string name="delete_playlist_confirmation_dialog_title">Confirm deletion</string>
     <plurals name="playlist_songs_count">
         <item quantity="zero">0 songs found.</item>

@@ -1,13 +1,13 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:icon="@drawable/ic_settings"
-        app:title="@string/app_name">
+        app:title="@string/pref_category_ui">
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/tooltip_options_text"
-            app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat
+            app:key="mode_dark"
+            app:summaryOff="@string/mode_dark_off"
+            app:summaryOn="@string/mode_dark_on"
+            app:title="@string/pref_mode_dark" />
 
     </PreferenceCategory>
 

@@ -24,6 +24,13 @@ public class PreferenceItem {
         
         binding.item.setOnClickListener(view -> {
                 settingsActivity.replaceFragment(fragment);
+                settingsActivity.getSupportActionBar().setTitle(builder.title);
+                settingsActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        });
+        
+        binding.icon.setOnClickListener(view -> {
+                settingsActivity.replaceFragment(fragment);
+                settingsActivity.getSupportActionBar().setTitle(builder.title);
                 settingsActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         });
     }
@@ -34,7 +41,7 @@ public class PreferenceItem {
     
     public void setItemIcon(Drawable icon) {
     	if(icon != null) {
-    		binding.icon.setImageDrawable(icon);
+    		binding.icon.setIcon(icon);
     	}
     }
     

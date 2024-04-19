@@ -10,14 +10,14 @@
     android:padding="8dp"
     android:layout_margin="8dp">
     
-    <ImageView
+    <com.google.android.material.button.MaterialButton
+        style="?attr/materialIconButtonFilledTonalStyle"
         android:id="@+id/icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
-        android:layout_margin="8dp"
-        android:scaleType="centerCrop"/>
+        android:layout_margin="8dp"/>
     
     <LinearLayout
         android:layout_height="wrap_content"
