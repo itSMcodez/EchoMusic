@@ -1,6 +1,7 @@
 package com.itsmcodez.echomusic.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.itsmcodez.echomusic.PlaylistSongsActivity;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.adapters.PlaylistsAdapter;
 import com.itsmcodez.echomusic.databinding.FragmentPlaylistsBinding;
@@ -48,6 +50,11 @@ public class PlaylistsFragment extends Fragment {
                 public void onChanged(ArrayList<PlaylistsModel> allPlaylists) {
                 	playlistsAdapter = new PlaylistsAdapter(container.getContext(), getLayoutInflater(), allPlaylists);
                     binding.recyclerView.setAdapter(playlistsAdapter);
+                    
+                    // On item click
+                    playlistsAdapter.setOnItemClickListener((view, playlist, position) -> {
+                            startActivity(new Intent(container.getContext(), PlaylistSongsActivity.class).putExtra("title", playlist.getTitle()).putExtra("position", position));
+                    });
                 }
         });
         

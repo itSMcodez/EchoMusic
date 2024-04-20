@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.itsmcodez.echomusic.models.SongsModel;
 import java.util.ArrayList;
 
-public final class SongsRepository {
+public class SongsRepository {
     private static Application application;
     private static SongsRepository instance;
     private ArrayList<SongsModel> songs;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<PlaylistsModel> playlists;
+    private OnItemClickListener onItemClickListener;
 
     public PlaylistsAdapter(Context context, LayoutInflater inflater, ArrayList<PlaylistsModel> playlists) {
         this.context = context;
@@ -73,7 +75,9 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
         }
         
         viewHolder.itemView.setOnClickListener(view -> {
-                
+                if(onItemClickListener != null) {
+                	onItemClickListener.onItemClick(view, playlist, position);
+                }
         });
         
         viewHolder.itemMenu.setOnClickListener(view -> {
@@ -151,5 +155,14 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
     @Override
     public int getItemCount() {
         return playlists.size();
+    }
+    
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    	this.onItemClickListener = onItemClickListener;
+    }
+    
+    @FunctionalInterface
+    public interface OnItemClickListener {
+        public void onItemClick(View view, PlaylistsModel playlist, int position);
     }
 }

@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_margin="8dp"
-            android:text="Favourites"
+            android:text="@string/bt_fav_text"
             android:layout_weight="1"
             app:icon="@drawable/ic_heart"
             style="@style/Widget.Material3.Button.OutlinedButton.Icon"/>
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_margin="8dp"
-            android:text="Add playlist"
+            android:text="@string/bt_add_playlist_text"
             android:layout_weight="1"
             app:icon="@drawable/ic_playlist_plus"
             style="@style/Widget.Material3.Button.TonalButton.Icon"/>

@@ -6,7 +6,7 @@ import com.itsmcodez.echomusic.models.AlbumsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
 import java.util.ArrayList;
 
-public final class AlbumsRepository {
+public class AlbumsRepository {
     private static Application application;
     private static AlbumsRepository instance;
     private ArrayList<AlbumsModel> albums;

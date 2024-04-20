@@ -43,7 +43,14 @@
         </activity>
         
         <activity
-            android:name=".SearchableActivity"
+            android:name="SearchableActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity">
+            
+        </activity>
+        
+        <activity
+            android:name="PlaylistSongsActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity">
             

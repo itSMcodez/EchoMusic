@@ -6,7 +6,7 @@ import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.utils.PlaylistUtils;
 import java.util.ArrayList;
 
-public final class PlaylistsRepository {
+public class PlaylistsRepository {
     private static Application application;
     private static PlaylistsRepository instance;
     private ArrayList<PlaylistsModel> playlists;
