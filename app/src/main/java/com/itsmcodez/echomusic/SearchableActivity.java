@@ -80,4 +80,10 @@ public class SearchableActivity extends AppCompatActivity implements SearchView.
         
         return true;
     }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.binding = null;
+    }
 }

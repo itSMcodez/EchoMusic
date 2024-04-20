@@ -32,4 +32,9 @@ public class PrefItemsFragment extends Fragment {
     	binding.getRoot().addView(item.getRoot());
     }
     
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.binding = null;
+    }
 }

@@ -43,6 +43,12 @@ public class SettingsActivity extends AppCompatActivity {
         replaceFragment(prefItemsFragment);
     }
     
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.binding = null;
+    }
+    
     public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

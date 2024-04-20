@@ -42,4 +42,10 @@ public class AlbumsFragment extends Fragment {
         return binding.getRoot();
     }
     
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.binding = null;
+    }
+    
 }

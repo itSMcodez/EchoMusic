@@ -60,6 +60,12 @@ public class PlaylistsFragment extends Fragment {
         
         return binding.getRoot();
     }
+    
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.binding = null;
+    }
 
     private void showAddPlaylistDialog(Context context) {
         

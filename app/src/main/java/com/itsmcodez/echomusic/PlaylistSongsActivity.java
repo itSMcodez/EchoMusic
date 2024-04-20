@@ -48,4 +48,10 @@ public class PlaylistSongsActivity extends AppCompatActivity {
                 }
         });
     }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.binding = null;
+    }
 }
