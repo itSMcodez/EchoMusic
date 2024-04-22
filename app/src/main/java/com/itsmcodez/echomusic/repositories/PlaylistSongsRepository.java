@@ -28,7 +28,7 @@ public class PlaylistSongsRepository {
     
     public ArrayList<PlaylistSongsModel> getSongs(int position) {
         PlaylistsModel playlist = playlists.get(position);
-        songs = new ArrayList<>(playlist.getSongs());
+        songs = playlist.getSongs() != null ? playlist.getSongs() : new ArrayList<>();
         return this.songs;
     }
     
