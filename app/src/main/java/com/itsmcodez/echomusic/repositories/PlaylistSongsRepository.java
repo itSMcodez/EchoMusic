@@ -11,11 +11,9 @@ public class PlaylistSongsRepository {
     private ArrayList<PlaylistSongsModel> songs;
     private MutableLiveData<ArrayList<PlaylistSongsModel>> allSongs;
     private PlaylistsRepository playlistsRepository;
-    private ArrayList<PlaylistsModel> playlists;
     
     private PlaylistSongsRepository() {
         playlistsRepository = PlaylistsRepository.getInstance(application);
-        playlists = playlistsRepository.getPlaylists();
     }
     
     public static PlaylistSongsRepository getInstance(Application application) {
@@ -27,6 +25,7 @@ public class PlaylistSongsRepository {
     }
     
     public ArrayList<PlaylistSongsModel> getSongs(int position) {
+        ArrayList<PlaylistsModel> playlists = playlistsRepository.getPlaylists();
         PlaylistsModel playlist = playlists.get(position);
         songs = playlist.getSongs() != null ? playlist.getSongs() : new ArrayList<>();
         return this.songs;
@@ -35,5 +34,13 @@ public class PlaylistSongsRepository {
     public MutableLiveData<ArrayList<PlaylistSongsModel>> getAllSongs(int position) {
         allSongs = new MutableLiveData<>(getSongs(position));
     	return this.allSongs;
+    }
+    
+    public void removeSongFromPlaylistAt(int songPosition, int position) {
+    	playlistsRepository.removeSongFromPlaylistAt(songPosition, position);
+        ArrayList<PlaylistsModel> playlists = playlistsRepository.getPlaylists();
+        PlaylistsModel playlist = playlists.get(position);
+        songs = playlist.getSongs();
+        allSongs.setValue(songs);
     }
 }

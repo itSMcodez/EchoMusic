@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class PlaylistSongsActivity extends AppCompatActivity {
     private ActivityPlaylistSongsBinding binding;
     private PlaylistSongsAdapter playlistSongsAdapter;
-    private PlaylistSongsViewModel playlistSongsViewModel;
+    private static PlaylistSongsViewModel playlistSongsViewModel;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class PlaylistSongsActivity extends AppCompatActivity {
         playlistSongsViewModel.getAllSongs(playlistPosition).observe(this, new Observer<ArrayList<PlaylistSongsModel>>(){
                 @Override
                 public void onChanged(ArrayList<PlaylistSongsModel> allSongs) {
-                	playlistSongsAdapter = new PlaylistSongsAdapter(PlaylistSongsActivity.this, getLayoutInflater(), allSongs);
+                	playlistSongsAdapter = new PlaylistSongsAdapter(PlaylistSongsActivity.this, getLayoutInflater(), playlistPosition, allSongs);
                     binding.recyclerView.setAdapter(playlistSongsAdapter);
                 }
         });
@@ -53,5 +53,9 @@ public class PlaylistSongsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         this.binding = null;
+    }
+    
+    public static void removeSongFromPlaylistAt(int songPosition, int position) {
+        playlistSongsViewModel.removeSongFromPlaylistAt(songPosition, position);
     }
 }

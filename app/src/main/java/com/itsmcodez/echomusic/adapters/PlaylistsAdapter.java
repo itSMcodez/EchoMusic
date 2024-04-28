@@ -144,6 +144,10 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
                                 return true;
                             }
                             
+                            if(item.getItemId() == R.id.add_playlist_to_queue_menu_item) {
+                            	return true;
+                            }
+                            
                             return false;
                         }
                         

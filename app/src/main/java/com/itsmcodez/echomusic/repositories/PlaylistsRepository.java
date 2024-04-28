@@ -56,4 +56,10 @@ public class PlaylistsRepository {
         playlists = PlaylistUtils.getAllPlaylists(application);
         allPlaylists.setValue(playlists);
     }
+    
+    public void removeSongFromPlaylistAt(int songPosition, int position) {
+    	PlaylistUtils.removeSongFromPlaylistAt(application, songPosition, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
 }
