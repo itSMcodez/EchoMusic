@@ -1,12 +1,16 @@
 package com.itsmcodez.echomusic.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
+import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.databinding.LayoutPlaylistSongItemBinding;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import java.util.ArrayList;
@@ -54,7 +58,22 @@ public class PlaylistSongsAdapter extends RecyclerView.Adapter<PlaylistSongsAdap
         });
         
         viewHolder.itemMenu.setOnClickListener(view -> {
-                
+                PopupMenu menu = new PopupMenu(context, view);
+                menu.inflate(R.menu.menu_playlist_song_item);
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            
+                            if(item.getItemId() == R.id.remove_song_menu_item) {
+                            	Log.d("RemoveSong:", "Removed " + song.getTitle());
+                                
+                                return true;
+                            }
+                            
+                            return false;
+                        }
+                });
+                menu.show();
         });
     }
 

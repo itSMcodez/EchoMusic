@@ -1,0 +1,35 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/adapters/PlaylistSongsAdapter.java",
+      "selection": {
+        "end": {
+          "column": 47,
+          "index": 2716,
+          "line": 67
+        },
+        "start": {
+          "column": 47,
+          "index": 2716,
+          "line": 67
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/res/menu/menu_playlist_song_item.xml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/adapters/PlaylistSongsAdapter.java"
+}
