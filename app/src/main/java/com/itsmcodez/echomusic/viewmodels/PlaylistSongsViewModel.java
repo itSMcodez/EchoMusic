@@ -33,4 +33,8 @@ public class PlaylistSongsViewModel extends AndroidViewModel {
         songs = playlistSongsRepo.getSongs(position);
         allSongs.setValue(songs);
     }
+    
+    public void swapPlaylistSongPosAt(int position, int songCurrentIndex, int songTargetIndex) {
+        playlistSongsRepo.swapPlaylistSongPosAt(position, songCurrentIndex, songTargetIndex);
+    }
 }

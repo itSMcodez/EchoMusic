@@ -56,10 +56,15 @@ public class PlaylistSongsAdapter extends RecyclerView.Adapter<PlaylistSongsAdap
     public void onBindViewHolder(PlaylistSongsViewHolder viewHolder, final int position) {
         PlaylistSongsModel song = songs.get(position);
         
-        viewHolder.title.setText(String.valueOf(position + 1) + " - " + song.getTitle());
+        viewHolder.title.setText(" - " + song.getTitle());
         
         viewHolder.itemView.setOnClickListener(view -> {
                 
+        });
+        
+        viewHolder.itemView.setOnLongClickListener(view -> {
+                Toast.makeText(context, R.string.msg_swap_song_position, Toast.LENGTH_LONG).show();
+                return true;
         });
         
         viewHolder.swapItemPosition.setOnClickListener(view -> {

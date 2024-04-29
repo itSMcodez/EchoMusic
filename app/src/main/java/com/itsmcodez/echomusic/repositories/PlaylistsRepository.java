@@ -62,4 +62,10 @@ public class PlaylistsRepository {
         playlists = PlaylistUtils.getAllPlaylists(application);
         allPlaylists.setValue(playlists);
     }
+    
+    public void swapPlaylistSongPosAt(int position, int songCurrentIndex, int songTargetIndex) {
+        PlaylistUtils.swapPlaylistSongPosAt(application, position, songCurrentIndex, songTargetIndex);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
 }

@@ -8,6 +8,7 @@ import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public final class PlaylistUtils {
     private static ArrayList<PlaylistsModel> allPlaylists;
@@ -57,6 +58,14 @@ public final class PlaylistUtils {
         ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs();
         Toast.makeText(application, application.getString(R.string.msg_remove_song_from_playlist_success, songs.get(songPosition).getTitle(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
         songs.remove(songPosition);
+        allPlaylists.get(position).setSongs(songs);
+        savePlaylistsToDB(application, allPlaylists);
+    }
+    
+    public static void swapPlaylistSongPosAt(Application application, int position, int songCurrentIndex, int songTargetIndex) {
+    	allPlaylists = getPlaylistsFromDB(application);
+        ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs();
+        Collections.swap(songs, songCurrentIndex, songTargetIndex);
         allPlaylists.get(position).setSongs(songs);
         savePlaylistsToDB(application, allPlaylists);
     }
