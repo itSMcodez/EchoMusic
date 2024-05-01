@@ -149,7 +149,24 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
                             }
                             
                             if(item.getItemId() == R.id.clear_playlist_menu_item) {
-                                PlaylistsFragment.clearSongsFromPlaylistAt(position);
+                                
+                                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context)
+                                .setTitle(R.string.clear_playlist)
+                                .setMessage(context.getString(R.string.msg_clear_playlist_rationale, playlist.getTitle()))
+                                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                })
+                                .setPositiveButton(R.string.clear, new DialogInterface.OnClickListener(){
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            PlaylistsFragment.clearSongsFromPlaylistAt(position);
+                                        }
+                                });
+                                dialog.show();
+                                
                             	return true;
                             }
                             

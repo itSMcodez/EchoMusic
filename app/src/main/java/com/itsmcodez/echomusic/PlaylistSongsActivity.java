@@ -1,19 +1,23 @@
 package com.itsmcodez.echomusic;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.adapters.PlaylistSongsAdapter;
 import com.itsmcodez.echomusic.databinding.ActivityPlaylistSongsBinding;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
+import com.itsmcodez.echomusic.utils.PlaylistUtils;
 import com.itsmcodez.echomusic.viewmodels.PlaylistSongsViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -131,8 +135,27 @@ public class PlaylistSongsActivity extends AppCompatActivity {
         }
         
         if(item.getItemId() == R.id.clear_pl_songs_menu_item) {
+            // get playlist position
             var playlistPosition = getIntent().getIntExtra("position", -1);
-        	playlistSongsViewModel.clearSongsFromPlaylistAt(playlistPosition);
+            
+            AlertDialog dialog = new MaterialAlertDialogBuilder(PlaylistSongsActivity.this)
+            .setTitle(R.string.clear_playlist)
+            .setMessage(getString(R.string.msg_clear_playlist_rationale, PlaylistUtils.getAllPlaylists(getApplication()).get(playlistPosition).getTitle()))
+            .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+            })
+            .setPositiveButton(R.string.clear, new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        playlistSongsViewModel.clearSongsFromPlaylistAt(playlistPosition);
+                    }
+            })
+            .create();
+            dialog.show();
+            
             return true;
         }
         
