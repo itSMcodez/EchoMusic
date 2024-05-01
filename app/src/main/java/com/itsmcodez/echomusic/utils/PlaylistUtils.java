@@ -72,7 +72,7 @@ public final class PlaylistUtils {
     
     public static void clearSongsFromPlaylistAt(Application application, int position) {
     	allPlaylists = getPlaylistsFromDB(application);
-        ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs();
+        ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs() != null ? allPlaylists.get(position).getSongs() : new ArrayList<>();
         Toast.makeText(application, application.getResources().getQuantityString(R.plurals.msg_clear_playlist_success, songs.size(), songs.size(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
         songs.clear();
         allPlaylists.get(position).setSongs(songs);
