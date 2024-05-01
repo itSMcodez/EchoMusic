@@ -2,6 +2,8 @@ package com.itsmcodez.echomusic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -87,6 +89,54 @@ public class PlaylistSongsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         this.binding = null;
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_activity_playlist_songs, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        
+        if(item.getItemId() == R.id.add_pl_songs_to_queue_menu_item) {
+        	
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_custom) {
+        	
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_asc) {
+        	
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_desc) {
+        	
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_size) {
+        	
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_duration) {
+        	
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.clear_pl_songs_menu_item) {
+            var playlistPosition = getIntent().getIntExtra("position", -1);
+        	playlistSongsViewModel.clearSongsFromPlaylistAt(playlistPosition);
+            return true;
+        }
+        
+        return super.onOptionsItemSelected(item);
     }
     
     public static void removeSongFromPlaylistAt(int songPosition, int position) {

@@ -148,6 +148,11 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
                             	return true;
                             }
                             
+                            if(item.getItemId() == R.id.clear_playlist_menu_item) {
+                                PlaylistsFragment.clearSongsFromPlaylistAt(position);
+                            	return true;
+                            }
+                            
                             return false;
                         }
                         

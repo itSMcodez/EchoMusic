@@ -47,4 +47,12 @@ public class PlaylistSongsRepository {
     public void swapPlaylistSongPosAt(int position, int songCurrentIndex, int songTargetIndex) {
         playlistsRepository.swapPlaylistSongPosAt(position, songCurrentIndex, songTargetIndex);
     }
+    
+    public void clearSongsFromPlaylistAt(int position) {
+        playlistsRepository.clearSongsFromPlaylistAt(position);
+        ArrayList<PlaylistsModel> playlists = playlistsRepository.getPlaylists();
+        PlaylistsModel playlist = playlists.get(position);
+        songs = playlist.getSongs();
+        allSongs.setValue(songs);
+    }
 }

@@ -6,6 +6,14 @@
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="remove">Remove</string>
+    <string name="sort">Sort</string>
+    <string name="asc">Ascending</string>
+    <string name="desc">Descending</string>
+    <string name="size">Size</string>
+    <string name="duration">Duration</string>
+    <string name="clear">Clear</string>
+    <string name="custom">Custom</string>
+    <string name="clear_playlist">Clear songs</string>
     <string name="add_to_queue">Add to playing queue</string>
     <string name="activity_settings_action_bar_title">Settings</string>
     <string name="activity_searchable_action_bar_title">Echo Music - Search</string>
@@ -60,6 +68,10 @@
         <item quantity="zero">0 songs found.</item>
         <item quantity="one">%d song found.</item>
         <item quantity="other">%d songs found.</item>
+    </plurals>
+    <plurals name="msg_clear_playlist_success">
+        <item quantity="one">Successfully cleared %d song from %s</item>
+        <item quantity="other">Successfully cleared %d songs from %s</item>
     </plurals>
     <string name="song_details">Name: %1$s \n \nPath: %2$s \n \nArtist: %3$s \n \nAlbum: %4$s \n \nDuration: %5$s</string>
 </resources>

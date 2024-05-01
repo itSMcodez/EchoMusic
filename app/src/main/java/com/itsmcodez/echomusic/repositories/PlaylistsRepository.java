@@ -68,4 +68,10 @@ public class PlaylistsRepository {
         playlists = PlaylistUtils.getAllPlaylists(application);
         allPlaylists.setValue(playlists);
     }
+    
+    public void clearSongsFromPlaylistAt(int position) {
+        PlaylistUtils.clearSongsFromPlaylistAt(application, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
 }

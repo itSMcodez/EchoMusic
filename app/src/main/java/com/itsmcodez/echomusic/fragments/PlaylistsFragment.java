@@ -105,4 +105,8 @@ public class PlaylistsFragment extends Fragment {
     public static void renamePlaylistAt(String playlistName, int position) {
     	playlistsViewModel.renamePlaylistAt(playlistName, position);
     }
+    
+    public static void clearSongsFromPlaylistAt(int position) {
+    	playlistsViewModel.clearSongsFromPlaylistAt(position);
+    }
 }

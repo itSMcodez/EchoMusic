@@ -70,6 +70,15 @@ public final class PlaylistUtils {
         savePlaylistsToDB(application, allPlaylists);
     }
     
+    public static void clearSongsFromPlaylistAt(Application application, int position) {
+    	allPlaylists = getPlaylistsFromDB(application);
+        ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs();
+        Toast.makeText(application, application.getResources().getQuantityString(R.plurals.msg_clear_playlist_success, songs.size(), songs.size(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
+        songs.clear();
+        allPlaylists.get(position).setSongs(songs);
+        savePlaylistsToDB(application, allPlaylists);
+    }
+    
     private static void savePlaylistsToDB(Application application, ArrayList<PlaylistsModel> playlists) {
     	Gson gson = new Gson();
         String playlistsData = gson.toJson(playlists);
