@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.itsmcodez.echomusic.BaseApplication;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
@@ -21,6 +22,12 @@ public final class PlaylistUtils {
     public static void addNewPlaylist(Application application, PlaylistsModel playlist) {
     	allPlaylists = getAllPlaylists(application);
         allPlaylists.add(playlist);
+        savePlaylistsToDB(application, allPlaylists);
+    }
+    
+    public static void addNewPlaylistAt(Application application, PlaylistsModel playlist, int position) {
+    	allPlaylists = getAllPlaylists(application);
+        allPlaylists.add(position, playlist);
         savePlaylistsToDB(application, allPlaylists);
     }
     

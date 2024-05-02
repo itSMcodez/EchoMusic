@@ -83,6 +83,13 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
         viewHolder.itemMenu.setOnClickListener(view -> {
                 PopupMenu menu = new PopupMenu(context, view);
                 menu.inflate(R.menu.menu_playlist_item);
+                // Check and restrict user from deleting Favourites playlist item
+                if(playlist.getTitle().equals("Favourites") && position == 0) {
+                	MenuItem deleteMenuItem = menu.getMenu().findItem(R.id.delete_playlist_menu_item);
+                    MenuItem renameMenuItem = menu.getMenu().findItem(R.id.rename_playlist_menu_item);
+                    deleteMenuItem.setEnabled(false);
+                    renameMenuItem.setEnabled(false);
+                }
                 menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {

@@ -45,6 +45,16 @@ public class PlaylistsFragment extends Fragment {
                 showAddPlaylistDialog(container.getContext());
         });
         
+        // Favourite songs function
+        binding.favBt.setOnClickListener(view -> {
+                if(!playlistsViewModel.getPlaylists().get(0).getTitle().equals("Favourites")) {
+                    PlaylistsModel favourites = new PlaylistsModel("Favourites", new ArrayList<PlaylistSongsModel>(), 0, 0);
+                    playlistsViewModel.addNewPlaylistAt(favourites, 0);
+                }
+                startActivity(new Intent(container.getContext(), PlaylistSongsActivity.class).putExtra("title", "Favourites").putExtra("position", 0));
+        });
+        
+        // Observe LiveData
         playlistsViewModel.getAllPlaylists().observe(getViewLifecycleOwner(), new Observer<ArrayList<PlaylistsModel>>(){
                 @Override
                 public void onChanged(ArrayList<PlaylistsModel> allPlaylists) {
@@ -89,7 +99,7 @@ public class PlaylistsFragment extends Fragment {
                     	Toast.makeText(context, R.string.add_playlist_dialog_empty_input_rationale, Toast.LENGTH_LONG).show();
                     } else {
                         String input = textInputBinding.textInput.getText().toString();
-                        PlaylistsModel newPlaylist = new PlaylistsModel(input, null, 0, 0);
+                        PlaylistsModel newPlaylist = new PlaylistsModel(input, new ArrayList<PlaylistSongsModel>(), 0, 0);
                         playlistsViewModel.addNewPlaylist(newPlaylist);
                         binding.recyclerView.scrollToPosition(binding.recyclerView.getAdapter().getItemCount()-1); // Scroll to the newly added playlist item
                     }

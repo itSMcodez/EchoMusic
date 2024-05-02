@@ -39,6 +39,12 @@ public class PlaylistsRepository {
         allPlaylists.setValue(playlists);
     }
     
+    public void addNewPlaylistAt(PlaylistsModel playlist, int position) {
+    	PlaylistUtils.addNewPlaylistAt(application, playlist, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
+    
     public void deletePlaylistAt(int position) {
     	PlaylistUtils.deletePlaylistAt(application, position);
         playlists = PlaylistUtils.getAllPlaylists(application);
