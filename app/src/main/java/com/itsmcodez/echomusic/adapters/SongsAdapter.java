@@ -14,6 +14,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.BaseApplication;
 import com.itsmcodez.echomusic.R;
@@ -66,10 +68,9 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
         
         viewHolder.title.setText(song.getTitle());
         viewHolder.artist.setText(song.getArtist());
-        viewHolder.albumArtwork.setImageURI(song.getAlbumArtwork());
-        if(viewHolder.albumArtwork.getDrawable() == null) {
-        	viewHolder.albumArtwork.setImageDrawable(context.getDrawable(R.drawable.ic_music_note_outline));
-        }
+        Glide.with(context).load(song.getAlbumArtwork()).diskCacheStrategy(DiskCacheStrategy.ALL)
+        .error(R.drawable.ic_music_note_outline)
+        .into(viewHolder.albumArtwork);
         
         viewHolder.itemView.setOnClickListener(view -> {
                 

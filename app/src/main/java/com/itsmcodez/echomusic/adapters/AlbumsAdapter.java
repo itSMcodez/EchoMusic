@@ -7,6 +7,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.databinding.LayoutAlbumItemBinding;
 import com.itsmcodez.echomusic.models.AlbumsModel;
@@ -50,10 +52,9 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.AlbumsView
         AlbumsModel album = albums.get(position);
         
         viewHolder.title.setText(album.getAlbum());
-        viewHolder.albumArtwork.setImageURI(album.getAlbumArtwork());
-        if(viewHolder.albumArtwork.getDrawable() == null) {
-        	viewHolder.albumArtwork.setImageDrawable(context.getDrawable(R.drawable.ic_album_artwork));
-        }
+        Glide.with(context).load(album.getAlbumArtwork()).diskCacheStrategy(DiskCacheStrategy.ALL)
+        .error(R.drawable.ic_album_artwork)
+        .into(viewHolder.albumArtwork);
         
         viewHolder.itemView.setOnClickListener(view -> {
                 

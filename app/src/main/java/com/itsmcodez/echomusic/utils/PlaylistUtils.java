@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.itsmcodez.echomusic.BaseApplication;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
