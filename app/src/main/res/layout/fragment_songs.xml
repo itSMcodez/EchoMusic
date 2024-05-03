@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/title"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_margin="8dp"
-        android:padding="8dp"
-        android:textAlignment="textStart"
-        android:textStyle="bold"
-        android:typeface="serif"
-        android:textSize="24sp"
-        android:text="@string/fragment_songs_title"/>
+        app:liftOnScroll="true"
+        app:liftOnScrollColor="@android:color/transparent">
+        
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="match_parent"
+            app:title="@string/fragment_songs_title"
+            app:layout_scrollFlags="scroll|enterAlways|snap"/>
+        
+    </com.google.android.material.appbar.AppBarLayout>
     
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"/>
+        android:layout_width="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

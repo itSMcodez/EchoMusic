@@ -8,6 +8,7 @@ import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public final class PlaylistUtils {
     private static ArrayList<PlaylistsModel> allPlaylists;
@@ -20,6 +21,12 @@ public final class PlaylistUtils {
     public static void addNewPlaylist(Application application, PlaylistsModel playlist) {
     	allPlaylists = getAllPlaylists(application);
         allPlaylists.add(playlist);
+        savePlaylistsToDB(application, allPlaylists);
+    }
+    
+    public static void addNewPlaylistAt(Application application, PlaylistsModel playlist, int position) {
+    	allPlaylists = getAllPlaylists(application);
+        allPlaylists.add(position, playlist);
         savePlaylistsToDB(application, allPlaylists);
     }
     
@@ -46,8 +53,52 @@ public final class PlaylistUtils {
         	Toast.makeText(application, R.string.msg_add_to_playlist_exists, Toast.LENGTH_LONG).show();
         } else {
             songs.add(song);
-            Toast.makeText(application, application.getString(R.string.msg_add_to_playlist_succes, song.getTitle(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
+            Toast.makeText(application, application.getString(R.string.msg_add_to_playlist_success, song.getTitle(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
         }
+        var playlistDuration = 0l;
+        var sum = 0l;
+        for(PlaylistSongsModel _song : songs) {
+        	playlistDuration = sum + Long.parseLong(_song.getDuration());
+            sum += Long.parseLong(_song.getDuration());
+        }
+        allPlaylists.get(position).setTotalDuration(playlistDuration);
+        allPlaylists.get(position).setSongCount(songs.size());
+        allPlaylists.get(position).setSongs(songs);
+        savePlaylistsToDB(application, allPlaylists);
+    }
+    
+    public static void removeSongFromPlaylistAt(Application application, int songPosition, int position) {
+    	allPlaylists = getPlaylistsFromDB(application);
+        ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs();
+        Toast.makeText(application, application.getString(R.string.msg_remove_song_from_playlist_success, songs.get(songPosition).getTitle(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
+        songs.remove(songPosition);
+        var playlistDuration = 0l;
+        var sum = 0l;
+        for(PlaylistSongsModel _song : songs) {
+        	playlistDuration = sum + Long.parseLong(_song.getDuration());
+            sum += Long.parseLong(_song.getDuration());
+        }
+        allPlaylists.get(position).setTotalDuration(playlistDuration);
+        allPlaylists.get(position).setSongCount(songs.size());
+        allPlaylists.get(position).setSongs(songs);
+        savePlaylistsToDB(application, allPlaylists);
+    }
+    
+    public static void swapPlaylistSongPosAt(Application application, int position, int songCurrentIndex, int songTargetIndex) {
+    	allPlaylists = getPlaylistsFromDB(application);
+        ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs();
+        Collections.swap(songs, songCurrentIndex, songTargetIndex);
+        allPlaylists.get(position).setSongs(songs);
+        savePlaylistsToDB(application, allPlaylists);
+    }
+    
+    public static void clearSongsFromPlaylistAt(Application application, int position) {
+    	allPlaylists = getPlaylistsFromDB(application);
+        ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs() != null ? allPlaylists.get(position).getSongs() : new ArrayList<>();
+        Toast.makeText(application, application.getResources().getQuantityString(R.plurals.msg_clear_playlist_success, songs.size(), songs.size(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
+        songs.clear();
+        allPlaylists.get(position).setTotalDuration(0);
+        allPlaylists.get(position).setSongCount(0);
         allPlaylists.get(position).setSongs(songs);
         savePlaylistsToDB(application, allPlaylists);
     }

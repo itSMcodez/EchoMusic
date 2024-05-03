@@ -36,6 +36,12 @@ public class PlaylistsViewModel extends AndroidViewModel {
         allPlaylists.setValue(playlists);
     }
     
+    public void addNewPlaylistAt(PlaylistsModel playlist, int position) {
+    	playlistsRepository.addNewPlaylistAt(playlist, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
+    
     public void deletePlaylistAt(int position) {
     	playlistsRepository.deletePlaylistAt(position);
         playlists = PlaylistUtils.getAllPlaylists(application);
@@ -50,6 +56,12 @@ public class PlaylistsViewModel extends AndroidViewModel {
     
     public void addSongToPlaylistAt(PlaylistSongsModel song, int position) {
     	playlistsRepository.addSongToPlaylistAt(song, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
+    
+    public void clearSongsFromPlaylistAt(int position) {
+        playlistsRepository.clearSongsFromPlaylistAt(position);
         playlists = PlaylistUtils.getAllPlaylists(application);
         allPlaylists.setValue(playlists);
     }

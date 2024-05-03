@@ -14,6 +14,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.BaseApplication;
 import com.itsmcodez.echomusic.R;
@@ -24,6 +26,7 @@ import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
 import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
+import com.itsmcodez.echomusic.utils.MusicUtils;
 import java.util.ArrayList;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
@@ -66,10 +69,9 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
         
         viewHolder.title.setText(song.getTitle());
         viewHolder.artist.setText(song.getArtist());
-        viewHolder.albumArtwork.setImageURI(song.getAlbumArtwork());
-        if(viewHolder.albumArtwork.getDrawable() == null) {
-        	viewHolder.albumArtwork.setImageDrawable(context.getDrawable(R.drawable.ic_music_note_outline));
-        }
+        Glide.with(context).load(song.getAlbumArtwork()).diskCacheStrategy(DiskCacheStrategy.ALL)
+        .error(R.drawable.ic_music_note_outline)
+        .into(viewHolder.albumArtwork);
         
         viewHolder.itemView.setOnClickListener(view -> {
                 
@@ -146,7 +148,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
                             	
                                 AlertDialog dialog = new MaterialAlertDialogBuilder(context)
                                 .setTitle(R.string.details)
-                                .setMessage(context.getString(R.string.song_details, song.getTitle(), song.getPath(), song.getArtist(), song.getAlbum(), song.getDuration()))
+                                .setMessage(context.getString(R.string.song_details, song.getTitle(), song.getPath(), song.getArtist(), song.getAlbum(), MusicUtils.getReadableDuration(Long.parseLong(song.getDuration()))))
                                 .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

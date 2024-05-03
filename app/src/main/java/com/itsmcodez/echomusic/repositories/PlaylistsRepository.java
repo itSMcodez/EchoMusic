@@ -39,6 +39,12 @@ public class PlaylistsRepository {
         allPlaylists.setValue(playlists);
     }
     
+    public void addNewPlaylistAt(PlaylistsModel playlist, int position) {
+    	PlaylistUtils.addNewPlaylistAt(application, playlist, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
+    
     public void deletePlaylistAt(int position) {
     	PlaylistUtils.deletePlaylistAt(application, position);
         playlists = PlaylistUtils.getAllPlaylists(application);
@@ -53,6 +59,24 @@ public class PlaylistsRepository {
     
     public void addSongToPlaylistAt(PlaylistSongsModel song, int position) {
     	PlaylistUtils.addSongToPlaylistAt(application, song, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
+    
+    public void removeSongFromPlaylistAt(int songPosition, int position) {
+    	PlaylistUtils.removeSongFromPlaylistAt(application, songPosition, position);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
+    
+    public void swapPlaylistSongPosAt(int position, int songCurrentIndex, int songTargetIndex) {
+        PlaylistUtils.swapPlaylistSongPosAt(application, position, songCurrentIndex, songTargetIndex);
+        playlists = PlaylistUtils.getAllPlaylists(application);
+        allPlaylists.setValue(playlists);
+    }
+    
+    public void clearSongsFromPlaylistAt(int position) {
+        PlaylistUtils.clearSongsFromPlaylistAt(application, position);
         playlists = PlaylistUtils.getAllPlaylists(application);
         allPlaylists.setValue(playlists);
     }

@@ -27,4 +27,20 @@ public class PlaylistSongsViewModel extends AndroidViewModel {
     	allSongs = playlistSongsRepo.getAllSongs(position);
         return this.allSongs;
     }
+    
+    public void removeSongFromPlaylistAt(int songPosition, int position) {
+        playlistSongsRepo.removeSongFromPlaylistAt(songPosition, position);
+        songs = playlistSongsRepo.getSongs(position);
+        allSongs.setValue(songs);
+    }
+    
+    public void swapPlaylistSongPosAt(int position, int songCurrentIndex, int songTargetIndex) {
+        playlistSongsRepo.swapPlaylistSongPosAt(position, songCurrentIndex, songTargetIndex);
+    }
+    
+    public void clearSongsFromPlaylistAt(int position) {
+        playlistSongsRepo.clearSongsFromPlaylistAt(position);
+        songs = playlistSongsRepo.getSongs(position);
+        allSongs.setValue(songs);
+    }
 }

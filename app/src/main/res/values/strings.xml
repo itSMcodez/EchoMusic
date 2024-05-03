@@ -5,6 +5,15 @@
     <string name="create">Create</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
+    <string name="remove">Remove</string>
+    <string name="sort">Sort</string>
+    <string name="asc">Ascending</string>
+    <string name="desc">Descending</string>
+    <string name="size">Size</string>
+    <string name="duration">Duration</string>
+    <string name="clear">Clear</string>
+    <string name="custom">Custom</string>
+    <string name="clear_playlist">Clear songs</string>
     <string name="add_to_queue">Add to playing queue</string>
     <string name="activity_settings_action_bar_title">Settings</string>
     <string name="activity_searchable_action_bar_title">Echo Music - Search</string>
@@ -17,12 +26,16 @@
     <string name="add_playlist_dialog_title">Add new playlist</string>
     <string name="choose_playlist_dialog_title">Choose playlist</string>
     <string name="add_playlist_dialog_empty_input_rationale">Please type a name for the playlist!</string>
-    <string name="msg_delete_playlist_rationale">Are you sure you want to delete %s? \nThis will not delete any songs in the playlist.</string>
+    <string name="msg_delete_playlist_rationale">Are you sure you want to delete %s? \nThis will not delete any song in the playlist.</string>
+    <string name="msg_clear_playlist_rationale">Are you sure you want to clear %s? \nThis will not delete any song in the playlist.</string>
     <string name="msg_delete_playlist_success">Deleted %s</string>
     <string name="msg_rename_playlist_rationale">You are renaming %s. \nType the new name below.</string>
     <string name="msg_rename_playlist_success">Renamed %1$s to %2$s</string>
-    <string name="msg_add_to_playlist_succes">Added %1$s to %2$s</string>
+    <string name="msg_add_to_playlist_success">Added %1$s to %2$s</string>
+    <string name="msg_remove_song_from_playlist_success">Removed %1$s from %2$s</string>
     <string name="msg_add_to_playlist_exists">Song already exists!</string>
+    <string name="msg_swap_song_position">Move item up or down to change it\'s position</string>
+    <string name="msg_swap_item_position_help">Touch and hold this button to change song position</string>
     <string name="play_next">Play next</string>
     <string name="add_to_playlist">Add to playlist</string>
     <string name="edit_metadata">Edit metadata</string>
@@ -56,6 +69,10 @@
         <item quantity="zero">0 songs found.</item>
         <item quantity="one">%d song found.</item>
         <item quantity="other">%d songs found.</item>
+    </plurals>
+    <plurals name="msg_clear_playlist_success">
+        <item quantity="one">Successfully cleared %d song from %s</item>
+        <item quantity="other">Successfully cleared %d songs from %s</item>
     </plurals>
     <string name="song_details">Name: %1$s \n \nPath: %2$s \n \nArtist: %3$s \n \nAlbum: %4$s \n \nDuration: %5$s</string>
 </resources>
