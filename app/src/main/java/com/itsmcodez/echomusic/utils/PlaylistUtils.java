@@ -55,6 +55,14 @@ public final class PlaylistUtils {
             songs.add(song);
             Toast.makeText(application, application.getString(R.string.msg_add_to_playlist_success, song.getTitle(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
         }
+        var playlistDuration = 0l;
+        var sum = 0l;
+        for(PlaylistSongsModel _song : songs) {
+        	playlistDuration = sum + Long.parseLong(_song.getDuration());
+            sum += Long.parseLong(_song.getDuration());
+        }
+        allPlaylists.get(position).setTotalDuration(playlistDuration);
+        allPlaylists.get(position).setSongCount(songs.size());
         allPlaylists.get(position).setSongs(songs);
         savePlaylistsToDB(application, allPlaylists);
     }
@@ -64,6 +72,14 @@ public final class PlaylistUtils {
         ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs();
         Toast.makeText(application, application.getString(R.string.msg_remove_song_from_playlist_success, songs.get(songPosition).getTitle(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
         songs.remove(songPosition);
+        var playlistDuration = 0l;
+        var sum = 0l;
+        for(PlaylistSongsModel _song : songs) {
+        	playlistDuration = sum + Long.parseLong(_song.getDuration());
+            sum += Long.parseLong(_song.getDuration());
+        }
+        allPlaylists.get(position).setTotalDuration(playlistDuration);
+        allPlaylists.get(position).setSongCount(songs.size());
         allPlaylists.get(position).setSongs(songs);
         savePlaylistsToDB(application, allPlaylists);
     }
@@ -81,6 +97,8 @@ public final class PlaylistUtils {
         ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs() != null ? allPlaylists.get(position).getSongs() : new ArrayList<>();
         Toast.makeText(application, application.getResources().getQuantityString(R.plurals.msg_clear_playlist_success, songs.size(), songs.size(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
         songs.clear();
+        allPlaylists.get(position).setTotalDuration(0);
+        allPlaylists.get(position).setSongCount(0);
         allPlaylists.get(position).setSongs(songs);
         savePlaylistsToDB(application, allPlaylists);
     }

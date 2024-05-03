@@ -26,6 +26,7 @@ import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
 import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
+import com.itsmcodez.echomusic.utils.MusicUtils;
 import java.util.ArrayList;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
@@ -147,7 +148,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
                             	
                                 AlertDialog dialog = new MaterialAlertDialogBuilder(context)
                                 .setTitle(R.string.details)
-                                .setMessage(context.getString(R.string.song_details, song.getTitle(), song.getPath(), song.getArtist(), song.getAlbum(), song.getDuration()))
+                                .setMessage(context.getString(R.string.song_details, song.getTitle(), song.getPath(), song.getArtist(), song.getAlbum(), MusicUtils.getReadableDuration(Long.parseLong(song.getDuration()))))
                                 .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

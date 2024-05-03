@@ -19,6 +19,7 @@ import com.itsmcodez.echomusic.databinding.LayoutPlaylistItemBinding;
 import com.itsmcodez.echomusic.fragments.PlaylistsFragment;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.utils.ArtworkUtils;
+import com.itsmcodez.echomusic.utils.MusicUtils;
 import java.util.ArrayList;
 
 public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.PlaylistsViewHolder> {
@@ -62,15 +63,16 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
         
         viewHolder.title.setText(playlist.getTitle());
         if(playlist.getSongs() != null && playlist.getSongs().size() != 0) {
-            var songsCount = playlist.getSongs().size();
-            viewHolder.info.setText(context.getResources().getQuantityString(R.plurals.playlist_songs_count, songsCount, songsCount));
+            var playlistDuration = playlist.getTotalDuration();
+            var songsCount = playlist.getSongCount();
+            viewHolder.info.setText(context.getResources().getQuantityString(R.plurals.playlist_songs_count, songsCount, songsCount) + MusicUtils.getReadableDuration(playlistDuration));
             viewHolder.albumArtwork.setImageURI(ArtworkUtils.getArtworkFrom(Long.parseLong(playlist.getSongs().get(playlist.getSongs().size() - 1).getAlbumId())));
             if(viewHolder.albumArtwork.getDrawable() == null) {
             	viewHolder.albumArtwork.setImageDrawable(context.getDrawable(R.drawable.ic_library_music_outline));
             }
         } else {
             var songsCount = 0;
-            viewHolder.info.setText(context.getResources().getQuantityString(R.plurals.playlist_songs_count, songsCount, songsCount));
+            viewHolder.info.setText(context.getResources().getQuantityString(R.plurals.playlist_songs_count, songsCount, songsCount) + "00:00");
             viewHolder.albumArtwork.setImageDrawable(context.getDrawable(R.drawable.ic_library_music_outline));
         }
         
