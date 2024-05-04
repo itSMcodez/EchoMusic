@@ -56,6 +56,9 @@ public class PlaylistSongsActivity extends AppCompatActivity {
                 	playlistSongsAdapter = new PlaylistSongsAdapter(PlaylistSongsActivity.this, getLayoutInflater(), playlistPosition, allSongs);
                     binding.recyclerView.setAdapter(playlistSongsAdapter);
                     
+                    // Cover Art
+                    binding.coverArt.setImageDrawable(playlistPosition == 0 ? getDrawable(R.drawable.ic_heart) : getDrawable(R.drawable.ic_library_music_outline));
+                    
                     // Swap song item position logic
                     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
                         new ItemTouchHelper.Callback(){

@@ -25,6 +25,7 @@
             android:padding="8dp">
             
             <ImageView
+                android:id="@+id/cover_art"
                 android:layout_height="48dp"
                 android:layout_width="48dp"
                 android:layout_margin="8dp"

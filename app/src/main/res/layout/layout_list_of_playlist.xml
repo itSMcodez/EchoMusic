@@ -8,7 +8,7 @@
     android:background="?attr/rectSelector"
     android:clickable="true"
     android:focusable="true"
-    android:padding="8dp"
+    android:padding="12dp"
     android:id="@+id/item_view">
     
     <TextView
