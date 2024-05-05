@@ -92,16 +92,28 @@
                 android:id="@+id/skip_next_bt"
                 android:src="@drawable/ic_skip_next_outline"/>
             
-            <ImageView
+            <RelativeLayout
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:background="?attr/roundSelector"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="8dp"
-                android:layout_margin="8dp"
-                android:id="@+id/play_pause_bt"
-                android:src="@drawable/ic_play_outline"/>
+                android:layout_width="wrap_content">
+                
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/progress"/>
+                
+                <ImageView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="?attr/roundSelector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="8dp"
+                    android:id="@+id/play_pause_bt"
+                    android:src="@drawable/ic_play_outline"/>
+                
+            </RelativeLayout>
             
         </LinearLayout>
         
