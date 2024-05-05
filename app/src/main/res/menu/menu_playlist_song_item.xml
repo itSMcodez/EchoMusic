@@ -5,5 +5,10 @@
         android:id="@+id/remove_song_menu_item"
         android:name="@string/remove"
         android:title="@string/remove" />
+    
+    <item
+        android:id="@+id/add_to_playlist_menu_item"
+        android:name="@string/add_to_playlist"
+        android:title="@string/add_to_playlist" />
 
 </menu>

@@ -6,16 +6,19 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+import com.itsmcodez.echomusic.callbacks.OnClickEvents;
 import com.itsmcodez.echomusic.databinding.LayoutArtistItemBinding;
+import com.itsmcodez.echomusic.markups.Adapter;
 import com.itsmcodez.echomusic.models.ArtistsModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
 
-public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ArtistsViewHolder> {
+public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ArtistsViewHolder> implements Adapter {
     private LayoutArtistItemBinding binding;
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<ArtistsModel> artists;
+    private OnClickEvents.OnItemClickListener onItemClickListener;
 
     public ArtistsAdapter(Context context, LayoutInflater inflater, ArrayList<ArtistsModel> artists) {
         this.context = context;
@@ -50,12 +53,18 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ArtistsV
         viewHolder.title.setText(artist.getArtist());
         
         viewHolder.itemView.setOnClickListener(view -> {
-                
+                if(onItemClickListener != null) {
+                	onItemClickListener.onItemClick(view, artist, position);
+                }
         });
     }
 
     @Override
     public int getItemCount() {
         return artists.size();
+    }
+    
+    public void setOnItemClickListener(OnClickEvents.OnItemClickListener onItemClickListener) {
+    	this.onItemClickListener = onItemClickListener;
     }
 }

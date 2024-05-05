@@ -1,8 +1,9 @@
 package com.itsmcodez.echomusic.models;
 
+import com.itsmcodez.echomusic.markups.Model;
 import java.util.ArrayList;
 
-public class PlaylistsModel {
+public class PlaylistsModel implements Model {
     private String title;
     private ArrayList<PlaylistSongsModel> songs;
     private int songCount;

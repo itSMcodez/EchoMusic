@@ -1,4 +1,5 @@
 package com.itsmcodez.echomusic.fragments;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.itsmcodez.echomusic.AlbumArtistSongsActivity;
 import com.itsmcodez.echomusic.adapters.ArtistsAdapter;
 import com.itsmcodez.echomusic.databinding.FragmentArtistsBinding;
 import com.itsmcodez.echomusic.models.ArtistsModel;
@@ -37,6 +39,14 @@ public class ArtistsFragment extends Fragment {
                 public void onChanged(ArrayList<ArtistsModel> allArtists) {
                 	artistsAdapter = new ArtistsAdapter(container.getContext(), getLayoutInflater(), allArtists);
                     binding.recyclerView.setAdapter(artistsAdapter);
+                    
+                    artistsAdapter.setOnItemClickListener((view, _artist, position) -> {
+                            ArtistsModel artist = (ArtistsModel) _artist;
+                            startActivity(new Intent(container.getContext(), AlbumArtistSongsActivity.class)
+                                .putExtra("title", artist.getArtist())
+                                .putExtra("album_id", artist.getAlbumId())
+                                .putExtra("from", "artist"));
+                    });
                 }
         });
         

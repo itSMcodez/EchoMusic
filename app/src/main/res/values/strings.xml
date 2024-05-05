@@ -13,6 +13,7 @@
     <string name="duration">Duration</string>
     <string name="clear">Clear</string>
     <string name="custom">Custom</string>
+    <string name="_default">Default</string>
     <string name="clear_playlist">Clear songs</string>
     <string name="add_to_queue">Add to playing queue</string>
     <string name="activity_settings_action_bar_title">Settings</string>
@@ -32,6 +33,7 @@
     <string name="msg_rename_playlist_rationale">You are renaming %s. \nType the new name below.</string>
     <string name="msg_rename_playlist_success">Renamed %1$s to %2$s</string>
     <string name="msg_add_to_playlist_success">Added %1$s to %2$s</string>
+    <string name="msg_add_songs_to_playlist_success">Added %d song(s) to %s</string>
     <string name="msg_remove_song_from_playlist_success">Removed %1$s from %2$s</string>
     <string name="msg_add_to_playlist_exists">Song already exists!</string>
     <string name="msg_swap_song_position">Move item up or down to change it\'s position</string>
@@ -66,9 +68,9 @@
     <string name="mode_dark_off">Requires restart \nDark mode has been disabled</string>
     <string name="delete_playlist_confirmation_dialog_title">Confirm deletion</string>
     <plurals name="playlist_songs_count">
-        <item quantity="zero">0 songs found.</item>
-        <item quantity="one">%d song found.</item>
-        <item quantity="other">%d songs found.</item>
+        <item quantity="zero">0 songs found -</item>
+        <item quantity="one">%d song found -</item>
+        <item quantity="other">%d songs found -</item>
     </plurals>
     <plurals name="msg_clear_playlist_success">
         <item quantity="one">Successfully cleared %d song from %s</item>

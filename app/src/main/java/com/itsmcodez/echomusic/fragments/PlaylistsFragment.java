@@ -63,7 +63,8 @@ public class PlaylistsFragment extends Fragment {
                     binding.recyclerView.setAdapter(playlistsAdapter);
                     
                     // On item click
-                    playlistsAdapter.setOnItemClickListener((view, playlist, position) -> {
+                    playlistsAdapter.setOnItemClickListener((view, _playlist, position) -> {
+                            PlaylistsModel playlist = (PlaylistsModel) _playlist;
                             startActivity(new Intent(container.getContext(), PlaylistSongsActivity.class).putExtra("title", playlist.getTitle()).putExtra("position", position));
                     });
                 }

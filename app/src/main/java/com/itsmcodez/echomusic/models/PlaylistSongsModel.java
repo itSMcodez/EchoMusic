@@ -1,6 +1,7 @@
 package com.itsmcodez.echomusic.models;
+import com.itsmcodez.echomusic.markups.Model;
 
-public class PlaylistSongsModel {
+public class PlaylistSongsModel implements Model {
     private String path, title, artist, duration, album, albumId, songId;
 
     public PlaylistSongsModel(

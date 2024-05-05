@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:liftOnScroll="true"
+        app:liftOnScrollColor="@android:color/transparent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways|snap" />
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp"
+            app:layout_scrollFlags="scroll|enterAlways|snap">
+
+            <ImageView
+                android:id="@+id/album_artwork"
+                android:layout_height="300dp"
+                android:layout_width="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_album_artwork" />
+            
+            <TextView
+                android:id="@+id/info"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="8dp"
+                android:padding="8dp"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                android:text="Playlist info"/>
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/shuffle_all_bt"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/bt_shuffle_all_text"
+                    android:layout_weight="1"
+                    app:icon="@drawable/ic_shuffle"
+                    style="@style/Widget.Material3.Button.OutlinedButton.Icon" />
+
+                <Button
+                    android:id="@+id/play_all_bt"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/bt_play_all_text"
+                    android:layout_weight="1"
+                    app:icon="@drawable/ic_play_outline"
+                    style="@style/Widget.Material3.Button.TonalButton.Icon" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:fadeScrollbars="true"
+        android:scrollbarDefaultDelayBeforeFade="1500"
+        android:scrollbarSize="6dp"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -14,20 +14,22 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.R;
+import com.itsmcodez.echomusic.callbacks.OnClickEvents;
 import com.itsmcodez.echomusic.databinding.LayoutMaterialTextinputBinding;
 import com.itsmcodez.echomusic.databinding.LayoutPlaylistItemBinding;
 import com.itsmcodez.echomusic.fragments.PlaylistsFragment;
+import com.itsmcodez.echomusic.markups.Adapter;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.utils.ArtworkUtils;
 import com.itsmcodez.echomusic.utils.MusicUtils;
 import java.util.ArrayList;
 
-public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.PlaylistsViewHolder> {
+public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.PlaylistsViewHolder> implements Adapter {
     private LayoutPlaylistItemBinding binding;
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<PlaylistsModel> playlists;
-    private OnItemClickListener onItemClickListener;
+    private OnClickEvents.OnItemClickListener onItemClickListener;
 
     public PlaylistsAdapter(Context context, LayoutInflater inflater, ArrayList<PlaylistsModel> playlists) {
         this.context = context;
@@ -65,14 +67,14 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
         if(playlist.getSongs() != null && playlist.getSongs().size() != 0) {
             var playlistDuration = playlist.getTotalDuration();
             var songsCount = playlist.getSongCount();
-            viewHolder.info.setText(context.getResources().getQuantityString(R.plurals.playlist_songs_count, songsCount, songsCount) + MusicUtils.getReadableDuration(playlistDuration));
+            viewHolder.info.setText(context.getResources().getQuantityString(R.plurals.playlist_songs_count, songsCount, songsCount) + " " + MusicUtils.getReadableDuration(playlistDuration));
             viewHolder.albumArtwork.setImageURI(ArtworkUtils.getArtworkFrom(Long.parseLong(playlist.getSongs().get(playlist.getSongs().size() - 1).getAlbumId())));
             if(viewHolder.albumArtwork.getDrawable() == null) {
             	viewHolder.albumArtwork.setImageDrawable(context.getDrawable(R.drawable.ic_library_music_outline));
             }
         } else {
             var songsCount = 0;
-            viewHolder.info.setText(context.getResources().getQuantityString(R.plurals.playlist_songs_count, songsCount, songsCount) + "00:00");
+            viewHolder.info.setText(context.getResources().getQuantityString(R.plurals.playlist_songs_count, songsCount, songsCount) + " 00:00");
             viewHolder.albumArtwork.setImageDrawable(context.getDrawable(R.drawable.ic_library_music_outline));
         }
         
@@ -192,12 +194,8 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
         return playlists.size();
     }
     
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnClickEvents.OnItemClickListener onItemClickListener) {
     	this.onItemClickListener = onItemClickListener;
     }
     
-    @FunctionalInterface
-    public interface OnItemClickListener {
-        public void onItemClick(View view, PlaylistsModel playlist, int position);
-    }
 }

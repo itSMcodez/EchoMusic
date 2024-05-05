@@ -17,6 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.adapters.PlaylistSongsAdapter;
 import com.itsmcodez.echomusic.databinding.ActivityPlaylistSongsBinding;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
+import com.itsmcodez.echomusic.utils.MusicUtils;
 import com.itsmcodez.echomusic.utils.PlaylistUtils;
 import com.itsmcodez.echomusic.viewmodels.PlaylistSongsViewModel;
 import java.util.ArrayList;
@@ -58,6 +59,15 @@ public class PlaylistSongsActivity extends AppCompatActivity {
                     
                     // Cover Art
                     binding.coverArt.setImageDrawable(playlistPosition == 0 ? getDrawable(R.drawable.ic_heart) : getDrawable(R.drawable.ic_library_music_outline));
+                    
+                    // Songs list and duration
+                    var songsDuration = 0l;
+                    var sum = 0l;
+                    for(PlaylistSongsModel song : allSongs) {
+                    	songsDuration = sum + Long.parseLong(song.getDuration());
+                        sum += Long.parseLong(song.getDuration());
+                    }
+                    binding.info.setText(getResources().getQuantityString(R.plurals.playlist_songs_count, allSongs.size(), allSongs.size()) + " " + MusicUtils.getReadableDuration(songsDuration));
                     
                     // Swap song item position logic
                     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(

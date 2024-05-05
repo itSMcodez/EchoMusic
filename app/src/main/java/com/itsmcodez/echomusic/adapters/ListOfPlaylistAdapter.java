@@ -7,16 +7,18 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+import com.itsmcodez.echomusic.callbacks.OnClickEvents;
 import com.itsmcodez.echomusic.databinding.LayoutListOfPlaylistBinding;
+import com.itsmcodez.echomusic.markups.Adapter;
 import com.itsmcodez.echomusic.models.ListOfPlaylistModel;
 import java.util.ArrayList;
 
-public class ListOfPlaylistAdapter extends RecyclerView.Adapter<ListOfPlaylistAdapter.ListOfPlaylistViewHolder> {
+public class ListOfPlaylistAdapter extends RecyclerView.Adapter<ListOfPlaylistAdapter.ListOfPlaylistViewHolder> implements Adapter {
     private LayoutListOfPlaylistBinding binding;
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<ListOfPlaylistModel> playlists;
-    private OnItemClickListener onItemClickListener;
+    private OnClickEvents.OnItemClickListener onItemClickListener;
 
     public ListOfPlaylistAdapter(Context context, LayoutInflater inflater, ArrayList<ListOfPlaylistModel> playlists) {
         this.context = context;
@@ -59,12 +61,8 @@ public class ListOfPlaylistAdapter extends RecyclerView.Adapter<ListOfPlaylistAd
         return playlists.size();
     }
     
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnClickEvents.OnItemClickListener onItemClickListener) {
     	this.onItemClickListener = onItemClickListener;
     }
     
-    @FunctionalInterface
-    public interface OnItemClickListener {
-        public void onItemClick(View view, ListOfPlaylistModel playlist, int position);
-    }
 }

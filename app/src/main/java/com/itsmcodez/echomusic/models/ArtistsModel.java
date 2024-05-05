@@ -1,8 +1,9 @@
 package com.itsmcodez.echomusic.models;
 
 import android.net.Uri;
+import com.itsmcodez.echomusic.markups.Model;
 
-public class ArtistsModel {
+public class ArtistsModel implements Model {
     private String artist, albumId;
     private Uri albumArtwork;
 

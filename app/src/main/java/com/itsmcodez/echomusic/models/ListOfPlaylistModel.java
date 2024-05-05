@@ -1,6 +1,7 @@
 package com.itsmcodez.echomusic.models;
+import com.itsmcodez.echomusic.markups.Model;
 
-public class ListOfPlaylistModel {
+public class ListOfPlaylistModel implements Model {
     private String title;
 
     public ListOfPlaylistModel(String title) {

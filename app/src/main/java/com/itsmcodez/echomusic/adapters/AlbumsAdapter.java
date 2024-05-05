@@ -10,16 +10,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.itsmcodez.echomusic.R;
+import com.itsmcodez.echomusic.callbacks.OnClickEvents;
 import com.itsmcodez.echomusic.databinding.LayoutAlbumItemBinding;
+import com.itsmcodez.echomusic.markups.Adapter;
 import com.itsmcodez.echomusic.models.AlbumsModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
 
-public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.AlbumsViewHolder> {
+public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.AlbumsViewHolder> implements Adapter {
     private LayoutAlbumItemBinding binding;
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<AlbumsModel> albums;
+    private OnClickEvents.OnItemClickListener onItemClickListener;
 
     public AlbumsAdapter(Context context, LayoutInflater inflater, ArrayList<AlbumsModel> albums) {
         this.context = context;
@@ -57,12 +60,18 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.AlbumsView
         .into(viewHolder.albumArtwork);
         
         viewHolder.itemView.setOnClickListener(view -> {
-                
+                if(onItemClickListener != null) {
+                	onItemClickListener.onItemClick(view, album, position);
+                }
         });
     }
 
     @Override
     public int getItemCount() {
         return albums.size();
+    }
+    
+    public void setOnItemClickListener(OnClickEvents.OnItemClickListener onItemClickListener) {
+    	this.onItemClickListener = onItemClickListener;
     }
 }

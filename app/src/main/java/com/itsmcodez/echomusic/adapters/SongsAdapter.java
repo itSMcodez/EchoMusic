@@ -21,6 +21,7 @@ import com.itsmcodez.echomusic.BaseApplication;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.databinding.LayoutRecyclerviewBinding;
 import com.itsmcodez.echomusic.databinding.LayoutSongItemBinding;
+import com.itsmcodez.echomusic.markups.Adapter;
 import com.itsmcodez.echomusic.models.ListOfPlaylistModel;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
@@ -29,7 +30,7 @@ import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
 import com.itsmcodez.echomusic.utils.MusicUtils;
 import java.util.ArrayList;
 
-public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> {
+public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> implements Adapter {
     private LayoutSongItemBinding binding;
     private Context context;
     private LayoutInflater inflater;
@@ -114,7 +115,8 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
                                 .create();
                                 dialog.show();
                                 
-                                adapter.setOnItemClickListener((view, playlist, position) -> {
+                                adapter.setOnItemClickListener((view, _playlist, position) -> {
+                                        ListOfPlaylistModel playlist = (ListOfPlaylistModel) _playlist;
                                         PlaylistSongsModel playlistSong = new PlaylistSongsModel(song.getPath(), song.getTitle(),
                                             song.getArtist(), song.getDuration(), song.getAlbum(), song.getAlbumId(), song.getSongId());
                                         playlistRepo.addSongToPlaylistAt(playlistSong, position);

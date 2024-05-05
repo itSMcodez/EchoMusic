@@ -103,6 +103,36 @@ public final class PlaylistUtils {
         savePlaylistsToDB(application, allPlaylists);
     }
     
+    public static void addSongsToPlaylistAt(Application application, ArrayList<PlaylistSongsModel> songsList, int position) {
+    	allPlaylists = getPlaylistsFromDB(application);
+        ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs() != null ? allPlaylists.get(position).getSongs() : new ArrayList<>();
+        ArrayList<String> titles = new ArrayList<>();
+        for(PlaylistSongsModel _song : songs) {
+        	titles.add(_song.getTitle());
+        }
+        // count songs added
+        var songsAdded = 0;
+        for(PlaylistSongsModel _song : songsList) {
+        	if(titles.contains(_song.getTitle())) {
+                continue;
+            } else {
+                songs.add(_song);
+            }
+            songsAdded++;
+        }
+        Toast.makeText(application, application.getString(R.string.msg_add_songs_to_playlist_success, songsAdded, allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
+        var playlistDuration = 0l;
+        var sum = 0l;
+        for(PlaylistSongsModel _song : songs) {
+        	playlistDuration = sum + Long.parseLong(_song.getDuration());
+            sum += Long.parseLong(_song.getDuration());
+        }
+        allPlaylists.get(position).setTotalDuration(playlistDuration);
+        allPlaylists.get(position).setSongCount(songs.size());
+        allPlaylists.get(position).setSongs(songs);
+        savePlaylistsToDB(application, allPlaylists);
+    }
+    
     private static void savePlaylistsToDB(Application application, ArrayList<PlaylistsModel> playlists) {
     	Gson gson = new Gson();
         String playlistsData = gson.toJson(playlists);
