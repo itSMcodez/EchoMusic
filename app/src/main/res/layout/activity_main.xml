@@ -18,17 +18,94 @@
     </com.google.android.material.appbar.AppBarLayout>
     
     <FrameLayout
+        android:id="@+id/fragmentHolder"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_below="@id/appbar"
-        android:layout_above="@id/bottom_nav">
+        android:layout_above="@id/mini_controller"/>
+    
+    <RelativeLayout
+        android:id="@+id/mini_controller"
+        android:layout_above="@id/bottom_nav"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:background="?attr/colorSurfaceContainer">
         
-        <FrameLayout
-            android:id="@+id/fragmentHolder"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"/>
+        <ImageView
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:layout_alignParentStart="true"
+            android:scaleType="centerCrop"
+            android:id="@+id/album_artwork"
+            android:src="@drawable/ic_album_artwork"/>
         
-    </FrameLayout>
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/album_artwork"
+            android:layout_toStartOf="@id/bt_holder">
+            
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="Song title"
+                android:typeface="serif"
+                android:textStyle="bold"
+                android:id="@+id/title" />
+            
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="Artist"
+                android:typeface="sans"
+                android:id="@+id/artist" />
+            
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/bt_holder"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true">
+            
+            <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:background="?attr/roundSelector"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:layout_margin="8dp"
+                android:id="@+id/skip_next_bt"
+                android:src="@drawable/ic_skip_next_outline"/>
+            
+            <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:background="?attr/roundSelector"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:layout_margin="8dp"
+                android:id="@+id/play_pause_bt"
+                android:src="@drawable/ic_play_outline"/>
+            
+        </LinearLayout>
+        
+    </RelativeLayout>
     
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
