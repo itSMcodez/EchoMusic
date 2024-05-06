@@ -37,6 +37,15 @@ public class SongsFragment extends Fragment {
                 public void onChanged(ArrayList<SongsModel> allSongs) {
                 	songsAdapter = new SongsAdapter(container.getContext(), getLayoutInflater(), allSongs);
                     binding.recyclerView.setAdapter(songsAdapter);
+                    
+                    songsAdapter.setOnItemClickListener((view, _song, position) -> {
+                            
+                    });
+                    
+                    songsAdapter.setOnItemLongClickListener((view, _song, position) -> {
+                            
+                            return true;
+                    });
                 }
         });
         

@@ -11,6 +11,6 @@ public interface OnClickEvents {
     
     @FunctionalInterface
     public interface OnItemLongClickListener {
-        public void onItemLongClick(View view, Model model, int position);
+        public boolean onItemLongClick(View view, Model model, int position);
     }
 }

@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.BaseApplication;
 import com.itsmcodez.echomusic.R;
+import com.itsmcodez.echomusic.callbacks.OnClickEvents;
 import com.itsmcodez.echomusic.databinding.LayoutRecyclerviewBinding;
 import com.itsmcodez.echomusic.databinding.LayoutSongItemBinding;
 import com.itsmcodez.echomusic.markups.Adapter;
@@ -35,6 +36,8 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<SongsModel> songs;
+    private OnClickEvents.OnItemClickListener onItemClickListener;
+    private OnClickEvents.OnItemLongClickListener onItemLongClickListener;
 
     public SongsAdapter(Context context, LayoutInflater inflater, ArrayList<SongsModel> songs) {
         this.context = context;
@@ -75,7 +78,16 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
         .into(viewHolder.albumArtwork);
         
         viewHolder.itemView.setOnClickListener(view -> {
-                
+                if(onItemClickListener != null) {
+                	onItemClickListener.onItemClick(view, song, position);
+                }
+        });
+        
+        viewHolder.itemView.setOnLongClickListener(view -> {
+                if(onItemLongClickListener != null) {
+                	onItemLongClickListener.onItemLongClick(view, song, position);
+                }
+                return true;
         });
         
         viewHolder.itemMenu.setOnClickListener(view -> {
@@ -173,5 +185,13 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
     @Override
     public int getItemCount() {
         return songs.size();
+    }
+    
+    public void setOnItemClickListener(OnClickEvents.OnItemClickListener onItemClickListener) {
+    	this.onItemClickListener = onItemClickListener;
+    }
+    
+    public void setOnItemLongClickListener(OnClickEvents.OnItemLongClickListener onItemLongClickListener) {
+    	this.onItemLongClickListener = onItemLongClickListener;
     }
 }
