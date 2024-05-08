@@ -79,6 +79,14 @@ public class SongsFragment extends Fragment {
         this.binding = null;
     }
     
+    @Override
+    public void onDetach() {
+        if(actionMode != null) {
+        	actionMode.finish();
+        }
+        super.onDetach();
+    }
+    
     /* Multiple selection ActionMode logic */
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback(){
         @Override
