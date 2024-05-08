@@ -59,8 +59,12 @@ public class SongsFragment extends Fragment {
                     
                     songsAdapter.setOnItemLongClickListener((view, _song, position) -> {
                             // toggle multiple selection
-                            songsAdapter.toggleSelectionMode(position, true, view);
-                            startActionMode();
+                            if(!songsAdapter.isSelectModeOn()) {
+                            	songsAdapter.toggleSelectionMode(position, true, view);
+                            	startActionMode();
+                            } else {
+                            	songsAdapter.addIndexToSelection(position, view);
+                            }
                             actionMode.setTitle(String.valueOf(songsAdapter.getSelectedIndices().size() + " selected"));
                             if(songsAdapter.getSelectedIndices().size() == 0) {
                             	actionMode.finish();

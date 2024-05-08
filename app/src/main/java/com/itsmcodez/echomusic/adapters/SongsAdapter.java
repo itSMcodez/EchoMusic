@@ -264,9 +264,6 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
                 isSelectModeOn = selectedIndices.size() > 0 ? true : false;
                 Toast.makeText(context.getApplicationContext(), "Deselected " + songs.get(index).getTitle(), Toast.LENGTH_SHORT).show();
             }
-            if(!isSelectModeOn) {
-                selectedIndex = -1;
-            }
             // Set itemView active state for selection -> change background to grey if selected or otherwise
             view.setActivated(false);
         }
