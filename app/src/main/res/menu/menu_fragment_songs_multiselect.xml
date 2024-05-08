@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/add_songs_to_playlist_menu_item"
+        android:name="@string/add_to_playlist"
+        android:title="@string/add_to_playlist"
+        android:icon="@drawable/ic_playlist_plus"
+        app:tooltipText="@string/add_to_playlist"
+        app:showAsAction="ifRoom" />
+    
+    <item
+        android:id="@+id/add_songs_to_queue_menu_item"
+        android:name="@string/add_to_queue"
+        android:title="@string/add_to_queue"
+        android:icon="@drawable/ic_plus"
+        app:tooltipText="@string/add_to_queue"
+        app:showAsAction="ifRoom" />
+
+</menu>

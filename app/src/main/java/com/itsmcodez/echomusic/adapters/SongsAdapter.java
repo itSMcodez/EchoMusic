@@ -3,8 +3,10 @@ package com.itsmcodez.echomusic.adapters;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -31,13 +33,19 @@ import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
 import com.itsmcodez.echomusic.utils.MusicUtils;
 import java.util.ArrayList;
 
-public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> implements Adapter {
+public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> implements Adapter, 
+OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelectChangedListener {
+    
     private LayoutSongItemBinding binding;
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<SongsModel> songs;
     private OnClickEvents.OnItemClickListener onItemClickListener;
     private OnClickEvents.OnItemLongClickListener onItemLongClickListener;
+    private SparseBooleanArray selectionMap = new SparseBooleanArray();
+    private ArrayList<Integer> selectedIndices = new ArrayList<>();
+    private boolean isSelectModeOn = false;
+    private int selectedIndex = -1;
 
     public SongsAdapter(Context context, LayoutInflater inflater, ArrayList<SongsModel> songs) {
         this.context = context;
@@ -71,6 +79,10 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
     public void onBindViewHolder(SongsAdapter.SongsViewHolder viewHolder, int position) {
         SongsModel song = songs.get(position);
         
+        // Set itemView active state for selection -> change background to grey if selected or otherwise
+        viewHolder.itemView.setActivated(selectionMap.get(position, false));
+        viewHolder.itemMenu.setVisibility(selectionMap.get(position, false) ? View.GONE : View.VISIBLE);
+        
         viewHolder.title.setText(song.getTitle());
         viewHolder.artist.setText(song.getArtist());
         Glide.with(context).load(song.getAlbumArtwork()).diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -80,12 +92,16 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
         viewHolder.itemView.setOnClickListener(view -> {
                 if(onItemClickListener != null) {
                 	onItemClickListener.onItemClick(view, song, position);
+                    if(isSelectModeOn) {
+                    	viewHolder.itemMenu.setVisibility(selectionMap.get(position, false) ? View.GONE : View.VISIBLE);
+                    }
                 }
         });
         
         viewHolder.itemView.setOnLongClickListener(view -> {
                 if(onItemLongClickListener != null) {
                 	onItemLongClickListener.onItemLongClick(view, song, position);
+                    viewHolder.itemMenu.setVisibility(selectionMap.get(position, false) ? View.GONE : View.VISIBLE);
                 }
                 return true;
         });
@@ -193,5 +209,76 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHol
     
     public void setOnItemLongClickListener(OnClickEvents.OnItemLongClickListener onItemLongClickListener) {
     	this.onItemLongClickListener = onItemLongClickListener;
+    }
+    
+    public boolean isSelectModeOn() {
+    	return this.isSelectModeOn;
+    }
+    
+    /* Multiple selection logic */
+    @Override
+    public ArrayList<Integer> getSelectedIndices() {
+        return selectedIndices;
+    }
+    
+    @Override
+    public SparseBooleanArray getSelectionMap() {
+        return selectionMap;
+    }
+    
+    @Override
+    public void addIndexToSelection(int index, View view) {
+        // Check if index already exists or not
+        if(selectionMap.get(index, false)) {
+            // if index exists then remove it
+            selectedIndex = selectionMap.indexOfKey(index);
+            selectionMap.delete(index);
+            onSelectChanged(index, false, view);
+        } else {
+            // if index doesn't exist then add it
+            selectionMap.put(index, true);
+            selectedIndex = selectionMap.indexOfKey(index);
+            onSelectChanged(index, true, view);
+        }
+    }
+    
+    
+    @Override
+    public void toggleSelectionMode(int index, boolean isSelectModeOn, View view) {
+        this.isSelectModeOn = isSelectModeOn;
+        addIndexToSelection(index, view);
+    }
+    
+    
+    @Override
+    public void onSelectChanged(int index, boolean isActive, View view) {
+        
+        if(isActive) {
+        	selectedIndices.add(index);
+            // Set itemView active state for selection -> change background to grey if selected or otherwise
+            view.setActivated(isActive);
+            Toast.makeText(context.getApplicationContext(), "Selected " + songs.get(index).getTitle(), Toast.LENGTH_SHORT).show();
+        } else {
+            if(selectedIndices.contains(index)) {
+                selectedIndices.remove(selectedIndex);
+                isSelectModeOn = selectedIndices.size() > 0 ? true : false;
+                Toast.makeText(context.getApplicationContext(), "Deselected " + songs.get(index).getTitle(), Toast.LENGTH_SHORT).show();
+            }
+            if(!isSelectModeOn) {
+                selectedIndex = -1;
+            }
+            // Set itemView active state for selection -> change background to grey if selected or otherwise
+            view.setActivated(false);
+        }
+    }
+    
+    @Override
+    public void clearSelection() {
+    	isSelectModeOn = false;
+        selectedIndex = -1;
+        selectedIndices.clear();
+        selectionMap.clear();
+        Toast.makeText(context.getApplicationContext(), "Cancelled selection", Toast.LENGTH_SHORT).show();
+        notifyDataSetChanged();
     }
 }
