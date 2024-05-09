@@ -96,6 +96,12 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
     }
     
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.binding = null;
+    }
+    
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_activity_album_artist_songs, menu);
         return super.onCreateOptionsMenu(menu);
