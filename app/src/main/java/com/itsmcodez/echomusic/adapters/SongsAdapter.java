@@ -246,7 +246,9 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
     @Override
     public void toggleSelectionMode(int index, boolean isSelectModeOn, View view) {
         this.isSelectModeOn = isSelectModeOn;
-        addIndexToSelection(index, view);
+        if(isSelectModeOn) {
+        	addIndexToSelection(index, view);
+        }
     }
     
     
@@ -254,19 +256,17 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
     public void onSelectChanged(int index, boolean isActive, View view) {
         
         if(isActive) {
-        	selectedIndices.add(index);
+        	selectedIndices.add(selectedIndex, index);
             // Set itemView active state for selection -> change background to grey if selected or otherwise
             view.setActivated(isActive);
-            Toast.makeText(context.getApplicationContext(), "Selected " + songs.get(index).getTitle(), Toast.LENGTH_SHORT).show();
         } else {
             if(selectedIndices.contains(index)) {
                 selectedIndices.remove(selectedIndex);
-                isSelectModeOn = selectedIndices.size() > 0 ? true : false;
-                Toast.makeText(context.getApplicationContext(), "Deselected " + songs.get(index).getTitle(), Toast.LENGTH_SHORT).show();
             }
             // Set itemView active state for selection -> change background to grey if selected or otherwise
             view.setActivated(false);
         }
+        isSelectModeOn = selectedIndices.size() != 0 ? true : false;
     }
     
     @Override
@@ -275,7 +275,6 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
         selectedIndex = -1;
         selectedIndices.clear();
         selectionMap.clear();
-        Toast.makeText(context.getApplicationContext(), "Cancelled selection", Toast.LENGTH_SHORT).show();
         notifyDataSetChanged();
     }
 }
