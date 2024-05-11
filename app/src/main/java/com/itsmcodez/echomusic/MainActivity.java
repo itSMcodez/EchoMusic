@@ -40,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
         // ActionBar
         setSupportActionBar(binding.toolbar);
         
+        // Mini controller
+        binding.miniController.setOnClickListener(view -> {
+                startActivity(new Intent(MainActivity.this, PlayerActivity.class));
+        });
+        
         // Fragments
         SongsFragment songsFragment = new SongsFragment();
         AlbumsFragment albumsFragment = new AlbumsFragment();
