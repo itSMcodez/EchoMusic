@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDelegate;
+import com.itsmcodez.echomusic.preferences.Settings;
 import com.itsmcodez.echomusic.preferences.utils.PreferenceUtils;
 
 public class BaseApplication extends Application implements Application.ActivityLifecycleCallbacks {
@@ -14,10 +15,7 @@ public class BaseApplication extends Application implements Application.Activity
         super.onCreate();
         application = this;
         this.registerActivityLifecycleCallbacks(this);
-        boolean isDarkModeEnabled = PreferenceUtils.getKey().getBoolean("mode_dark", false);
-        if (isDarkModeEnabled) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
+        Settings.applyUIModeSettings();
     }
 
     public static Application getApplication() {
@@ -25,13 +23,17 @@ public class BaseApplication extends Application implements Application.Activity
     }
 
     @Override
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+        Settings.applyUIModeSettings();
+    }
 
     @Override
     public void onActivityStarted(Activity activity) {}
 
     @Override
-    public void onActivityResumed(Activity activity) {}
+    public void onActivityResumed(Activity activity) {
+        Settings.applyUIModeSettings();
+    }
 
     @Override
     public void onActivityPaused(Activity activity) {}
