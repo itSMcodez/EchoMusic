@@ -18,6 +18,7 @@
     <string name="add_to_queue">Add to playing queue</string>
     <string name="activity_settings_action_bar_title">Settings</string>
     <string name="activity_searchable_action_bar_title">Echo Music - Search</string>
+    <string name="fragment_np_md3_toolbar_title">Now Playing</string>
     <string name="bt_fav_text">Favourites</string>
     <string name="bt_add_playlist_text">Add playlist</string>
     <string name="bt_shuffle_all_text">Shuffle all</string>
@@ -44,6 +45,7 @@
     <string name="set_ringtone">Set as ringtone</string>
     <string name="share">Share</string>
     <string name="details">Details</string>
+    <string name="tooltip_now_playing_queue">Now playing queue</string>
     <string name="tooltip_search_text">Search</string>
     <string name="tooltip_settings_text">Settings</string>
     <string name="tooltip_songs_text">All songs</string>

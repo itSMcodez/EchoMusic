@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true">
+            
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent"
+                app:title="@string/fragment_np_md3_toolbar_title"
+                app:menu="@menu/menu_fragment_np_md3"/>
+            
+        </com.google.android.material.appbar.AppBarLayout>
+        
+        <LinearLayout
+            android:id="@+id/artwork_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_below="@id/appbar"
+            android:layout_above="@id/controls_holder">
+            
+            <androidx.cardview.widget.CardView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp">
+                
+                <ImageView
+                    android:id="@+id/album_artwork"
+                    android:layout_height="280dp"
+                    android:layout_width="280dp"/>
+                
+            </androidx.cardview.widget.CardView>
+            
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:textSize="24sp"
+                android:typeface="serif"
+                android:id="@+id/title"
+                android:textStyle="bold"
+                android:text="Song title" />
+            
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:text="Artist"
+                android:typeface="sans"
+                android:id="@+id/artist" />
+            
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/controls_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true">
+            
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical|right"
+                android:padding="8dp">
+                
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/fav_bt"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/roundSelector"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_heart_outline"/>
+                
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/set_ringtone_bt"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/roundSelector"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_bell_ring_outline"/>
+                
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/equalizer_bt"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/roundSelector"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_equalizer_outline"/>
+                
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/details_bt"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/roundSelector"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_information_variant"/>
+                
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="8dp"
+                    android:typeface="sans"
+                    android:text="00:00"
+                    android:id="@+id/current_duration" />
+                
+                <androidx.appcompat.widget.AppCompatSeekBar
+                    android:id="@+id/seek_bar"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"/>
+                
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="8dp"
+                    android:typeface="sans"
+                    android:text="00:00"
+                    android:id="@+id/duration" />
+                
+            </LinearLayout>
+            
+            <RelativeLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:padding="8dp">
+                
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/repeat_bt"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/roundSelector"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_repeat_off"/>
+                
+                <LinearLayout
+                    android:layout_toEndOf="@id/repeat_bt"
+                    android:layout_toStartOf="@id/shuffle_bt"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/skip_previous_bt"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/roundSelector"
+                        android:padding="8dp"
+                        app:srcCompat="@drawable/ic_skip_previous_outline"/>
+                    
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/play_pause_bt"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/roundSelector"
+                        android:padding="8dp"
+                        app:srcCompat="@drawable/ic_play_circle"/>
+                    
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/skip_next_bt"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/roundSelector"
+                        android:padding="8dp"
+                        app:srcCompat="@drawable/ic_skip_next_outline"/>
+                    
+                </LinearLayout>
+                
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/shuffle_bt"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/roundSelector"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_shuffle_off"/>
+                
+            </RelativeLayout>
+            
+        </LinearLayout>
+        
+    </RelativeLayout>
+    
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
