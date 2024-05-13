@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/now_playing_queue_sheet"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurfaceContainer"
+    android:clickable="true"
+    android:focusable="true"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp">
+    
+    <RelativeLayout
+        android:id="@+id/toggle_bar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/rectSelector"
+        android:padding="8dp">
+        
+        <ImageView
+            android:id="@+id/navigate_up_bt"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:padding="8dp"
+            android:layout_margin="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/roundSelector"
+            android:src="@drawable/ic_arrow_left"/>
+        
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/navigate_up_bt"
+            android:textStyle="bold"
+            android:typeface="serif"
+            android:textSize="24sp"
+            android:text="@string/layout_now_playing_queue_sheet_title"/>
+        
+    </RelativeLayout>
+    
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"/>
+    
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:fadeScrollbars="true"
+        android:scrollbarDefaultDelayBeforeFade="1500"
+        android:scrollbarSize="6dp"
+        android:scrollbars="vertical"/>
+    
+</LinearLayout>
