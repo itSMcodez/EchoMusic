@@ -27,6 +27,7 @@
     <string name="add_playlist_textinput_hint">Enter playlist name</string>
     <string name="add_playlist_dialog_title">Add new playlist</string>
     <string name="choose_playlist_dialog_title">Choose playlist</string>
+    <string name="layout_now_playing_queue_sheet_title">Now Playing Queue</string>
     <string name="add_playlist_dialog_empty_input_rationale">Please type a name for the playlist!</string>
     <string name="msg_delete_playlist_rationale">Are you sure you want to delete %s? \nThis will not delete any song in the playlist.</string>
     <string name="msg_clear_playlist_rationale">Are you sure you want to clear %s? \nThis will not delete any song in the playlist.</string>

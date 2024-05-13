@@ -238,4 +238,8 @@
         
     </RelativeLayout>
     
+    <include
+        android:id="@+id/np_queue_sheet"
+        layout="@layout/layout_now_playing_queue_sheet"/>
+    
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
