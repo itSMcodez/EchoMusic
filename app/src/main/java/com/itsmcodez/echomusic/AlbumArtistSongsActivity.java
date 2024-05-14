@@ -86,6 +86,11 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
                     
                     songsAdapter = new SongsAdapter(AlbumArtistSongsActivity.this, getLayoutInflater(), songs);
                     binding.recyclerView.setAdapter(songsAdapter);
+                    
+                    songsAdapter.setOnItemClickListener((view, _song, position) -> {
+                            startActivity(new Intent(AlbumArtistSongsActivity.this, PlayerActivity.class));
+                    });
+                    
                     // Cover Art
                     binding.albumArtwork.setImageURI(ArtworkUtils.getArtworkFrom(Long.parseLong(intent.getStringExtra("album_id"))));
                     if(binding.albumArtwork.getDrawable() == null) {
