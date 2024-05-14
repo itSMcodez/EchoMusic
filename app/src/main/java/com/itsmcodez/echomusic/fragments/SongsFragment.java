@@ -1,5 +1,6 @@
 package com.itsmcodez.echomusic.fragments;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.BaseApplication;
+import com.itsmcodez.echomusic.PlayerActivity;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.adapters.ListOfPlaylistAdapter;
 import com.itsmcodez.echomusic.adapters.SongsAdapter;
@@ -68,6 +70,8 @@ public class SongsFragment extends Fragment {
                                 }
                             	return;
                             }
+                            
+                            startActivity(new Intent(container.getContext(), PlayerActivity.class));
                     });
                     
                     songsAdapter.setOnItemLongClickListener((view, _song, position) -> {
