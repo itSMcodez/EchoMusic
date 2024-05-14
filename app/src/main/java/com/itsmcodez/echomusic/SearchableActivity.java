@@ -1,5 +1,6 @@
 package com.itsmcodez.echomusic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,6 +75,10 @@ public class SearchableActivity extends AppCompatActivity implements SearchView.
                         
                     	songsAdapter = new SongsAdapter(SearchableActivity.this, getLayoutInflater(), filteredList);
                         binding.recyclerView.setAdapter(songsAdapter);
+                        
+                        songsAdapter.setOnItemClickListener((view, _song, position) -> {
+                                startActivity(new Intent(SearchableActivity.this, PlayerActivity.class));
+                        });
                     }
             });
         } else binding.recyclerView.setAdapter(null);
