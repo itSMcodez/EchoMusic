@@ -57,6 +57,10 @@ public class PlaylistSongsActivity extends AppCompatActivity {
                 	playlistSongsAdapter = new PlaylistSongsAdapter(PlaylistSongsActivity.this, getLayoutInflater(), playlistPosition, allSongs);
                     binding.recyclerView.setAdapter(playlistSongsAdapter);
                     
+                    playlistSongsAdapter.setOnItemClickListener((view, _song, position) -> {
+                            startActivity(new Intent(PlaylistSongsActivity.this, PlayerActivity.class));
+                    });
+                    
                     // Cover Art
                     binding.coverArt.setImageDrawable(playlistPosition == 0 ? getDrawable(R.drawable.ic_heart) : getDrawable(R.drawable.ic_library_music_outline));
                     

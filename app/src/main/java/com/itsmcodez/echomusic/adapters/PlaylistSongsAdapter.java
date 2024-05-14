@@ -18,6 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.BaseApplication;
 import com.itsmcodez.echomusic.PlaylistSongsActivity;
 import com.itsmcodez.echomusic.R;
+import com.itsmcodez.echomusic.callbacks.OnClickEvents;
 import com.itsmcodez.echomusic.databinding.LayoutPlaylistSongItemBinding;
 import com.itsmcodez.echomusic.databinding.LayoutRecyclerviewBinding;
 import com.itsmcodez.echomusic.markups.Adapter;
@@ -33,6 +34,7 @@ public class PlaylistSongsAdapter extends RecyclerView.Adapter<PlaylistSongsAdap
     private LayoutInflater inflater;
     private ArrayList<PlaylistSongsModel> songs;
     private int playlistPosition;
+    private OnClickEvents.OnItemClickListener onItemClickListener;
 
     public PlaylistSongsAdapter(Context context, LayoutInflater inflater, int playlistPosition, ArrayList<PlaylistSongsModel> songs) {
         this.context = context;
@@ -69,7 +71,9 @@ public class PlaylistSongsAdapter extends RecyclerView.Adapter<PlaylistSongsAdap
         viewHolder.title.setText(" - " + song.getTitle());
         
         viewHolder.itemView.setOnClickListener(view -> {
-                
+                if(onItemClickListener != null) {
+                	onItemClickListener.onItemClick(view, song, position);
+                }
         });
         
         viewHolder.itemView.setOnLongClickListener(view -> {
@@ -152,5 +156,9 @@ public class PlaylistSongsAdapter extends RecyclerView.Adapter<PlaylistSongsAdap
     @Override
     public int getItemCount() {
         return songs.size();
+    }
+    
+    public void setOnItemClickListener(OnClickEvents.OnItemClickListener onItemClickListener) {
+    	this.onItemClickListener = onItemClickListener;
     }
 }
