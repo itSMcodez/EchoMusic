@@ -143,6 +143,7 @@ public class PlaylistSongsActivity extends AppCompatActivity {
         this.binding = null;
         if(!mediaController.isPlaying()) {
         	mediaController.release();
+            stopService(new Intent(this, MusicService.class));
         }
     }
     

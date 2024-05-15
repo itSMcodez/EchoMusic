@@ -124,6 +124,7 @@ public class SearchableActivity extends AppCompatActivity implements SearchView.
         this.binding = null;
         if(!mediaController.isPlaying()) {
         	mediaController.release();
+            stopService(new Intent(this, MusicService.class));
         }
     }
 }
