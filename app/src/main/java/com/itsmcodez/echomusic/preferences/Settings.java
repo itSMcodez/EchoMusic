@@ -2,7 +2,7 @@ package com.itsmcodez.echomusic.preferences;
 import androidx.appcompat.app.AppCompatDelegate;
 import com.itsmcodez.echomusic.preferences.utils.PreferenceUtils;
 
-public class Settings {
+public final class Settings {
     public static final String UI_MODE_SWITCH = "mode_dark";
     
     private Settings(){
