@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDelegate;
 import com.itsmcodez.echomusic.preferences.Settings;
 import com.itsmcodez.echomusic.preferences.utils.PreferenceUtils;
+import com.itsmcodez.echomusic.utils.ServiceUtils;
 
 public class BaseApplication extends Application implements Application.ActivityLifecycleCallbacks {
     private static Application application;
@@ -15,6 +16,10 @@ public class BaseApplication extends Application implements Application.Activity
         super.onCreate();
         application = this;
         this.registerActivityLifecycleCallbacks(this);
+        
+        // start MusicService
+        ServiceUtils.startMusicService(this);
+        
         Settings.applyUIModeSettings();
     }
 
@@ -45,5 +50,7 @@ public class BaseApplication extends Application implements Application.Activity
     public void onActivitySaveInstanceState(Activity activity, Bundle savedInstanceState) {}
 
     @Override
-    public void onActivityDestroyed(Activity activity) {}
+    public void onActivityDestroyed(Activity activity) {
+        
+    }
 }
