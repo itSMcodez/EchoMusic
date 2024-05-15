@@ -1,5 +1,6 @@
 package com.itsmcodez.echomusic;
 
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +11,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.media3.session.MediaController;
+import androidx.media3.session.SessionToken;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.itsmcodez.echomusic.adapters.ListOfPlaylistAdapter;
 import com.itsmcodez.echomusic.adapters.SongsAdapter;
 import com.itsmcodez.echomusic.databinding.ActivityAlbumArtistSongsBinding;
@@ -22,6 +27,7 @@ import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
 import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
+import com.itsmcodez.echomusic.services.MusicService;
 import com.itsmcodez.echomusic.utils.ArtworkUtils;
 import com.itsmcodez.echomusic.utils.MusicUtils;
 import com.itsmcodez.echomusic.viewmodels.SongsViewModel;
@@ -32,6 +38,26 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
     private SongsAdapter songsAdapter;
     private SongsViewModel songsViewModel;
     private ArrayList<SongsModel> songs = new ArrayList<>();
+    private MediaController mediaController;
+    private ListenableFuture<MediaController> controllerFuture;
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SessionToken sessionToken = new SessionToken(this, new ComponentName(this, MusicService.class));
+        controllerFuture = new MediaController.Builder(this, sessionToken).buildAsync();
+        controllerFuture.addListener(() -> {
+                
+                if(controllerFuture.isDone()) {
+                    try {
+                        mediaController = controllerFuture.get();
+                    } catch(Exception err) {
+                        err.printStackTrace();
+                        mediaController = null;
+                    }
+                }
+        }, MoreExecutors.directExecutor());
+    }
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +114,11 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
                     binding.recyclerView.setAdapter(songsAdapter);
                     
                     songsAdapter.setOnItemClickListener((view, _song, position) -> {
+                            mediaController.setMediaItems(MusicUtils.makeMediaItems(songs), position, 0);
+                            if(!mediaController.isPlaying()) {
+                                mediaController.prepare();
+                                mediaController.play();
+                            }
                             startActivity(new Intent(AlbumArtistSongsActivity.this, PlayerActivity.class));
                     });
                     
@@ -104,6 +135,9 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         this.binding = null;
+        if(!mediaController.isPlaying()) {
+        	mediaController.release();
+        }
     }
     
     @Override
