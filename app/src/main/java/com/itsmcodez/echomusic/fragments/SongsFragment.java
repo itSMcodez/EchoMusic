@@ -1,4 +1,5 @@
 package com.itsmcodez.echomusic.fragments;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -15,9 +16,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.media3.common.MediaItem;
+import androidx.media3.session.MediaController;
+import androidx.media3.session.SessionToken;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.itsmcodez.echomusic.BaseApplication;
 import com.itsmcodez.echomusic.PlayerActivity;
 import com.itsmcodez.echomusic.R;
@@ -30,6 +36,9 @@ import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
 import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
+import com.itsmcodez.echomusic.services.MusicService;
+import com.itsmcodez.echomusic.utils.MusicUtils;
+import com.itsmcodez.echomusic.utils.ServiceUtils;
 import com.itsmcodez.echomusic.viewmodels.SongsViewModel;
 import java.util.ArrayList;
 
@@ -39,11 +48,39 @@ public class SongsFragment extends Fragment {
     private SongsViewModel songsViewModel;
     private ActionMode actionMode;
     private ArrayList<SongsModel> songs = new ArrayList<>();
+    private MediaController mediaController;
+    private ListenableFuture<MediaController> controllerFuture;
+    
+    @Override
+    public void onStart() {
+        super.onStart();
+        SessionToken sessionToken = new SessionToken(getContext(), new ComponentName(getContext(), MusicService.class));
+        controllerFuture = new MediaController.Builder(getContext(), sessionToken).buildAsync();
+        controllerFuture.addListener(() -> {
+                
+                if(controllerFuture.isDone()) {
+                    try {
+                        mediaController = controllerFuture.get();
+                    } catch(Exception err) {
+                        err.printStackTrace();
+                        mediaController = null;
+                    }
+                }
+        }, MoreExecutors.directExecutor());
+    }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         songsViewModel = new ViewModelProvider(this).get(SongsViewModel.class);
+    }
+    
+    @Override
+    public void onDestroy() {
+        if(!mediaController.isPlaying()) {
+        	mediaController.release();
+        }
+        super.onDestroy();
     }
     
     @Override
@@ -53,6 +90,7 @@ public class SongsFragment extends Fragment {
         
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext(), RecyclerView.VERTICAL, false));
         
+        // Observe LiveData
         songsViewModel.getAllSongs().observe(getViewLifecycleOwner(), new Observer<ArrayList<SongsModel>>() {
                 @Override
                 public void onChanged(ArrayList<SongsModel> allSongs) {
@@ -61,6 +99,8 @@ public class SongsFragment extends Fragment {
                     binding.recyclerView.setAdapter(songsAdapter);
                     
                     songsAdapter.setOnItemClickListener((view, _song, position) -> {
+                            SongsModel song = (SongsModel) _song;
+                            
                             // If multiple selection is toggled
                             if(songsAdapter.isSelectModeOn()) {
                                 songsAdapter.addIndexToSelection(position, view);
@@ -71,6 +111,11 @@ public class SongsFragment extends Fragment {
                             	return;
                             }
                             
+                            mediaController.setMediaItems(MusicUtils.makeMediaItems(allSongs), position, 0);
+                            if(!mediaController.isPlaying()) {
+                                mediaController.prepare();
+                                mediaController.play();
+                            }
                             startActivity(new Intent(container.getContext(), PlayerActivity.class));
                     });
                     
