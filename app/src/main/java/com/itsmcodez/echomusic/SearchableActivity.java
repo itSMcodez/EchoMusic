@@ -1,5 +1,6 @@
 package com.itsmcodez.echomusic;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -7,11 +8,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.media3.session.MediaController;
+import androidx.media3.session.SessionToken;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.itsmcodez.echomusic.adapters.SongsAdapter;
 import com.itsmcodez.echomusic.databinding.ActivitySearchableBinding;
 import com.itsmcodez.echomusic.models.SongsModel;
+import com.itsmcodez.echomusic.services.MusicService;
+import com.itsmcodez.echomusic.utils.MusicUtils;
 import com.itsmcodez.echomusic.viewmodels.SongsViewModel;
 import java.util.ArrayList;
 
@@ -19,6 +26,26 @@ public class SearchableActivity extends AppCompatActivity implements SearchView.
     private ActivitySearchableBinding binding;
     private SongsAdapter songsAdapter;
     private SongsViewModel songsViewModel;
+    private MediaController mediaController;
+    private ListenableFuture<MediaController> controllerFuture;
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SessionToken sessionToken = new SessionToken(this, new ComponentName(this, MusicService.class));
+        controllerFuture = new MediaController.Builder(this, sessionToken).buildAsync();
+        controllerFuture.addListener(() -> {
+                
+                if(controllerFuture.isDone()) {
+                    try {
+                        mediaController = controllerFuture.get();
+                    } catch(Exception err) {
+                        err.printStackTrace();
+                        mediaController = null;
+                    }
+                }
+        }, MoreExecutors.directExecutor());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +104,11 @@ public class SearchableActivity extends AppCompatActivity implements SearchView.
                         binding.recyclerView.setAdapter(songsAdapter);
                         
                         songsAdapter.setOnItemClickListener((view, _song, position) -> {
+                                mediaController.setMediaItems(MusicUtils.makeMediaItems(filteredList), position, 0);
+                                if(!mediaController.isPlaying()) {
+                                    mediaController.prepare();
+                                    mediaController.play();
+                                }
                                 startActivity(new Intent(SearchableActivity.this, PlayerActivity.class));
                         });
                     }
@@ -90,5 +122,8 @@ public class SearchableActivity extends AppCompatActivity implements SearchView.
     protected void onDestroy() {
         super.onDestroy();
         this.binding = null;
+        if(!mediaController.isPlaying()) {
+        	mediaController.release();
+        }
     }
 }
