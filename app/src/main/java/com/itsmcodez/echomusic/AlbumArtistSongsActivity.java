@@ -136,7 +136,6 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
         super.onDestroy();
         this.binding = null;
         if(!mediaController.isPlaying()) {
-        	mediaController.release();
             stopService(new Intent(this, MusicService.class));
         }
     }
