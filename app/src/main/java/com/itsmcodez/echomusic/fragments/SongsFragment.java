@@ -78,7 +78,6 @@ public class SongsFragment extends Fragment {
     @Override
     public void onDestroy() {
         if(!mediaController.isPlaying()) {
-        	mediaController.release();
             getActivity().stopService(new Intent(getContext(), MusicService.class));
         }
         super.onDestroy();
