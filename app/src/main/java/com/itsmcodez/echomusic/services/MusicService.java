@@ -8,14 +8,12 @@ import com.itsmcodez.echomusic.PlayerActivity;
 import com.itsmcodez.echomusic.preferences.PlaybackSettings;
 
 public class MusicService extends MediaSessionService {
-    private MediaSession mediaSession;
+    private static MediaSession mediaSession;
     private ExoPlayer exoPlayer;
-    private static boolean isRunning;
     
     @Override
     public void onCreate() {
         super.onCreate();
-        isRunning = false;
         
         // Initialize exoplayer and mediasession
         exoPlayer = new ExoPlayer.Builder(this)
@@ -26,7 +24,7 @@ public class MusicService extends MediaSessionService {
         .setPauseAtEndOfMediaItems(false)
         .build();
         mediaSession = new MediaSession.Builder(this, exoPlayer)
-        .setSessionActivity(PendingIntent.getActivity(this ,0 , new Intent(this, PlayerActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
+        .setSessionActivity(PendingIntent.getActivity(this ,0 , new Intent(this, PlayerActivity.class), 0))
         .setCallback(PlaybackSettings.MEDIA_SESSION_CALLBACK)
         .build();
         
@@ -37,7 +35,6 @@ public class MusicService extends MediaSessionService {
         mediaSession.getPlayer().release();
         mediaSession.release();
         mediaSession = null;
-        isRunning = false;
         super.onDestroy();
     }
     
@@ -49,14 +46,12 @@ public class MusicService extends MediaSessionService {
         super.onTaskRemoved(intent);
     }
     
-    
     @Override
     public MediaSession onGetSession(MediaSession.ControllerInfo controllerInfo) {
-        isRunning = true;
-        return this.mediaSession;
+        return mediaSession;
     }
     
-    public static boolean isRunning() {
-    	return MusicService.isRunning();
+    public static MediaSession getMediaSession() {
+    	return MusicService.mediaSession;
     }
 }
