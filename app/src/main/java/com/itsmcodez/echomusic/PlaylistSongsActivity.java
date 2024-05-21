@@ -141,9 +141,12 @@ public class PlaylistSongsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         this.binding = null;
-        if(!mediaController.isPlaying()) {
-            stopService(new Intent(this, MusicService.class));
-        }
+    }
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        MediaController.releaseFuture(controllerFuture);
     }
     
     @Override
