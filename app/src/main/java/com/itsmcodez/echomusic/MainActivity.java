@@ -13,6 +13,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.media3.session.MediaController;
+import androidx.media3.session.SessionToken;
+import android.content.ComponentName;
+import com.itsmcodez.echomusic.services.MusicService;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.itsmcodez.echomusic.databinding.ActivityMainBinding;
 import com.itsmcodez.echomusic.fragments.AlbumsFragment;
 import com.itsmcodez.echomusic.fragments.ArtistsFragment;
@@ -21,7 +27,33 @@ import com.itsmcodez.echomusic.fragments.SongsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-
+    private MediaController mediaController;
+    private ListenableFuture<MediaController> controllerFuture;
+    
+    @Override
+    public void onStart() {
+        super.onStart();
+        SessionToken sessionToken = new SessionToken(this, new ComponentName(this, MusicService.class));
+        controllerFuture = new MediaController.Builder(this, sessionToken).buildAsync();
+        controllerFuture.addListener(() -> {
+                
+                if(controllerFuture.isDone()) {
+                    try {
+                        mediaController = controllerFuture.get();
+                    } catch(Exception err) {
+                        err.printStackTrace();
+                        mediaController = null;
+                    }
+                }
+        }, MoreExecutors.directExecutor());
+    }
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        MediaController.releaseFuture(controllerFuture);
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
