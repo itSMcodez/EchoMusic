@@ -1,0 +1,20 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/MainActivity.java",
+      "selection": {
+        "end": {
+          "column": 47,
+          "index": 3675,
+          "line": 93
+        },
+        "start": {
+          "column": 47,
+          "index": 3675,
+          "line": 93
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Echo Music/app/src/main/java/com/itsmcodez/echomusic/MainActivity.java"
+}

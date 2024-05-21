@@ -88,7 +88,11 @@ public class MainActivity extends AppCompatActivity {
         
         // playPauseBt
         binding.playPauseBt.setOnClickListener(view -> {
-                
+                if(mediaController.getPlayWhenReady() || mediaController.getMediaItemCount() != 0) {
+                	if(mediaController.isPlaying()) {
+                		mediaController.pause();
+                	} else mediaController.play();
+                }
         });
         
         // Fragments
