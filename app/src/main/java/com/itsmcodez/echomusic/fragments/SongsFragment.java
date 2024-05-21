@@ -70,17 +70,15 @@ public class SongsFragment extends Fragment {
     }
     
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        songsViewModel = new ViewModelProvider(this).get(SongsViewModel.class);
+    public void onStop() {
+        super.onStop();
+        MediaController.releaseFuture(controllerFuture);
     }
     
     @Override
-    public void onDestroy() {
-        if(!mediaController.isPlaying()) {
-            getActivity().stopService(new Intent(getContext(), MusicService.class));
-        }
-        super.onDestroy();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        songsViewModel = new ViewModelProvider(this).get(SongsViewModel.class);
     }
     
     @Override
