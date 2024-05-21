@@ -77,6 +77,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, PlayerActivity.class));
         });
         
+        // skipNextBt
+        binding.skipNextBt.setOnClickListener(view -> {
+                if(mediaController.getPlayWhenReady() || mediaController.getMediaItemCount() != 0) {
+                	if(mediaController.hasNextMediaItem()) {
+                		mediaController.seekToNextMediaItem();
+                	}
+                }
+        });
+        
+        // playPauseBt
+        binding.playPauseBt.setOnClickListener(view -> {
+                
+        });
+        
         // Fragments
         SongsFragment songsFragment = new SongsFragment();
         AlbumsFragment albumsFragment = new AlbumsFragment();
