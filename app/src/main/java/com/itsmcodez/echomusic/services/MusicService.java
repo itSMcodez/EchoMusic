@@ -31,6 +31,7 @@ public class MusicService extends MediaSessionService {
                 @Override
                 public void onMediaItemTransition(MediaItem mediaItem, int reason) {
                     if(!exoPlayer.isPlaying()) {
+                        exoPlayer.prepare();
                     	exoPlayer.play();
                     }
                     PlayerStateObservable.notifyPlayerStateObserver();
@@ -40,6 +41,7 @@ public class MusicService extends MediaSessionService {
                 public void onPlaybackStateChanged(int playbackState) {
                     if(playbackState == ExoPlayer.STATE_READY) {
                         if(!exoPlayer.isPlaying()) {
+                            exoPlayer.prepare();
                             exoPlayer.play();
                         }
                     	PlayerStateObservable.notifyPlayerStateObserver();

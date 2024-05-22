@@ -84,11 +84,9 @@ public class PlaylistSongsActivity extends AppCompatActivity {
                     binding.recyclerView.setAdapter(playlistSongsAdapter);
                     
                     playlistSongsAdapter.setOnItemClickListener((view, _song, position) -> {
+                            // Update MediaItems
                             mediaController.setMediaItems(MusicUtils.makeMediaItems(allSongs, "Playlist Songs"), position, 0);
-                            if(!mediaController.isPlaying()) {
-                                mediaController.prepare();
-                                mediaController.play();
-                            }
+                            
                             startActivity(new Intent(PlaylistSongsActivity.this, PlayerActivity.class));
                     });
                     

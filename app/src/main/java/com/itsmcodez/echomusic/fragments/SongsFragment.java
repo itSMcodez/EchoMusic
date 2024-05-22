@@ -108,12 +108,9 @@ public class SongsFragment extends Fragment {
                                 }
                             	return;
                             }
-                            
+                            // Update MediaItems
                             mediaController.setMediaItems(MusicUtils.makeMediaItems(allSongs), position, 0);
-                            if(!mediaController.isPlaying()) {
-                                mediaController.prepare();
-                                mediaController.play();
-                            }
+                            
                             startActivity(new Intent(container.getContext(), PlayerActivity.class));
                     });
                     
