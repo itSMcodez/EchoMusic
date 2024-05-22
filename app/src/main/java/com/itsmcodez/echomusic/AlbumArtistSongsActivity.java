@@ -211,6 +211,11 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
         	return true;
         }
         
+        if(item.getItemId() == R.id.add_songs_to_queue_menu_item) {
+        	mediaController.addMediaItems(MusicUtils.makeMediaItems(songs));
+            Toast.makeText(this, getString(R.string.msg_add_songs_to_queue_success, songs.size()), Toast.LENGTH_SHORT).show();
+        }
+        
         return super.onOptionsItemSelected(item);
     }
     
