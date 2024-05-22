@@ -74,6 +74,22 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(intent.getStringExtra("title"));
         
+        // shuffleAllBt logic
+        binding.shuffleAllBt.setOnClickListener(view -> {
+                if(!mediaController.getShuffleModeEnabled()) {
+                	mediaController.setShuffleModeEnabled(true);
+                }
+                mediaController.setMediaItems(MusicUtils.makeMediaItems(songs));
+        });
+        
+        // playAllBt logic
+        binding.playAllBt.setOnClickListener(view -> {
+                if(mediaController.getShuffleModeEnabled()) {
+                	mediaController.setShuffleModeEnabled(false);
+                }
+                mediaController.setMediaItems(MusicUtils.makeMediaItems(songs));
+        });
+        
         // RecyclerView and ViewModel
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         songsViewModel = new ViewModelProvider(this).get(SongsViewModel.class);
