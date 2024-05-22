@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -78,6 +79,7 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
         binding.shuffleAllBt.setOnClickListener(view -> {
                 if(!mediaController.getShuffleModeEnabled()) {
                 	mediaController.setShuffleModeEnabled(true);
+                    Toast.makeText(this, getString(R.string.msg_shuffle_on), Toast.LENGTH_SHORT).show();
                 }
                 mediaController.setMediaItems(MusicUtils.makeMediaItems(songs));
         });
@@ -86,6 +88,7 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
         binding.playAllBt.setOnClickListener(view -> {
                 if(mediaController.getShuffleModeEnabled()) {
                 	mediaController.setShuffleModeEnabled(false);
+                    Toast.makeText(this, getString(R.string.msg_shuffle_off), Toast.LENGTH_SHORT).show();
                 }
                 mediaController.setMediaItems(MusicUtils.makeMediaItems(songs));
         });
