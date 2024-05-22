@@ -4,6 +4,7 @@ package com.itsmcodez.echomusic;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,9 +14,13 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.SessionToken;
 import android.content.ComponentName;
+import com.bumptech.glide.Glide;
+import com.itsmcodez.echomusic.callbacks.OnPlayerStateChange;
+import com.itsmcodez.echomusic.common.PlayerStateObserver;
 import com.itsmcodez.echomusic.services.MusicService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -29,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private MediaController mediaController;
     private ListenableFuture<MediaController> controllerFuture;
+    private OnPlayerStateChange playerStateCallback;
     
     @Override
     public void onStart() {
@@ -40,18 +46,30 @@ public class MainActivity extends AppCompatActivity {
                 if(controllerFuture.isDone()) {
                     try {
                         mediaController = controllerFuture.get();
+                        updateUIAndProgress();
                     } catch(Exception err) {
                         err.printStackTrace();
                         mediaController = null;
                     }
                 }
         }, MoreExecutors.directExecutor());
+        
+        // Player state callback
+        playerStateCallback = new OnPlayerStateChange() {
+            @Override
+            public void onStateChanged() {
+                updateUIAndProgress();
+            }
+        };
+        PlayerStateObserver.registerCallback(playerStateCallback);
     }
     
     @Override
     public void onStop() {
         super.onStop();
         MediaController.releaseFuture(controllerFuture);
+        PlayerStateObserver.unregisterCallback(playerStateCallback);
+        playerStateCallback = null;
     }
     
     @Override
@@ -134,6 +152,33 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentHolder, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void updateUIAndProgress() {
+        runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    
+                    if(mediaController != null && (mediaController.getMediaItemCount() != 0 && mediaController.getCurrentMediaItem() != null)) {
+                        
+                        // Player progress
+                        binding.progress.setMax((int)mediaController.getDuration());
+                        if(mediaController.getPlayWhenReady() || mediaController.isPlaying()) {
+                            binding.progress.setProgress((int)mediaController.getContentPosition());
+                        }
+                        
+                        // Media metadata
+                        binding.title.setText(mediaController.getCurrentMediaItem().mediaMetadata.title);
+                        binding.artist.setText(mediaController.getCurrentMediaItem().mediaMetadata.artist);
+                        binding.playPauseBt.setImageDrawable(mediaController.getPlayWhenReady() || mediaController.isPlaying() ? getDrawable(R.drawable.ic_pause_outline) : getDrawable(R.drawable.ic_play_outline));
+                        Glide.with(MainActivity.this).load(mediaController.getCurrentMediaItem().mediaMetadata.artworkUri)
+                        .error(R.drawable.ic_music_note_outline)
+                        .into(binding.albumArtwork);
+                    }
+                    
+                    new Handler().postDelayed(this, 1000);
+                }
+        });
     }
     
     @Override
