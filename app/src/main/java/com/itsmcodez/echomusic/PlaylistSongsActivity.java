@@ -32,6 +32,7 @@ import java.util.Collections;
 public class PlaylistSongsActivity extends AppCompatActivity {
     private ActivityPlaylistSongsBinding binding;
     private PlaylistSongsAdapter playlistSongsAdapter;
+    private ArrayList<PlaylistSongsModel> songs = new ArrayList<>();
     private static PlaylistSongsViewModel playlistSongsViewModel;
     private MediaController mediaController;
     private ListenableFuture<MediaController> controllerFuture;
@@ -65,6 +66,22 @@ public class PlaylistSongsActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
+        // shuffleAllBt logic
+        binding.shuffleAllBt.setOnClickListener(view -> {
+                if(!mediaController.getShuffleModeEnabled()) {
+                	mediaController.setShuffleModeEnabled(true);
+                }
+                mediaController.setMediaItems(MusicUtils.makeMediaItems(songs, "Playlist songs"));
+        });
+        
+        // playAllBt logic
+        binding.playAllBt.setOnClickListener(view -> {
+                if(mediaController.getShuffleModeEnabled()) {
+                	mediaController.setShuffleModeEnabled(false);
+                }
+                mediaController.setMediaItems(MusicUtils.makeMediaItems(songs, "Playlist songs"));
+        });
+        
         // Intent keys
         Intent intent = getIntent();
         binding.title.setText(intent.getStringExtra("title"));
@@ -79,7 +96,8 @@ public class PlaylistSongsActivity extends AppCompatActivity {
         playlistSongsViewModel.getAllSongs(playlistPosition).observe(this, new Observer<ArrayList<PlaylistSongsModel>>(){
                 @Override
                 public void onChanged(ArrayList<PlaylistSongsModel> allSongs) {
-                    
+                    // get playlist songs
+                    songs = allSongs;
                 	playlistSongsAdapter = new PlaylistSongsAdapter(PlaylistSongsActivity.this, getLayoutInflater(), playlistPosition, allSongs);
                     binding.recyclerView.setAdapter(playlistSongsAdapter);
                     
