@@ -47,17 +47,6 @@ public class MusicService extends MediaSessionService {
                     	PlayerStateObservable.notifyPlayerStateObserver();
                     }
                 }
-                
-                @Override
-                public void onPlayWhenReadyChanged(boolean isPlaying, int reason) {
-                    PlayerStateObservable.notifyPlayerStateObserver();
-                }
-                
-                @Override
-                public void onIsPlayingChanged(boolean isPlaying) {
-                    PlayerStateObservable.notifyPlayerStateObserver();
-                }
-                
         });
         
         mediaSession = new MediaSession.Builder(this, exoPlayer)
