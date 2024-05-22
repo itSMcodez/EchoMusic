@@ -40,6 +40,7 @@
     <string name="msg_add_to_playlist_exists">Song already exists!</string>
     <string name="msg_swap_song_position">Move item up or down to change it\'s position</string>
     <string name="msg_swap_item_position_help">Touch and hold this button to change song position</string>
+    <string name="msg_add_songs_to_queue_success">Added %d song(s) to playing queue</string>
     <string name="play_next">Play next</string>
     <string name="add_to_playlist">Add to playlist</string>
     <string name="edit_metadata">Edit metadata</string>

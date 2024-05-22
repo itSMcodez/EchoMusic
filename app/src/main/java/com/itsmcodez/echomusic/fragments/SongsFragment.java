@@ -219,6 +219,19 @@ public class SongsFragment extends Fragment {
             
             if(item.getItemId() == R.id.add_songs_to_queue_menu_item) {
                 
+                // get selected items (songs)
+                ArrayList<SongsModel> selectedSongs = new ArrayList<>();
+                var index = 0;
+                for(SongsModel song : songs) {
+                	if(songsAdapter.getSelectionMap().get(index, false)) {
+                		selectedSongs.add(song);
+                	}
+                    index++;
+                }
+                mediaController.addMediaItems(MusicUtils.makeMediaItems(selectedSongs));
+                Toast.makeText(getContext(), getString(R.string.msg_add_songs_to_queue_success, selectedSongs.size()), Toast.LENGTH_SHORT).show();
+                mode.finish();
+                
             	return true;
             }
             
