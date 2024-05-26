@@ -1,4 +1,5 @@
 package com.itsmcodez.echomusic.fragments;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,8 +11,12 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.media3.session.MediaController;
+import androidx.media3.session.SessionToken;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.itsmcodez.echomusic.PlaylistSongsActivity;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.adapters.PlaylistsAdapter;
@@ -19,6 +24,8 @@ import com.itsmcodez.echomusic.databinding.FragmentPlaylistsBinding;
 import com.itsmcodez.echomusic.databinding.LayoutMaterialTextinputBinding;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
+import com.itsmcodez.echomusic.services.MusicService;
+import com.itsmcodez.echomusic.utils.MusicUtils;
 import com.itsmcodez.echomusic.viewmodels.PlaylistsViewModel;
 import java.util.ArrayList;
 
@@ -26,6 +33,32 @@ public class PlaylistsFragment extends Fragment {
     private FragmentPlaylistsBinding binding;
     private PlaylistsAdapter playlistsAdapter;
     private static PlaylistsViewModel playlistsViewModel;
+    private static MediaController mediaController;
+    private ListenableFuture<MediaController> controllerFuture;
+    
+    @Override
+    public void onStart() {
+        super.onStart();
+        SessionToken sessionToken = new SessionToken(getContext(), new ComponentName(getContext(), MusicService.class));
+        controllerFuture = new MediaController.Builder(getContext(), sessionToken).buildAsync();
+        controllerFuture.addListener(() -> {
+                
+                if(controllerFuture.isDone()) {
+                    try {
+                        mediaController = controllerFuture.get();
+                    } catch(Exception err) {
+                        err.printStackTrace();
+                        mediaController = null;
+                    }
+                }
+        }, MoreExecutors.directExecutor());
+    }
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        MediaController.releaseFuture(controllerFuture);
+    }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,5 +153,9 @@ public class PlaylistsFragment extends Fragment {
     
     public static void clearSongsFromPlaylistAt(int position) {
     	playlistsViewModel.clearSongsFromPlaylistAt(position);
+    }
+    
+    public static void addPlaylistSongsToPlayingQueue(ArrayList<PlaylistSongsModel> songs) {
+        mediaController.addMediaItems(MusicUtils.makeMediaItems(songs, "Playlist songs"));
     }
 }
