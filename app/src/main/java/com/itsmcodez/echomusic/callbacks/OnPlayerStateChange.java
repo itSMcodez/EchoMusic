@@ -1,6 +1,8 @@
 package com.itsmcodez.echomusic.callbacks;
+import androidx.media3.common.MediaItem;
 
-@FunctionalInterface
 public interface OnPlayerStateChange {
-    public void onStateChanged();
+    public void onPlaybackStateChanged(int playbackState);
+    public void onMediaItemTransition(MediaItem mediaItem, int reason);
+    public void onIsPlayingChanged(boolean isPlaying);
 }

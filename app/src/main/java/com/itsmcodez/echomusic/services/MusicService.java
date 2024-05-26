@@ -7,17 +7,21 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.session.MediaSession;
 import androidx.media3.session.MediaSessionService;
 import com.itsmcodez.echomusic.PlayerActivity;
+import com.itsmcodez.echomusic.common.PlayerState;
+import com.itsmcodez.echomusic.common.PlayerStateInfo;
 import com.itsmcodez.echomusic.common.PlayerStateObservable;
 import com.itsmcodez.echomusic.preferences.PlaybackSettings;
 
 public class MusicService extends MediaSessionService {
     private static MediaSession mediaSession;
     private ExoPlayer exoPlayer;
+    private PlayerStateInfo playerStateInfo;
     
     @Override
     public void onCreate() {
         super.onCreate();
         
+        playerStateInfo = new PlayerStateInfo();
         // Initialize exoplayer and mediasession
         exoPlayer = new ExoPlayer.Builder(this)
         .setHandleAudioBecomingNoisy(true)
@@ -34,7 +38,9 @@ public class MusicService extends MediaSessionService {
                         exoPlayer.prepare();
                     	exoPlayer.play();
                     }
-                    PlayerStateObservable.notifyPlayerStateObserver();
+                    playerStateInfo.setMediaItem(mediaItem);
+                    playerStateInfo.setReason(reason);
+                    PlayerStateObservable.notifyPlayerStateObserver(PlayerState.ON_MEDIA_ITEM_TRANSITION, playerStateInfo);
                 }
                 
                 @Override
@@ -44,10 +50,15 @@ public class MusicService extends MediaSessionService {
                             exoPlayer.prepare();
                             exoPlayer.play();
                         }
-                    	PlayerStateObservable.notifyPlayerStateObserver();
-                    } else {
-                    	PlayerStateObservable.notifyPlayerStateObserver();
                     }
+                    playerStateInfo.setPlaybackState(playbackState);
+                    PlayerStateObservable.notifyPlayerStateObserver(PlayerState.ON_PLAYBACK_STATE_CHANGED, playerStateInfo);
+                }
+                
+                @Override
+                public void onIsPlayingChanged(boolean isPlaying) {
+                    playerStateInfo.setIsPlaying(isPlaying);
+                    PlayerStateObservable.notifyPlayerStateObserver(PlayerState.ON_IS_PLAYING_CHANGED, playerStateInfo);
                 }
         });
         
@@ -68,7 +79,7 @@ public class MusicService extends MediaSessionService {
     
     @Override
     public void onTaskRemoved(Intent intent) {
-        if(!mediaSession.getPlayer().getPlayWhenReady() || mediaSession.getPlayer().getMediaItemCount() == 0) {
+        if(!mediaSession.getPlayer().getPlayWhenReady() || !mediaSession.getPlayer().isPlaying() || mediaSession.getPlayer().getMediaItemCount() == 0) {
         	stopSelf();
         }
         super.onTaskRemoved(intent);

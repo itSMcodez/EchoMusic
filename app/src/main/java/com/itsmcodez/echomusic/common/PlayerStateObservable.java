@@ -5,7 +5,7 @@ public class PlayerStateObservable {
     
     private PlayerStateObservable(){}
     
-    public static void notifyPlayerStateObserver() {
-    	PlayerStateObserver.update();
+    public static void notifyPlayerStateObserver(PlayerState playerState, PlayerStateInfo playerStateInfo) {
+    	PlayerStateObserver.update(playerState, playerStateInfo);
     }
 }

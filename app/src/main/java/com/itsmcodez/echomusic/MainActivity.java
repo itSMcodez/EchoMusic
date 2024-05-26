@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.SessionToken;
@@ -46,7 +47,12 @@ public class MainActivity extends AppCompatActivity {
                 if(controllerFuture.isDone()) {
                     try {
                         mediaController = controllerFuture.get();
-                        updateUIAndProgress();
+                        // update UI if music is being played
+                        if(mediaController != null && mediaController.getCurrentMediaItem() != null) {
+                        	updateUI(mediaController.getCurrentMediaItem());
+                            binding.playPauseBt.setImageDrawable(mediaController.isPlaying() ? getDrawable(R.drawable.ic_pause_outline) : getDrawable(R.drawable.ic_play_outline));
+                            updateProgress();
+                        }
                     } catch(Exception err) {
                         err.printStackTrace();
                         mediaController = null;
@@ -57,8 +63,25 @@ public class MainActivity extends AppCompatActivity {
         // Player state callback
         playerStateCallback = new OnPlayerStateChange() {
             @Override
-            public void onStateChanged() {
-                updateUIAndProgress();
+            public void onPlaybackStateChanged(int playbackState) {
+                if(playbackState == ExoPlayer.STATE_READY) {
+                    binding.playPauseBt.setImageDrawable(getDrawable(R.drawable.ic_pause_outline));
+                    updateUI(mediaController.getCurrentMediaItem());
+                    updateProgress();
+                } else binding.playPauseBt.setImageDrawable(getDrawable(R.drawable.ic_play_outline));
+            }
+            
+            @Override
+            public void onMediaItemTransition(MediaItem mediaItem, int reason) {
+                updateUI(mediaItem);
+                updateProgress();
+            }
+            
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                if(isPlaying) {
+                	binding.playPauseBt.setImageDrawable(getDrawable(R.drawable.ic_pause_outline));
+                } else binding.playPauseBt.setImageDrawable(getDrawable(R.drawable.ic_play_outline));
             }
         };
         PlayerStateObserver.registerCallback(playerStateCallback);
@@ -109,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
                 if(mediaController.getPlayWhenReady() || mediaController.getMediaItemCount() != 0) {
                 	if(mediaController.isPlaying()) {
                 		mediaController.pause();
-                	} else mediaController.play();
+                	} else {
+                        mediaController.play();
+                    }
                 }
         });
         
@@ -154,31 +179,30 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    private void updateUIAndProgress() {
-        runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    
-                    if(mediaController != null && (mediaController.getMediaItemCount() != 0 && mediaController.getCurrentMediaItem() != null)) {
-                        
-                        // Player progress
-                        binding.progress.setMax((int)mediaController.getDuration());
-                        if(mediaController.getPlayWhenReady() || mediaController.isPlaying()) {
-                            binding.progress.setProgress((int)mediaController.getContentPosition());
+    private void updateProgress() {
+        if(mediaController != null) {
+            runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(binding != null && mediaController.getCurrentMediaItem() != null) {
+                            // Player progress
+                            binding.progress.setMax((int)mediaController.getDuration());
+                            if(mediaController.getPlayWhenReady() || mediaController.isPlaying()) {
+                                binding.progress.setProgress((int)mediaController.getCurrentPosition());
+                            }
                         }
-                        
-                        // Media metadata
-                        binding.title.setText(mediaController.getCurrentMediaItem().mediaMetadata.title);
-                        binding.artist.setText(mediaController.getCurrentMediaItem().mediaMetadata.artist);
-                        binding.playPauseBt.setImageDrawable(mediaController.getPlayWhenReady() || mediaController.isPlaying() ? getDrawable(R.drawable.ic_pause_outline) : getDrawable(R.drawable.ic_play_outline));
-                        Glide.with(MainActivity.this).load(mediaController.getCurrentMediaItem().mediaMetadata.artworkUri)
-                        .error(R.drawable.ic_music_note_outline)
-                        .into(binding.albumArtwork);
+                        new Handler().postDelayed(this, 1000);
                     }
-                    
-                    new Handler().postDelayed(this, 1000);
-                }
-        });
+            });
+        }
+    }
+    
+    private void updateUI(MediaItem mediaItem) {
+        binding.title.setText(mediaItem.mediaMetadata.title);
+        binding.artist.setText(mediaItem.mediaMetadata.artist);
+        Glide.with(MainActivity.this).load(mediaItem.mediaMetadata.artworkUri)
+            .error(R.drawable.ic_music_note_outline)
+            .into(binding.albumArtwork);
     }
     
     @Override
