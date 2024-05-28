@@ -67,7 +67,16 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
             this.artist = binding.artist;
         }
     }
+    
+    public interface OnPlayNextClickListener {
+        public void onPlayNextClick(SongsModel song);
+    }
+    private OnPlayNextClickListener onPlayNextClickListener;
 
+    public void setOnPlayNextClickListener(OnPlayNextClickListener onPlayNextClickListener) {
+    	this.onPlayNextClickListener = onPlayNextClickListener;
+    }
+    
     @Override
     public SongsAdapter.SongsViewHolder onCreateViewHolder(ViewGroup parent, int position) {
         // Bind to views
@@ -114,7 +123,9 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
                         public boolean onMenuItemClick(MenuItem item) {
                             
                             if(item.getItemId() == R.id.play_next_menu_item) {
-                            	
+                            	if(onPlayNextClickListener != null) {
+                            		onPlayNextClickListener.onPlayNextClick(song);
+                            	}
                                 return true;
                             }
                             

@@ -94,6 +94,10 @@ public class SongsFragment extends Fragment {
                 public void onChanged(ArrayList<SongsModel> allSongs) {
                     songs = allSongs;
                 	songsAdapter = new SongsAdapter(container.getContext(), getLayoutInflater(), allSongs);
+                    songsAdapter.setOnPlayNextClickListener((song) -> {
+                            mediaController.addMediaItem(mediaController.getCurrentMediaItem() != null ? mediaController.getCurrentMediaItemIndex()+1 : 0, MusicUtils.makeMediaItem(song));
+                            Toast.makeText(getContext(), getString(R.string.msg_add_song_to_playing_queue_success, song.getTitle()), Toast.LENGTH_SHORT).show();
+                    });
                     binding.recyclerView.setAdapter(songsAdapter);
                     
                     songsAdapter.setOnItemClickListener((view, _song, position) -> {

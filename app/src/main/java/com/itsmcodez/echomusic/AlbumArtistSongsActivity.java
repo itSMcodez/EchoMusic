@@ -130,6 +130,10 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
                     binding.info.setText(getResources().getQuantityString(R.plurals.playlist_songs_count, songs.size(), songs.size()) + " " + MusicUtils.getReadableDuration(songsDuration));
                     
                     songsAdapter = new SongsAdapter(AlbumArtistSongsActivity.this, getLayoutInflater(), songs);
+                    songsAdapter.setOnPlayNextClickListener((song) -> {
+                            mediaController.addMediaItem(mediaController.getCurrentMediaItem() != null ? mediaController.getCurrentMediaItemIndex()+1 : 0, MusicUtils.makeMediaItem(song));
+                            Toast.makeText(AlbumArtistSongsActivity.this, getString(R.string.msg_add_song_to_playing_queue_success, song.getTitle()), Toast.LENGTH_SHORT).show();
+                    });
                     binding.recyclerView.setAdapter(songsAdapter);
                     
                     songsAdapter.setOnItemClickListener((view, _song, position) -> {

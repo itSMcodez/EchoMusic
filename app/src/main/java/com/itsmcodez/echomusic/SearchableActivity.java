@@ -101,6 +101,10 @@ public class SearchableActivity extends AppCompatActivity implements SearchView.
                         }
                         
                     	songsAdapter = new SongsAdapter(SearchableActivity.this, getLayoutInflater(), filteredList);
+                        songsAdapter.setOnPlayNextClickListener((song) -> {
+                                mediaController.addMediaItem(mediaController.getCurrentMediaItem() != null ? mediaController.getCurrentMediaItemIndex()+1 : 0, MusicUtils.makeMediaItem(song));
+                                Toast.makeText(SearchableActivity.this, getString(R.string.msg_add_song_to_playing_queue_success, song.getTitle()), Toast.LENGTH_SHORT).show();
+                        });
                         binding.recyclerView.setAdapter(songsAdapter);
                         
                         songsAdapter.setOnItemClickListener((view, _song, position) -> {
