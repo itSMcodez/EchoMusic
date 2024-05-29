@@ -216,8 +216,26 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
         }
         
         if(item.getItemId() == R.id.add_songs_to_queue_menu_item) {
-        	mediaController.addMediaItems(MusicUtils.makeMediaItems(songs));
-            Toast.makeText(this, getString(R.string.msg_add_songs_to_queue_success, songs.size()), Toast.LENGTH_SHORT).show();
+        	AlertDialog dialog = new MaterialAlertDialogBuilder(AlbumArtistSongsActivity.this)
+                .setTitle(R.string.add_to_queue)
+                .setMessage(getString(R.string.msg_add_songs_to_playing_queue, songs.size()))
+                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                })
+                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mediaController.addMediaItems(MusicUtils.makeMediaItems(songs));
+                            Toast.makeText(AlbumArtistSongsActivity.this, getString(R.string.msg_add_songs_to_queue_success, songs.size()), Toast.LENGTH_SHORT).show();
+                        }
+                })
+                .create();
+                dialog.show();
+            
+            return true;
         }
         
         return super.onOptionsItemSelected(item);
