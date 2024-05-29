@@ -232,9 +232,27 @@ public class SongsFragment extends Fragment {
                 	}
                     index++;
                 }
-                mediaController.addMediaItems(MusicUtils.makeMediaItems(selectedSongs));
-                Toast.makeText(getContext(), getString(R.string.msg_add_songs_to_queue_success, selectedSongs.size()), Toast.LENGTH_SHORT).show();
-                mode.finish();
+                
+                AlertDialog dialog = new MaterialAlertDialogBuilder(getContext())
+                .setTitle(R.string.add_to_queue)
+                .setMessage(getString(R.string.msg_add_songs_to_playing_queue, selectedSongs.size()))
+                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            mode.finish();
+                        }
+                })
+                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mediaController.addMediaItems(MusicUtils.makeMediaItems(selectedSongs));
+                            Toast.makeText(getContext(), getString(R.string.msg_add_songs_to_queue_success, selectedSongs.size()), Toast.LENGTH_SHORT).show();
+                            mode.finish();
+                        }
+                })
+                .create();
+                dialog.show();
                 
             	return true;
             }

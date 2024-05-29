@@ -6,6 +6,7 @@
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="remove">Remove</string>
+    <string name="add">Add</string>
     <string name="sort">Sort</string>
     <string name="asc">Ascending</string>
     <string name="desc">Descending</string>
@@ -44,6 +45,7 @@
     <string name="msg_shuffle_on">Shuffle on</string>
     <string name="msg_shuffle_off">Shuffle off</string>
     <string name="msg_add_song_to_playing_queue_success">%s will be played as the next song</string>
+    <string name="msg_add_songs_to_playing_queue">Do you want to add %d song(s) to the playing queue?</string>
     <string name="play_next">Play next</string>
     <string name="add_to_playlist">Add to playlist</string>
     <string name="edit_metadata">Edit metadata</string>
