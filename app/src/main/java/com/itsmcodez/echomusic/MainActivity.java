@@ -198,6 +198,12 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void updateUI(MediaItem mediaItem) {
+        if(!binding.title.isSelected()) {
+        	binding.title.setSelected(true);
+        }
+        if(!binding.artist.isSelected()) {
+        	binding.artist.setSelected(true);
+        }
         binding.title.setText(mediaItem.mediaMetadata.title);
         binding.artist.setText(mediaItem.mediaMetadata.artist);
         Glide.with(MainActivity.this).load(mediaItem.mediaMetadata.artworkUri)
