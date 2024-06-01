@@ -21,12 +21,14 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.itsmcodez.echomusic.adapters.ListOfPlaylistAdapter;
 import com.itsmcodez.echomusic.adapters.SongsAdapter;
+import com.itsmcodez.echomusic.common.SortOrder;
 import com.itsmcodez.echomusic.databinding.ActivityAlbumArtistSongsBinding;
 import com.itsmcodez.echomusic.databinding.LayoutRecyclerviewBinding;
 import com.itsmcodez.echomusic.models.ListOfPlaylistModel;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
+import com.itsmcodez.echomusic.preferences.Settings;
 import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
 import com.itsmcodez.echomusic.services.MusicService;
 import com.itsmcodez.echomusic.utils.ArtworkUtils;
@@ -167,6 +169,40 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_activity_album_artist_songs, menu);
+        
+        final String SORT_ORDER = Settings.getSongsSortOrder();
+        switch(SORT_ORDER){
+            
+            case "SORT_ASC" : {
+                menu.findItem(R.id.sort_asc).setChecked(true);
+                songsViewModel.sortSongs(SortOrder.ASCENDING);
+            }
+            break;
+            
+            case "SORT_DESC" : {
+                menu.findItem(R.id.sort_desc).setChecked(true);
+                songsViewModel.sortSongs(SortOrder.DESCENDING);
+            }
+            break;
+            
+            case "SORT_SIZE" : {
+                menu.findItem(R.id.sort_size).setChecked(true);
+                songsViewModel.sortSongs(SortOrder.SIZE);
+            }
+            break;
+            
+            case "SORT_DURATION" : {
+                menu.findItem(R.id.sort_duration).setChecked(true);
+                songsViewModel.sortSongs(SortOrder.DURATION);
+            }
+            break;
+            
+            default: {
+                menu.findItem(R.id.sort_default).setChecked(true);
+                songsViewModel.sortSongs(SortOrder.DEFAULT);
+            }
+        }
+        
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -235,6 +271,41 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
                 .create();
                 dialog.show();
             
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_desc) {
+        	songsViewModel.sortSongs(SortOrder.DESCENDING);
+            Settings.setSongsSortOrder(SortOrder.DESCENDING);
+            item.setChecked(true);
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_asc) {
+        	songsViewModel.sortSongs(SortOrder.ASCENDING);
+            Settings.setSongsSortOrder(SortOrder.ASCENDING);
+            item.setChecked(true);
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_size) {
+        	songsViewModel.sortSongs(SortOrder.SIZE);
+            Settings.setSongsSortOrder(SortOrder.SIZE);
+            item.setChecked(true);
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_duration) {
+        	songsViewModel.sortSongs(SortOrder.DURATION);
+            Settings.setSongsSortOrder(SortOrder.DURATION);
+            item.setChecked(true);
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_default) {
+        	songsViewModel.sortSongs(SortOrder.DEFAULT);
+            Settings.setSongsSortOrder(SortOrder.DEFAULT);
+            item.setChecked(true);
             return true;
         }
         
