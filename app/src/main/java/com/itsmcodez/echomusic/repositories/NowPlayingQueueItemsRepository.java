@@ -11,7 +11,10 @@ public class NowPlayingQueueItemsRepository {
     private ArrayList<NowPlayingQueueItemsModel> songs;
     private MutableLiveData<ArrayList<NowPlayingQueueItemsModel>> allSongs;
 
-    private NowPlayingQueueItemsRepository() {}
+    private NowPlayingQueueItemsRepository() {
+        songs = new ArrayList<>();
+        allSongs = new MutableLiveData<>();
+    }
 
     public static synchronized NowPlayingQueueItemsRepository getInstance(Application application) {
         NowPlayingQueueItemsRepository.application = application;
