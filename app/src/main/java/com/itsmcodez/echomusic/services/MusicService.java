@@ -28,8 +28,8 @@ public class MusicService extends MediaSessionService {
         .setDeviceVolumeControlEnabled(true)
         .setWakeMode(PlaybackSettings.WAKELOCK)
         .setAudioAttributes(PlaybackSettings.AUDIO_ATTRIBUTES, true)
-        .setPauseAtEndOfMediaItems(false)
         .build();
+        exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
         exoPlayer.addListener(new Player.Listener(){
                 
                 @Override
@@ -64,7 +64,6 @@ public class MusicService extends MediaSessionService {
         
         mediaSession = new MediaSession.Builder(this, exoPlayer)
         .setSessionActivity(PendingIntent.getActivity(this ,0 , new Intent(this, PlayerActivity.class), 0))
-        .setCallback(PlaybackSettings.MEDIA_SESSION_CALLBACK)
         .build();
         
     }

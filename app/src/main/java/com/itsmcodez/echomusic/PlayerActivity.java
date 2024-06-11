@@ -17,10 +17,8 @@ public class PlayerActivity extends AppCompatActivity {
         // Bind to views
         binding = ActivityPlayerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        
-        // Initialize Now Playing Fragments
+    
         NPMD3Fragment NPMD3Fragment = new NPMD3Fragment();
-        
         // Show Now playing screen fragment
         replaceFragment(NPMD3Fragment);
     }

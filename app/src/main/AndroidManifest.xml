@@ -16,6 +16,8 @@
     <application 
         android:name="BaseApplication"
         android:appCategory="audio"
+        android:largeHeap="true"
+        android:usesCleartextTraffic="true"
         android:allowBackup="true" 
         android:icon="@mipmap/ic_launcher" 
         android:roundIcon="@mipmap/ic_launcher" 
@@ -78,7 +80,7 @@
         <activity
             android:name="PlayerActivity"
             android:exported="true"
-            >
+            android:launchMode="singleTop">
             
         </activity>
         

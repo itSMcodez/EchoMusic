@@ -44,8 +44,11 @@
     <string name="msg_add_songs_to_queue_success">Added %d song(s) to playing queue</string>
     <string name="msg_shuffle_on">Shuffle on</string>
     <string name="msg_shuffle_off">Shuffle off</string>
+    <string name="msg_repeat_on">Repeat on</string>
+    <string name="msg_repeat_off">Repeat off</string>
     <string name="msg_add_song_to_playing_queue_success">%s will be played as the next song</string>
     <string name="msg_add_songs_to_playing_queue">Do you want to add %d song(s) to the playing queue?</string>
+    <string name="msg_select_song_to_play">Please select a song to play!</string>
     <string name="play_next">Play next</string>
     <string name="add_to_playlist">Add to playlist</string>
     <string name="edit_metadata">Edit metadata</string>

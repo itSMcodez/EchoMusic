@@ -1,5 +1,6 @@
 package com.itsmcodez.echomusic;
 
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -106,7 +107,6 @@ public class PlaylistSongsActivity extends AppCompatActivity {
                     playlistSongsAdapter.setOnItemClickListener((view, _song, position) -> {
                             // Update MediaItems
                             mediaController.setMediaItems(MusicUtils.makeMediaItems(allSongs, "Playlist Songs"), position, 0);
-                            
                             startActivity(new Intent(PlaylistSongsActivity.this, PlayerActivity.class));
                     });
                     

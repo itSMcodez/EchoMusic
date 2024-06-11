@@ -1,5 +1,6 @@
 package com.itsmcodez.echomusic;
 
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
@@ -110,7 +111,6 @@ public class SearchableActivity extends AppCompatActivity implements SearchView.
                         songsAdapter.setOnItemClickListener((view, _song, position) -> {
                                 // Update MediaItems
                                 mediaController.setMediaItems(MusicUtils.makeMediaItems(filteredList), position, 0);
-                                
                                 startActivity(new Intent(SearchableActivity.this, PlayerActivity.class));
                         });
                     }

@@ -1,4 +1,5 @@
 package com.itsmcodez.echomusic.fragments;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -200,8 +201,7 @@ public class SongsFragment extends Fragment {
                             }
                             // Update MediaItems
                             mediaController.setMediaItems(MusicUtils.makeMediaItems(allSongs), position, 0);
-                            
-                            startActivity(new Intent(container.getContext(), PlayerActivity.class));
+                            startActivity(new Intent(getContext(), PlayerActivity.class));
                     });
                     
                     songsAdapter.setOnItemLongClickListener((view, _song, position) -> {

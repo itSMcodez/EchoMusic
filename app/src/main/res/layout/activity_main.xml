@@ -60,7 +60,7 @@
                 android:singleLine="true"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
-                android:text="Song title"
+                android:text="@string/msg_select_song_to_play"
                 android:typeface="serif"
                 android:textStyle="bold"
                 android:id="@+id/title" />
@@ -71,7 +71,7 @@
                 android:singleLine="true"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
-                android:text="Artist"
+                android:text="@string/msg_select_song_to_play"
                 android:typeface="sans"
                 android:id="@+id/artist" />
             

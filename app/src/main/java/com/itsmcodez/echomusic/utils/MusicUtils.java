@@ -36,6 +36,9 @@ public final class MusicUtils {
             .setTitle(song.getTitle())
             .setAlbumTitle(song.getAlbum())
             .setArtist(song.getArtist())
+            .setDisplayTitle(song.getPath())
+            .setDescription(song.getAlbumId())
+            .setCompilation(song.getSongId())
             .build();
             
         	MediaItem mediaItem = new MediaItem.Builder()
@@ -60,6 +63,9 @@ public final class MusicUtils {
             .setTitle(song.getTitle())
             .setAlbumTitle(song.getAlbum())
             .setArtist(song.getArtist())
+            .setDisplayTitle(song.getPath())
+            .setDescription(song.getAlbumId())
+            .setCompilation(song.getSongId())
             .build();
             
         	MediaItem mediaItem = new MediaItem.Builder()
@@ -81,6 +87,9 @@ public final class MusicUtils {
         .setTitle(song.getTitle())
         .setAlbumTitle(song.getAlbum())
         .setArtist(song.getArtist())
+        .setDisplayTitle(song.getPath())
+        .setDescription(song.getAlbumId())
+        .setCompilation(song.getSongId())
         .build();
         
         return new MediaItem.Builder()

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                         mediaController = controllerFuture.get();
                         // update UI if music is being played
                         if(mediaController != null && mediaController.getCurrentMediaItem() != null) {
-                        	updateUI(mediaController.getCurrentMediaItem());
+                            updateUI(mediaController.getCurrentMediaItem());
                             binding.playPauseBt.setImageDrawable(mediaController.isPlaying() ? getDrawable(R.drawable.ic_pause_outline) : getDrawable(R.drawable.ic_play_outline));
                             updateProgress();
                         }
@@ -66,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
             public void onPlaybackStateChanged(int playbackState) {
                 if(playbackState == ExoPlayer.STATE_READY) {
                     binding.playPauseBt.setImageDrawable(getDrawable(R.drawable.ic_pause_outline));
-                    updateUI(mediaController.getCurrentMediaItem());
-                    updateProgress();
                 } else binding.playPauseBt.setImageDrawable(getDrawable(R.drawable.ic_play_outline));
             }
             
@@ -115,11 +114,19 @@ public class MainActivity extends AppCompatActivity {
         
         // Mini controller
         binding.miniController.setOnClickListener(view -> {
+                if(mediaController.getMediaItemCount() == 0 && mediaController.getCurrentMediaItem() == null) {
+                    Toast.makeText(this, R.string.msg_select_song_to_play, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 startActivity(new Intent(MainActivity.this, PlayerActivity.class));
         });
         
         // skipNextBt
         binding.skipNextBt.setOnClickListener(view -> {
+                if(mediaController.getMediaItemCount() == 0 && mediaController.getCurrentMediaItem() == null) {
+                    Toast.makeText(this, R.string.msg_select_song_to_play, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(mediaController.getPlayWhenReady() || mediaController.getMediaItemCount() != 0) {
                 	if(mediaController.hasNextMediaItem()) {
                 		mediaController.seekToNextMediaItem();
@@ -129,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
         
         // playPauseBt
         binding.playPauseBt.setOnClickListener(view -> {
+                if(mediaController.getMediaItemCount() == 0 && mediaController.getCurrentMediaItem() == null) {
+                    Toast.makeText(this, R.string.msg_select_song_to_play, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(mediaController.getPlayWhenReady() || mediaController.getMediaItemCount() != 0) {
                 	if(mediaController.isPlaying()) {
                 		mediaController.pause();
@@ -187,9 +198,7 @@ public class MainActivity extends AppCompatActivity {
                         if(binding != null && mediaController.getCurrentMediaItem() != null) {
                             // Player progress
                             binding.progress.setMax((int)mediaController.getDuration());
-                            if(mediaController.getPlayWhenReady() || mediaController.isPlaying()) {
-                                binding.progress.setProgress((int)mediaController.getCurrentPosition());
-                            }
+                            binding.progress.setProgress((int)mediaController.getCurrentPosition());
                         }
                         new Handler().postDelayed(this, 1000);
                     }
