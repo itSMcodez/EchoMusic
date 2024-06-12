@@ -55,6 +55,11 @@ public final class PlaylistUtils {
             songs.add(song);
             Toast.makeText(application, application.getString(R.string.msg_add_to_playlist_success, song.getTitle(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
         }
+        
+        // clear @titles to reduce memory usage
+        titles.clear();
+        titles = null;
+        
         var playlistDuration = 0l;
         var sum = 0l;
         for(PlaylistSongsModel _song : songs) {
@@ -120,6 +125,11 @@ public final class PlaylistUtils {
             }
             songsAdded++;
         }
+        
+        // clear @titles to reduce memory usage
+        titles.clear();
+        titles = null;
+        
         Toast.makeText(application, application.getString(R.string.msg_add_songs_to_playlist_success, songsAdded, allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
         var playlistDuration = 0l;
         var sum = 0l;

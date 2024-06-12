@@ -36,6 +36,9 @@ public final class MusicUtils {
             .setTitle(song.getTitle())
             .setAlbumTitle(song.getAlbum())
             .setArtist(song.getArtist())
+            .setDisplayTitle(song.getPath())
+            .setDescription(song.getAlbumId())
+            .setCompilation(song.getSongId())
             .build();
             
         	MediaItem mediaItem = new MediaItem.Builder()
@@ -60,6 +63,9 @@ public final class MusicUtils {
             .setTitle(song.getTitle())
             .setAlbumTitle(song.getAlbum())
             .setArtist(song.getArtist())
+            .setDisplayTitle(song.getPath())
+            .setDescription(song.getAlbumId())
+            .setCompilation(song.getSongId())
             .build();
             
         	MediaItem mediaItem = new MediaItem.Builder()
@@ -70,5 +76,25 @@ public final class MusicUtils {
         }
         
         return mediaItems;
+    }
+    
+    public static MediaItem makeMediaItem(SongsModel song) {
+        Uri path = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Uri songUri = ContentUris.withAppendedId(path, Long.parseLong(song.getSongId()));
+        
+        MediaMetadata metadata = new MediaMetadata.Builder()
+        .setArtworkUri(ArtworkUtils.getArtworkFrom(Long.parseLong(song.getAlbumId())))
+        .setTitle(song.getTitle())
+        .setAlbumTitle(song.getAlbum())
+        .setArtist(song.getArtist())
+        .setDisplayTitle(song.getPath())
+        .setDescription(song.getAlbumId())
+        .setCompilation(song.getSongId())
+        .build();
+        
+        return new MediaItem.Builder()
+            .setMediaMetadata(metadata)
+            .setUri(songUri)
+            .build();
     }
 }

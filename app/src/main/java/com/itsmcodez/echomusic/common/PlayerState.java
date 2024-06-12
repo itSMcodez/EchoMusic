@@ -1,0 +1,10 @@
+package com.itsmcodez.echomusic.common;
+
+public enum PlayerState {
+    ON_MEDIA_ITEM_TRANSITION,
+    ON_PLAYBACK_STATE_CHANGED,
+    ON_MEDIA_METADATA_CHANGED,
+    ON_IS_PLAYING_CHANGED,
+    ON_SHUFFLE_MODE_CHANGED,
+    ON_REPEAT_MODE_CHANGED;
+}
