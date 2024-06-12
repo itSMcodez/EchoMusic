@@ -4,6 +4,7 @@ import android.app.Application;
 import androidx.lifecycle.MutableLiveData;
 import com.itsmcodez.echomusic.models.NowPlayingQueueItemsModel;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class NowPlayingQueueItemsRepository {
     private static Application application;

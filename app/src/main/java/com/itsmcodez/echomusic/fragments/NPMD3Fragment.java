@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.Player;
@@ -22,13 +23,18 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.SessionToken;
 import android.content.ComponentName;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.BaseApplication;
+import com.itsmcodez.echomusic.PlayerActivity;
+import com.itsmcodez.echomusic.adapters.NowPlayingQueueItemsAdapter;
 import com.itsmcodez.echomusic.callbacks.OnPlayerStateChange;
+import com.itsmcodez.echomusic.common.MediaItemsQueue;
 import com.itsmcodez.echomusic.common.PlayerStateObserver;
+import com.itsmcodez.echomusic.models.NowPlayingQueueItemsModel;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
 import com.itsmcodez.echomusic.services.MusicService;
@@ -42,6 +48,7 @@ import com.itsmcodez.echomusic.databinding.LayoutNowPlayingQueueSheetBinding;
 import com.itsmcodez.echomusic.utils.MusicUtils;
 import com.itsmcodez.echomusic.viewmodels.PlaylistSongsViewModel;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class NPMD3Fragment extends Fragment {
     private FragmentNpMd3Binding binding;
@@ -50,7 +57,7 @@ public class NPMD3Fragment extends Fragment {
     private OnPlayerStateChange playerStateCallback;
     private PlaylistSongsViewModel playlistSongsViewModel;
     private ArrayList<String> titles = new ArrayList<>();
-    
+    private NowPlayingQueueItemsAdapter nowPlayingQueueItemsAdapter;
     
     @Override
     public void onStart() {
@@ -150,6 +157,58 @@ public class NPMD3Fragment extends Fragment {
         
         // Now playing queue logic
         binding.npQueueSheet.recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext(), RecyclerView.VERTICAL, false));
+        PlayerActivity.getNowPlayingQueueList().getAllSongs().observe(getViewLifecycleOwner(), new Observer<ArrayList<NowPlayingQueueItemsModel>>() {
+                @Override
+                public void onChanged(ArrayList<NowPlayingQueueItemsModel> songs) {
+                    nowPlayingQueueItemsAdapter = new NowPlayingQueueItemsAdapter(getContext(), getLayoutInflater(), songs);
+                    binding.npQueueSheet.recyclerView.setAdapter(nowPlayingQueueItemsAdapter);
+                    
+                    nowPlayingQueueItemsAdapter.setOnItemClickListener((view, _song, position) -> {
+                            mediaController.seekTo(position, 0);
+                    });
+                    
+                    nowPlayingQueueItemsAdapter.setOnRemoveItemClickListener((position) -> {
+                            mediaController.removeMediaItem(position);
+                            Toast.makeText(getContext(), getString(R.string.msg_remove_song_from_queue_success, MediaItemsQueue.getNowPlayingQueue().get(position).getTitle()), Toast.LENGTH_LONG).show();
+                            MediaItemsQueue.getNowPlayingQueue().remove(position);
+                            nowPlayingQueueItemsAdapter.notifyItemRemoved(position);
+                            nowPlayingQueueItemsAdapter.notifyDataSetChanged();
+                    });
+                    
+                    // Swap song item position logic
+                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                        new ItemTouchHelper.Callback(){
+                            
+                            @Override
+                            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                                return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
+                            }
+                            
+                            @Override
+                            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder targetViewHolder) {
+                                // Swap song position
+                                int draggedItemIndex = viewHolder.getAdapterPosition();
+                                int targetIndex = targetViewHolder.getAdapterPosition();
+                                MediaItem selectedMediaItem = mediaController.getMediaItemAt(draggedItemIndex);
+                                MediaItem targetMediaItem = mediaController.getMediaItemAt(targetIndex);
+                                mediaController.replaceMediaItem(targetIndex, selectedMediaItem);
+                                mediaController.replaceMediaItem(draggedItemIndex, targetMediaItem);
+                                // Update adapter's contents after swapping
+                                Collections.swap(songs, draggedItemIndex, targetIndex);
+                                nowPlayingQueueItemsAdapter.notifyItemMoved(draggedItemIndex, targetIndex);
+                                return true;
+                            }
+                            
+                            @Override
+                            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                                // TODO: implement this method
+                            }
+                            
+                        }
+                    );
+                    itemTouchHelper.attachToRecyclerView(binding.npQueueSheet.recyclerView);
+                }
+        });
         
         // Toolbar
         binding.toolbar.setBackInvokedCallbackEnabled(true);

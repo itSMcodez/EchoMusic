@@ -48,7 +48,7 @@ public class NowPlayingQueueItemsAdapter extends RecyclerView.Adapter<NowPlaying
     }
     private OnRemoveItemClickListener onRemoveItemClickListener;
     
-    public void setRemoveItemClickListener(OnRemoveItemClickListener onRemoveItemClickListener) {
+    public void setOnRemoveItemClickListener(OnRemoveItemClickListener onRemoveItemClickListener) {
     	this.onRemoveItemClickListener = onRemoveItemClickListener;
     }
 
@@ -69,6 +69,11 @@ public class NowPlayingQueueItemsAdapter extends RecyclerView.Adapter<NowPlaying
                 if(onItemClickListener != null) {
                     onItemClickListener.onItemClick(view, song, position);
                 }
+        });
+        
+        viewHolder.itemView.setOnLongClickListener(view -> {
+                Toast.makeText(context, R.string.msg_swap_song_position, Toast.LENGTH_LONG).show();
+                return true;
         });
         
         viewHolder.removeItem.setOnClickListener(view -> {

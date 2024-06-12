@@ -21,6 +21,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.itsmcodez.echomusic.adapters.PlaylistSongsAdapter;
+import com.itsmcodez.echomusic.common.MediaItemsQueue;
 import com.itsmcodez.echomusic.databinding.ActivityPlaylistSongsBinding;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.services.MusicService;
@@ -107,6 +108,7 @@ public class PlaylistSongsActivity extends AppCompatActivity {
                     playlistSongsAdapter.setOnItemClickListener((view, _song, position) -> {
                             // Update MediaItems
                             mediaController.setMediaItems(MusicUtils.makeMediaItems(allSongs, "Playlist Songs"), position, 0);
+                            MediaItemsQueue.setNowPlayingQueue(allSongs, "Playlist Songs");
                             startActivity(new Intent(PlaylistSongsActivity.this, PlayerActivity.class));
                     });
                     

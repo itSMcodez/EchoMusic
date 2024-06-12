@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.itsmcodez.echomusic.adapters.SongsAdapter;
+import com.itsmcodez.echomusic.common.MediaItemsQueue;
 import com.itsmcodez.echomusic.databinding.ActivitySearchableBinding;
+import com.itsmcodez.echomusic.models.NowPlayingQueueItemsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
 import com.itsmcodez.echomusic.services.MusicService;
 import com.itsmcodez.echomusic.utils.MusicUtils;
@@ -104,6 +106,11 @@ public class SearchableActivity extends AppCompatActivity implements SearchView.
                     	songsAdapter = new SongsAdapter(SearchableActivity.this, getLayoutInflater(), filteredList);
                         songsAdapter.setOnPlayNextClickListener((song) -> {
                                 mediaController.addMediaItem(mediaController.getCurrentMediaItem() != null ? mediaController.getCurrentMediaItemIndex()+1 : 0, MusicUtils.makeMediaItem(song));
+                                if(mediaController.getMediaItemCount() != 0 && mediaController.getCurrentMediaItem() != null) {
+                                    if(MediaItemsQueue.getNowPlayingQueue().size() == 0) {
+                                    	MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
+                                    } else MediaItemsQueue.getNowPlayingQueue().add(mediaController.getCurrentMediaItemIndex()+1, new NowPlayingQueueItemsModel(song.getTitle()));
+                                } else MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
                                 Toast.makeText(SearchableActivity.this, getString(R.string.msg_add_song_to_playing_queue_success, song.getTitle()), Toast.LENGTH_SHORT).show();
                         });
                         binding.recyclerView.setAdapter(songsAdapter);
@@ -111,6 +118,7 @@ public class SearchableActivity extends AppCompatActivity implements SearchView.
                         songsAdapter.setOnItemClickListener((view, _song, position) -> {
                                 // Update MediaItems
                                 mediaController.setMediaItems(MusicUtils.makeMediaItems(filteredList), position, 0);
+                                MediaItemsQueue.setNowPlayingQueue(filteredList);
                                 startActivity(new Intent(SearchableActivity.this, PlayerActivity.class));
                         });
                     }

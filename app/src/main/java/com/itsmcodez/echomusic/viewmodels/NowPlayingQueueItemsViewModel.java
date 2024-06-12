@@ -31,6 +31,6 @@ public class NowPlayingQueueItemsViewModel extends AndroidViewModel {
     public void setSongs(ArrayList<NowPlayingQueueItemsModel> songs) {
         nowPlayingQueueItemsRepository.setSongs(songs);
         this.songs = nowPlayingQueueItemsRepository.getSongs();
-        this.allSongs = nowPlayingQueueItemsRepository.getAllSongs();
+        allSongs.setValue(songs);
     }
 }

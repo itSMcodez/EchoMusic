@@ -38,6 +38,7 @@
     <string name="msg_add_to_playlist_success">Added %1$s to %2$s</string>
     <string name="msg_add_songs_to_playlist_success">Added %d song(s) to %s</string>
     <string name="msg_remove_song_from_playlist_success">Removed %1$s from %2$s</string>
+    <string name="msg_remove_song_from_queue_success">Removed %s from the queue</string>
     <string name="msg_add_to_playlist_exists">Song already exists!</string>
     <string name="msg_swap_song_position">Move item up or down to change it\'s position</string>
     <string name="msg_swap_item_position_help">Touch and hold this button to change song position</string>

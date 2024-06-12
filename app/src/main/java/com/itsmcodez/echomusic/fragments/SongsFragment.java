@@ -32,10 +32,12 @@ import com.itsmcodez.echomusic.PlayerActivity;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.adapters.ListOfPlaylistAdapter;
 import com.itsmcodez.echomusic.adapters.SongsAdapter;
+import com.itsmcodez.echomusic.common.MediaItemsQueue;
 import com.itsmcodez.echomusic.common.SortOrder;
 import com.itsmcodez.echomusic.databinding.FragmentSongsBinding;
 import com.itsmcodez.echomusic.databinding.LayoutRecyclerviewBinding;
 import com.itsmcodez.echomusic.models.ListOfPlaylistModel;
+import com.itsmcodez.echomusic.models.NowPlayingQueueItemsModel;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
@@ -183,6 +185,11 @@ public class SongsFragment extends Fragment {
                 	songsAdapter = new SongsAdapter(container.getContext(), getLayoutInflater(), allSongs);
                     songsAdapter.setOnPlayNextClickListener((song) -> {
                             mediaController.addMediaItem(mediaController.getCurrentMediaItem() != null ? mediaController.getCurrentMediaItemIndex()+1 : 0, MusicUtils.makeMediaItem(song));
+                            if(mediaController.getMediaItemCount() != 0 && mediaController.getCurrentMediaItem() != null) {
+                                if(MediaItemsQueue.getNowPlayingQueue().size() == 0) {
+                                	MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
+                                } else MediaItemsQueue.getNowPlayingQueue().add(mediaController.getCurrentMediaItemIndex()+1, new NowPlayingQueueItemsModel(song.getTitle()));
+                            } else MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
                             Toast.makeText(getContext(), getString(R.string.msg_add_song_to_playing_queue_success, song.getTitle()), Toast.LENGTH_SHORT).show();
                     });
                     binding.recyclerView.setAdapter(songsAdapter);
@@ -201,6 +208,7 @@ public class SongsFragment extends Fragment {
                             }
                             // Update MediaItems
                             mediaController.setMediaItems(MusicUtils.makeMediaItems(allSongs), position, 0);
+                            MediaItemsQueue.setNowPlayingQueue(allSongs);
                             startActivity(new Intent(getContext(), PlayerActivity.class));
                     });
                     
