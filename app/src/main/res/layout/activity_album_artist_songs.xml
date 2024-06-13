@@ -26,8 +26,8 @@
 
             <ImageView
                 android:id="@+id/album_artwork"
-                android:layout_height="300dp"
-                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_width="150dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="8dp"
                 android:scaleType="centerCrop"
@@ -37,8 +37,6 @@
                 android:id="@+id/info"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_margin="8dp"
-                android:padding="8dp"
                 android:textAlignment="textStart"
                 android:textSize="18sp"
                 android:text="Playlist info"/>
