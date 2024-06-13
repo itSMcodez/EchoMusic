@@ -142,7 +142,7 @@ public class PlaylistSongsActivity extends AppCompatActivity {
                                 playlistSongsViewModel.swapPlaylistSongPosAt(playlistPosition, draggedItemIndex, targetIndex);
                                 // Update adapter's contents after swapping 
                                 Collections.swap(allSongs, draggedItemIndex, targetIndex);
-                                playlistSongsAdapter.notifyItemMoved(draggedItemIndex, targetIndex);
+                                recyclerView.getAdapter().notifyItemMoved(draggedItemIndex, targetIndex);
                                 return true;
                             }
                             

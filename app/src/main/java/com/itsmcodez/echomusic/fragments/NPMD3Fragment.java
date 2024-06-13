@@ -196,7 +196,7 @@ public class NPMD3Fragment extends Fragment {
                                 mediaController.replaceMediaItem(draggedItemIndex, targetMediaItem);
                                 // Update adapter's contents after swapping
                                 Collections.swap(songs, draggedItemIndex, targetIndex);
-                                nowPlayingQueueItemsAdapter.notifyItemMoved(draggedItemIndex, targetIndex);
+                                recyclerView.getAdapter().notifyItemMoved(draggedItemIndex, targetIndex);
                                 return true;
                             }
                             
