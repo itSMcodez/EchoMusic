@@ -23,6 +23,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.itsmcodez.echomusic.adapters.PlaylistSongsAdapter;
 import com.itsmcodez.echomusic.common.MediaItemsQueue;
 import com.itsmcodez.echomusic.databinding.ActivityPlaylistSongsBinding;
+import com.itsmcodez.echomusic.models.NowPlayingQueueItemsModel;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.services.MusicService;
 import com.itsmcodez.echomusic.utils.MusicUtils;
@@ -192,6 +193,9 @@ public class PlaylistSongsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mediaController.addMediaItems(MusicUtils.makeMediaItems(songs, "Playlist songs"));
+                        for(PlaylistSongsModel song : songs) {
+                            MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
+                        }
                         Toast.makeText(PlaylistSongsActivity.this, getString(R.string.msg_add_songs_to_queue_success, songs.size()), Toast.LENGTH_SHORT).show();
                     }
             })

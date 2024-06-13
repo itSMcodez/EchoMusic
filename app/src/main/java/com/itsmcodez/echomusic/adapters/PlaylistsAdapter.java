@@ -15,10 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.callbacks.OnClickEvents;
+import com.itsmcodez.echomusic.common.MediaItemsQueue;
 import com.itsmcodez.echomusic.databinding.LayoutMaterialTextinputBinding;
 import com.itsmcodez.echomusic.databinding.LayoutPlaylistItemBinding;
 import com.itsmcodez.echomusic.fragments.PlaylistsFragment;
 import com.itsmcodez.echomusic.markups.Adapter;
+import com.itsmcodez.echomusic.models.NowPlayingQueueItemsModel;
+import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.utils.ArtworkUtils;
 import com.itsmcodez.echomusic.utils.MusicUtils;
@@ -157,6 +160,9 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
                             
                             if(item.getItemId() == R.id.add_playlist_to_queue_menu_item) {
                                 PlaylistsFragment.addPlaylistSongsToPlayingQueue(playlist.getSongs());
+                                for(PlaylistSongsModel song : playlist.getSongs()) {
+                                    MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
+                                }
                                 Toast.makeText(context, context.getString(R.string.msg_add_songs_to_queue_success, playlist.getSongs().size()), Toast.LENGTH_SHORT).show();
                             	return true;
                             }

@@ -273,6 +273,9 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mediaController.addMediaItems(MusicUtils.makeMediaItems(songs));
+                            for(SongsModel song : songs) {
+                                MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
+                            }
                             Toast.makeText(AlbumArtistSongsActivity.this, getString(R.string.msg_add_songs_to_queue_success, songs.size()), Toast.LENGTH_SHORT).show();
                         }
                 })

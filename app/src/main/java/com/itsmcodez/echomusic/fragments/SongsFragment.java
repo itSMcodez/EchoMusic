@@ -341,6 +341,9 @@ public class SongsFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mediaController.addMediaItems(MusicUtils.makeMediaItems(selectedSongs));
+                            for(SongsModel song : selectedSongs) {
+                                MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
+                            }
                             Toast.makeText(getContext(), getString(R.string.msg_add_songs_to_queue_success, selectedSongs.size()), Toast.LENGTH_SHORT).show();
                             mode.finish();
                         }
