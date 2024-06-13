@@ -12,6 +12,7 @@ import java.util.Collections;
 
 public final class PlaylistUtils {
     private static ArrayList<PlaylistsModel> allPlaylists;
+    public static int FAVOURITES = 0;
     
     public static ArrayList<PlaylistsModel> getAllPlaylists(Application application) {
     	allPlaylists = getPlaylistsFromDB(application);
@@ -44,6 +45,10 @@ public final class PlaylistUtils {
     
     public static void addSongToPlaylistAt(Application application, PlaylistSongsModel song, int position) {
     	allPlaylists = getPlaylistsFromDB(application);
+        if((position == FAVOURITES && allPlaylists.size() == 0) || (position == FAVOURITES && allPlaylists.size() != 0 && !allPlaylists.get(FAVOURITES).getTitle().equals("Favourites"))) {
+        	PlaylistsModel favourites = new PlaylistsModel("Favourites", new ArrayList<PlaylistSongsModel>(), 0, 0);
+            addNewPlaylistAt(application, favourites, FAVOURITES);
+        }
         ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs() != null ? allPlaylists.get(position).getSongs() : new ArrayList<>();
         ArrayList<String> titles = new ArrayList<>();
         for(PlaylistSongsModel _song : songs) {

@@ -31,6 +31,7 @@ import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
 import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
 import com.itsmcodez.echomusic.utils.MusicUtils;
+import com.itsmcodez.echomusic.utils.PlaylistUtils;
 import java.util.ArrayList;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongsViewHolder> implements Adapter, 
@@ -127,6 +128,13 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
                             		onPlayNextClickListener.onPlayNextClick(song);
                             	}
                                 return true;
+                            }
+                            
+                            if(item.getItemId() == R.id.add_to_fav_menu_item) {
+                                PlaylistsRepository playlistRepo = PlaylistsRepository.getInstance(BaseApplication.getApplication());
+                                PlaylistSongsModel playlistSong = new PlaylistSongsModel(song.getPath(), song.getTitle(),
+                                     song.getArtist(), song.getDuration(), song.getAlbum(), song.getAlbumId(), song.getSongId());
+                                playlistRepo.addSongToPlaylistAt(playlistSong, PlaylistUtils.FAVOURITES);
                             }
                             
                             if(item.getItemId() == R.id.add_to_playlist_menu_item) {

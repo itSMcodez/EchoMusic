@@ -46,6 +46,7 @@ import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.databinding.FragmentNpMd3Binding;
 import com.itsmcodez.echomusic.databinding.LayoutNowPlayingQueueSheetBinding;
 import com.itsmcodez.echomusic.utils.MusicUtils;
+import com.itsmcodez.echomusic.utils.PlaylistUtils;
 import com.itsmcodez.echomusic.viewmodels.PlaylistSongsViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -324,14 +325,14 @@ public class NPMD3Fragment extends Fragment {
         binding.favBt.setOnClickListener(view -> {
                 PlaylistsRepository playlistRepo = PlaylistsRepository.getInstance(BaseApplication.getApplication());
                 if(titles.contains(mediaController.getCurrentMediaItem().mediaMetadata.title)) {
-                    playlistRepo.removeSongFromPlaylistAt(titles.indexOf(mediaController.getCurrentMediaItem().mediaMetadata.title), 0);
+                    playlistRepo.removeSongFromPlaylistAt(titles.indexOf(mediaController.getCurrentMediaItem().mediaMetadata.title), PlaylistUtils.FAVOURITES);
                     titles.remove(mediaController.getCurrentMediaItem().mediaMetadata.title);
                     binding.favBt.setImageResource(R.drawable.ic_heart_outline);
                 	return;
                 }
                 PlaylistSongsModel playlistSong = new PlaylistSongsModel((String)mediaController.getCurrentMediaItem().mediaMetadata.displayTitle, (String)mediaController.getCurrentMediaItem().mediaMetadata.title,
                     (String)mediaController.getCurrentMediaItem().mediaMetadata.artist, String.valueOf(mediaController.getDuration()), (String)mediaController.getCurrentMediaItem().mediaMetadata.albumTitle, (String)mediaController.getCurrentMediaItem().mediaMetadata.description, (String)mediaController.getCurrentMediaItem().mediaMetadata.compilation);
-                playlistRepo.addSongToPlaylistAt(playlistSong, 0);
+                playlistRepo.addSongToPlaylistAt(playlistSong, PlaylistUtils.FAVOURITES);
                 titles.add(playlistSong.getTitle());
                 binding.favBt.setImageResource(R.drawable.ic_heart);
         });

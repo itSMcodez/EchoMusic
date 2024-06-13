@@ -27,6 +27,7 @@
     <string name="search_query_hint">Search for songs/artists</string>
     <string name="add_playlist_textinput_hint">Enter playlist name</string>
     <string name="add_playlist_dialog_title">Add new playlist</string>
+    <string name="add_to_fav">Add to Favourites</string>
     <string name="choose_playlist_dialog_title">Choose playlist</string>
     <string name="layout_now_playing_queue_sheet_title">Now Playing Queue</string>
     <string name="add_playlist_dialog_empty_input_rationale">Please type a name for the playlist!</string>
