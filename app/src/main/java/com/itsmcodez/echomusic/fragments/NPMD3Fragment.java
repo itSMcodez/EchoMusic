@@ -190,10 +190,7 @@ public class NPMD3Fragment extends Fragment {
                                 // Swap song position
                                 int draggedItemIndex = viewHolder.getAdapterPosition();
                                 int targetIndex = targetViewHolder.getAdapterPosition();
-                                MediaItem selectedMediaItem = mediaController.getMediaItemAt(draggedItemIndex);
-                                MediaItem targetMediaItem = mediaController.getMediaItemAt(targetIndex);
-                                mediaController.replaceMediaItem(targetIndex, selectedMediaItem);
-                                mediaController.replaceMediaItem(draggedItemIndex, targetMediaItem);
+                                mediaController.moveMediaItem(draggedItemIndex, targetIndex);
                                 // Update adapter's contents after swapping
                                 Collections.swap(songs, draggedItemIndex, targetIndex);
                                 recyclerView.getAdapter().notifyItemMoved(draggedItemIndex, targetIndex);
@@ -331,7 +328,7 @@ public class NPMD3Fragment extends Fragment {
                 	return;
                 }
                 PlaylistSongsModel playlistSong = new PlaylistSongsModel((String)mediaController.getCurrentMediaItem().mediaMetadata.displayTitle, (String)mediaController.getCurrentMediaItem().mediaMetadata.title,
-                    (String)mediaController.getCurrentMediaItem().mediaMetadata.artist, String.valueOf(mediaController.getDuration()), (String)mediaController.getCurrentMediaItem().mediaMetadata.albumTitle, (String)mediaController.getCurrentMediaItem().mediaMetadata.description, (String)mediaController.getCurrentMediaItem().mediaMetadata.compilation);
+                    (String)mediaController.getCurrentMediaItem().mediaMetadata.artist, String.valueOf(mediaController.getDuration()), (String)mediaController.getCurrentMediaItem().mediaMetadata.albumTitle, (String)mediaController.getCurrentMediaItem().mediaMetadata.description, mediaController.getCurrentMediaItem().mediaId);
                 playlistRepo.addSongToPlaylistAt(playlistSong, PlaylistUtils.FAVOURITES);
                 titles.add(playlistSong.getTitle());
                 binding.favBt.setImageResource(R.drawable.ic_heart);

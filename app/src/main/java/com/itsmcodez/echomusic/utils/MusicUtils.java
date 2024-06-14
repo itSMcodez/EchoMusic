@@ -38,11 +38,11 @@ public final class MusicUtils {
             .setArtist(song.getArtist())
             .setDisplayTitle(song.getPath())
             .setDescription(song.getAlbumId())
-            .setCompilation(song.getSongId())
             .build();
             
         	MediaItem mediaItem = new MediaItem.Builder()
             .setMediaMetadata(metadata)
+            .setMediaId(song.getSongId())
             .setUri(songUri)
             .build();
             mediaItems.add(mediaItem);
@@ -65,11 +65,11 @@ public final class MusicUtils {
             .setArtist(song.getArtist())
             .setDisplayTitle(song.getPath())
             .setDescription(song.getAlbumId())
-            .setCompilation(song.getSongId())
             .build();
             
         	MediaItem mediaItem = new MediaItem.Builder()
             .setMediaMetadata(metadata)
+            .setMediaId(song.getSongId())
             .setUri(songUri)
             .build();
             mediaItems.add(mediaItem);
@@ -89,11 +89,11 @@ public final class MusicUtils {
         .setArtist(song.getArtist())
         .setDisplayTitle(song.getPath())
         .setDescription(song.getAlbumId())
-        .setCompilation(song.getSongId())
         .build();
         
         return new MediaItem.Builder()
             .setMediaMetadata(metadata)
+            .setMediaId(song.getSongId())
             .setUri(songUri)
             .build();
     }
