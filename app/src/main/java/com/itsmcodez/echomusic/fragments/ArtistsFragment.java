@@ -44,7 +44,6 @@ public class ArtistsFragment extends Fragment {
                             ArtistsModel artist = (ArtistsModel) _artist;
                             startActivity(new Intent(container.getContext(), AlbumArtistSongsActivity.class)
                                 .putExtra("title", artist.getArtist())
-                                .putExtra("album_id", artist.getAlbumId())
                                 .putExtra("from", "artist"));
                     });
                 }

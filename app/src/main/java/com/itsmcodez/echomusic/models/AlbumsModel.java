@@ -4,13 +4,18 @@ import android.net.Uri;
 import com.itsmcodez.echomusic.markups.Model;
 
 public class AlbumsModel implements Model {
-    private String album, albumId;
+    private String album, albumArtist, albumId;
     private Uri albumArtwork;
 
-    public AlbumsModel(String album, String albumId, Uri albumArtwork) {
+    public AlbumsModel(
+            String album,
+            String albumArtist,
+            String albumId,
+            Uri albumArtwork) {
         this.album = album;
         this.albumId = albumId;
         this.albumArtwork = albumArtwork;
+        this.albumArtist = albumArtist;
     }
 
     public String getAlbum() {
@@ -35,5 +40,13 @@ public class AlbumsModel implements Model {
 
     public void setAlbumArtwork(Uri albumArtwork) {
         this.albumArtwork = albumArtwork;
+    }
+
+    public String getAlbumArtist() {
+        return this.albumArtist;
+    }
+
+    public void setAlbumArtist(String albumArtist) {
+        this.albumArtist = albumArtist;
     }
 }

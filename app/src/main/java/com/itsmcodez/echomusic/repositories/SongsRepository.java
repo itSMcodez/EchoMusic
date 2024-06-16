@@ -3,8 +3,8 @@ import android.app.Application;
 import android.content.ContentUris;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
 import androidx.lifecycle.MutableLiveData;
+import com.itsmcodez.echomusic.common.MediaProperties;
 import com.itsmcodez.echomusic.common.SortOrder;
 import com.itsmcodez.echomusic.models.SongsModel;
 import java.util.ArrayList;
@@ -29,14 +29,14 @@ public class SongsRepository {
         	songs.clear();
         }
         
-        Uri songsUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
-            MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.ALBUM_ID, MediaStore.Audio.Media._ID};
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+        Uri songsUri = MediaProperties.MEDIA_STORE_EXTERNAL_URI;
+        String[] projection = {MediaProperties.DATA_PATH, MediaProperties.TITLE, MediaProperties.ARTIST,
+            MediaProperties.DURATION, MediaProperties.ALBUM, MediaProperties.ALBUM_ID, MediaProperties.SONG_ID};
+        String selection = MediaProperties.IS_MUSIC;
         
-        String songsSortOrder = sortOrder == SortOrder.DESCENDING ? MediaStore.Audio.Media.TITLE + " DESC" : 
-        sortOrder == SortOrder.ASCENDING ? MediaStore.Audio.Media.TITLE + " ASC" : sortOrder == SortOrder.SIZE ? MediaStore.Audio.Media.SIZE : 
-        sortOrder == SortOrder.DURATION ? MediaStore.Audio.Media.DURATION : MediaStore.Audio.Media.DATE_ADDED;
+        String songsSortOrder = sortOrder == SortOrder.DESCENDING ? MediaProperties.SORT_TITLE_DESC : 
+        sortOrder == SortOrder.ASCENDING ? MediaProperties.SORT_TITLE_ASC : sortOrder == SortOrder.SIZE ? MediaProperties.SORT_SIZE_ASC : 
+        sortOrder == SortOrder.DURATION ? MediaProperties.SORT_DURATION_ASC : MediaProperties.SORT_DATE_ADDED_ASC;
         
         Cursor cursor = application.getContentResolver().query(songsUri, projection, selection, null, songsSortOrder);
         if(cursor.moveToFirst()) {
@@ -50,7 +50,7 @@ public class SongsRepository {
                 String songId = cursor.getString(6);
             
                 long _albumId = Long.parseLong(albumId);
-                Uri artworkPath = Uri.parse("content://media/external/audio/albumart");
+                Uri artworkPath = Uri.parse(MediaProperties.ALBUM_ART_URI);
                 Uri albumArtwork = ContentUris.withAppendedId(artworkPath, _albumId);
             
                 songs.add(new SongsModel(path, title, artist, duration, album, albumId, songId, albumArtwork));

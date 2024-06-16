@@ -109,12 +109,19 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
                     // filter songs to match album/artist name
                 	ArrayList<SongsModel> filteredList = new ArrayList<>();
                     if(intent.getStringExtra("from").equals("album")) {
+                        // Cover Art
+                        binding.albumArtwork.setImageURI(ArtworkUtils.getArtworkFrom(Long.parseLong(intent.getStringExtra("album_id"))));
+                        if(binding.albumArtwork.getDrawable() == null) {
+                            binding.albumArtwork.setImageDrawable(getDrawable(R.drawable.ic_library_music_outline));
+                        }
                     	for(SongsModel song : allSongs) {
                             if(song.getAlbum().equals(intent.getStringExtra("title"))) {
                                 filteredList.add(song);
                             }
                         }
                     } else if(intent.getStringExtra("from").equals("artist")) {
+                        // Cover Art
+                        binding.albumArtwork.setImageResource(R.drawable.ic_artist_artwork);
                     	for(SongsModel song : allSongs) {
                             if(song.getArtist().equals(intent.getStringExtra("title"))) {
                                 filteredList.add(song);
@@ -151,12 +158,6 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
                             mediaController.setMediaItems(MusicUtils.makeMediaItems(songs), position, 0);
                             startActivity(new Intent(AlbumArtistSongsActivity.this, PlayerActivity.class));
                     });
-                    
-                    // Cover Art
-                    binding.albumArtwork.setImageURI(ArtworkUtils.getArtworkFrom(Long.parseLong(intent.getStringExtra("album_id"))));
-                    if(binding.albumArtwork.getDrawable() == null) {
-                    	binding.albumArtwork.setImageDrawable(getDrawable(R.drawable.ic_library_music_outline));
-                    }
                 }
         });
     }
