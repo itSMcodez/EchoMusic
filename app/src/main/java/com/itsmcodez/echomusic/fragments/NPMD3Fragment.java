@@ -47,7 +47,6 @@ import com.itsmcodez.echomusic.databinding.FragmentNpMd3Binding;
 import com.itsmcodez.echomusic.databinding.LayoutNowPlayingQueueSheetBinding;
 import com.itsmcodez.echomusic.utils.MusicUtils;
 import com.itsmcodez.echomusic.utils.PlaylistUtils;
-import com.itsmcodez.echomusic.viewmodels.PlaylistSongsViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -56,8 +55,6 @@ public class NPMD3Fragment extends Fragment {
     private MediaController mediaController;
     private ListenableFuture<MediaController> controllerFuture;
     private OnPlayerStateChange playerStateCallback;
-    private PlaylistSongsViewModel playlistSongsViewModel;
-    private ArrayList<String> titles = new ArrayList<>();
     private NowPlayingQueueItemsAdapter nowPlayingQueueItemsAdapter;
     
     @Override
@@ -114,17 +111,6 @@ public class NPMD3Fragment extends Fragment {
         MediaController.releaseFuture(controllerFuture);
         PlayerStateObserver.unregisterCallback(playerStateCallback);
         playerStateCallback = null;
-    }
-    
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        playlistSongsViewModel = new ViewModelProvider(this).get(PlaylistSongsViewModel.class);
-        // Favourite songs
-        ArrayList<PlaylistSongsModel> FavouriteSongs = playlistSongsViewModel.getSongs(0);
-        for(PlaylistSongsModel song : FavouriteSongs) {
-            titles.add(song.getTitle());
-        }
     }
     
     @Override
@@ -321,16 +307,14 @@ public class NPMD3Fragment extends Fragment {
         
         binding.favBt.setOnClickListener(view -> {
                 PlaylistsRepository playlistRepo = PlaylistsRepository.getInstance(BaseApplication.getApplication());
-                if(titles.contains(mediaController.getCurrentMediaItem().mediaMetadata.title)) {
-                    playlistRepo.removeSongFromPlaylistAt(titles.indexOf(mediaController.getCurrentMediaItem().mediaMetadata.title), PlaylistUtils.FAVOURITES);
-                    titles.remove(mediaController.getCurrentMediaItem().mediaMetadata.title);
+                if(MusicUtils.isFavouriteSong(getViewLifecycleOwner(), Long.parseLong(mediaController.getCurrentMediaItem().mediaId))) {
+                    playlistRepo.removeSongFromPlaylistAt(MusicUtils.indexOfSongById(Long.parseLong(mediaController.getCurrentMediaItem().mediaId), playlistRepo.getPlaylists().get(PlaylistUtils.FAVOURITES).getSongs()), PlaylistUtils.FAVOURITES);
                     binding.favBt.setImageResource(R.drawable.ic_heart_outline);
                 	return;
                 }
                 PlaylistSongsModel playlistSong = new PlaylistSongsModel((String)mediaController.getCurrentMediaItem().mediaMetadata.displayTitle, (String)mediaController.getCurrentMediaItem().mediaMetadata.title,
                     (String)mediaController.getCurrentMediaItem().mediaMetadata.artist, String.valueOf(mediaController.getDuration()), (String)mediaController.getCurrentMediaItem().mediaMetadata.albumTitle, (String)mediaController.getCurrentMediaItem().mediaMetadata.description, mediaController.getCurrentMediaItem().mediaId);
                 playlistRepo.addSongToPlaylistAt(playlistSong, PlaylistUtils.FAVOURITES);
-                titles.add(playlistSong.getTitle());
                 binding.favBt.setImageResource(R.drawable.ic_heart);
         });
         
@@ -351,7 +335,7 @@ public class NPMD3Fragment extends Fragment {
         Glide.with(getContext()).load(mediaItem.mediaMetadata.artworkUri)
             .error(R.drawable.ic_music_note_outline)
             .into(binding.albumArtwork);
-        if(titles.contains(mediaItem.mediaMetadata.title)) {
+        if(MusicUtils.isFavouriteSong(getViewLifecycleOwner(), Long.parseLong(mediaItem.mediaId))) {
             binding.favBt.setImageResource(R.drawable.ic_heart);
         } else {
             binding.favBt.setImageResource(R.drawable.ic_heart_outline);

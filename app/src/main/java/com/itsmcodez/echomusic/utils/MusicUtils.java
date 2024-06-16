@@ -2,13 +2,18 @@ package com.itsmcodez.echomusic.utils;
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.MediaStore;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
 import com.itsmcodez.echomusic.common.MediaItemsQueue;
 import com.itsmcodez.echomusic.markups.Model;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
+import com.itsmcodez.echomusic.viewmodels.PlaylistSongsViewModel;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public final class MusicUtils {
@@ -97,6 +102,47 @@ public final class MusicUtils {
             .setMediaId(song.getSongId())
             .setUri(songUri)
             .build();
+    }
+    
+    public static boolean isFavouriteSong(LifecycleOwner lifecycleOwner, long songId) {
+    	PlaylistSongsViewModel playlistSongsViewModel = new ViewModelProvider((ViewModelStoreOwner)lifecycleOwner).get(PlaylistSongsViewModel.class);
+        ArrayList<Long> songIds = new ArrayList<>();
+        // Query favourite songs
+        ArrayList<PlaylistSongsModel> FavouriteSongs = playlistSongsViewModel.getSongs(PlaylistUtils.FAVOURITES);
+        for(PlaylistSongsModel song : FavouriteSongs) {
+            songIds.add(Long.parseLong(song.getSongId()));
+        }
+        
+        if(songIds.contains(songId)) {
+        	return true;
+        }
+        return false;
+    }
+    
+    public static int indexOfSongById(long songId, List<PlaylistSongsModel> songs) {
+    	ArrayList<Long> songIds = new ArrayList<>();
+        var indexOfSong = 0;
+        for(PlaylistSongsModel song : songs) {
+        	songIds.add(Long.parseLong(song.getSongId()));
+        }
+        if(songIds.contains(songId)) {
+        	indexOfSong = songIds.indexOf(songId);
+            return indexOfSong;
+        }
+        return -1;
+    }
+    
+    public static int indexOfSongById(long songId, List<SongsModel> songs, String tag) {
+    	ArrayList<Long> songIds = new ArrayList<>();
+        var indexOfSong = 0;
+        for(SongsModel song : songs) {
+        	songIds.add(Long.parseLong(song.getSongId()));
+        }
+        if(songIds.contains(songId)) {
+        	indexOfSong = songIds.indexOf(songId);
+            return indexOfSong;
+        }
+        return -1;
     }
     
     public static void deleteSong() {
