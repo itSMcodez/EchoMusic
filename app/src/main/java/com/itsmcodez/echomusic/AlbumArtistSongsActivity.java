@@ -149,7 +149,6 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
                     songsAdapter.setOnItemClickListener((view, _song, position) -> {
                             // Update MediaItems
                             mediaController.setMediaItems(MusicUtils.makeMediaItems(songs), position, 0);
-                            MediaItemsQueue.setNowPlayingQueue(songs);
                             startActivity(new Intent(AlbumArtistSongsActivity.this, PlayerActivity.class));
                     });
                     

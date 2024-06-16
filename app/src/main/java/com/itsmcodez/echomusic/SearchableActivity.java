@@ -118,7 +118,6 @@ public class SearchableActivity extends AppCompatActivity implements SearchView.
                         songsAdapter.setOnItemClickListener((view, _song, position) -> {
                                 // Update MediaItems
                                 mediaController.setMediaItems(MusicUtils.makeMediaItems(filteredList), position, 0);
-                                MediaItemsQueue.setNowPlayingQueue(filteredList);
                                 startActivity(new Intent(SearchableActivity.this, PlayerActivity.class));
                         });
                     }

@@ -208,7 +208,6 @@ public class SongsFragment extends Fragment {
                             }
                             // Update MediaItems
                             mediaController.setMediaItems(MusicUtils.makeMediaItems(allSongs), position, 0);
-                            MediaItemsQueue.setNowPlayingQueue(allSongs);
                             startActivity(new Intent(getContext(), PlayerActivity.class));
                     });
                     

@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
+import com.itsmcodez.echomusic.common.MediaItemsQueue;
 import com.itsmcodez.echomusic.markups.Model;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
@@ -26,7 +27,7 @@ public final class MusicUtils {
     
     public static ArrayList<MediaItem> makeMediaItems(ArrayList<SongsModel> songs) {
     	ArrayList<MediaItem> mediaItems = new ArrayList<>();
-        
+        MediaItemsQueue.setNowPlayingQueue(songs);
         for(SongsModel song : songs) {
             Uri path = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             Uri songUri = ContentUris.withAppendedId(path, Long.parseLong(song.getSongId()));
@@ -53,7 +54,7 @@ public final class MusicUtils {
     
     public static ArrayList<MediaItem> makeMediaItems(ArrayList<PlaylistSongsModel> songs, String tag) {
     	ArrayList<MediaItem> mediaItems = new ArrayList<>();
-        
+        MediaItemsQueue.setNowPlayingQueue(songs, tag);
         for(PlaylistSongsModel song : songs) {
             Uri path = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             Uri songUri = ContentUris.withAppendedId(path, Long.parseLong(song.getSongId()));
@@ -96,5 +97,9 @@ public final class MusicUtils {
             .setMediaId(song.getSongId())
             .setUri(songUri)
             .build();
+    }
+    
+    public static void deleteSong() {
+    	
     }
 }
