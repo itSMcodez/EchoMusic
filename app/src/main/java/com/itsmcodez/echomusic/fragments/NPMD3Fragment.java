@@ -36,7 +36,6 @@ import com.itsmcodez.echomusic.common.MediaItemsQueue;
 import com.itsmcodez.echomusic.common.PlayerStateObserver;
 import com.itsmcodez.echomusic.models.NowPlayingQueueItemsModel;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
-import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
 import com.itsmcodez.echomusic.services.MusicService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -306,15 +305,14 @@ public class NPMD3Fragment extends Fragment {
         });
         
         binding.favBt.setOnClickListener(view -> {
-                PlaylistsRepository playlistRepo = PlaylistsRepository.getInstance(BaseApplication.getApplication());
-                if(MusicUtils.isFavouriteSong(getViewLifecycleOwner(), Long.parseLong(mediaController.getCurrentMediaItem().mediaId))) {
-                    playlistRepo.removeSongFromPlaylistAt(MusicUtils.indexOfSongById(Long.parseLong(mediaController.getCurrentMediaItem().mediaId), playlistRepo.getPlaylists().get(PlaylistUtils.FAVOURITES).getSongs()), PlaylistUtils.FAVOURITES);
+                if(MusicUtils.isFavouriteSong(Long.parseLong(mediaController.getCurrentMediaItem().mediaId))) {
+                    MusicUtils.removeSongFromFavourites(Long.parseLong(mediaController.getCurrentMediaItem().mediaId));
                     binding.favBt.setImageResource(R.drawable.ic_heart_outline);
                 	return;
                 }
                 PlaylistSongsModel playlistSong = new PlaylistSongsModel((String)mediaController.getCurrentMediaItem().mediaMetadata.displayTitle, (String)mediaController.getCurrentMediaItem().mediaMetadata.title,
                     (String)mediaController.getCurrentMediaItem().mediaMetadata.artist, String.valueOf(mediaController.getDuration()), (String)mediaController.getCurrentMediaItem().mediaMetadata.albumTitle, (String)mediaController.getCurrentMediaItem().mediaMetadata.description, mediaController.getCurrentMediaItem().mediaId);
-                playlistRepo.addSongToPlaylistAt(playlistSong, PlaylistUtils.FAVOURITES);
+                MusicUtils.addSongToFavourites(playlistSong);
                 binding.favBt.setImageResource(R.drawable.ic_heart);
         });
         
@@ -335,7 +333,7 @@ public class NPMD3Fragment extends Fragment {
         Glide.with(getContext()).load(mediaItem.mediaMetadata.artworkUri)
             .error(R.drawable.ic_music_note_outline)
             .into(binding.albumArtwork);
-        if(MusicUtils.isFavouriteSong(getViewLifecycleOwner(), Long.parseLong(mediaItem.mediaId))) {
+        if(MusicUtils.isFavouriteSong(Long.parseLong(mediaItem.mediaId))) {
             binding.favBt.setImageResource(R.drawable.ic_heart);
         } else {
             binding.favBt.setImageResource(R.drawable.ic_heart_outline);

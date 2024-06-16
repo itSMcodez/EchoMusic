@@ -7,16 +7,28 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
+import com.itsmcodez.echomusic.BaseApplication;
 import com.itsmcodez.echomusic.common.MediaItemsQueue;
 import com.itsmcodez.echomusic.markups.Model;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
-import com.itsmcodez.echomusic.viewmodels.PlaylistSongsViewModel;
+import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public final class MusicUtils {
+    private static ArrayList<PlaylistSongsModel> favouriteSongs;
+    private static ArrayList<Long> favSongIds = new ArrayList<>();
+    private static PlaylistsRepository playlistRepo = PlaylistsRepository.getInstance(BaseApplication.getApplication());
+    
+    static {
+        // Query favourite songs
+        favouriteSongs = playlistRepo.getPlaylists().get(PlaylistUtils.FAVOURITES).getSongs();
+        for(PlaylistSongsModel song : favouriteSongs) {
+            favSongIds.add(Long.parseLong(song.getSongId()));
+        }
+    }
     
     public static String getReadableDuration(long duration) {
     	var minutes = duration / 1000 / 60;
@@ -104,16 +116,20 @@ public final class MusicUtils {
             .build();
     }
     
-    public static boolean isFavouriteSong(LifecycleOwner lifecycleOwner, long songId) {
-    	PlaylistSongsViewModel playlistSongsViewModel = new ViewModelProvider((ViewModelStoreOwner)lifecycleOwner).get(PlaylistSongsViewModel.class);
-        ArrayList<Long> songIds = new ArrayList<>();
-        // Query favourite songs
-        ArrayList<PlaylistSongsModel> FavouriteSongs = playlistSongsViewModel.getSongs(PlaylistUtils.FAVOURITES);
-        for(PlaylistSongsModel song : FavouriteSongs) {
-            songIds.add(Long.parseLong(song.getSongId()));
-        }
-        
-        if(songIds.contains(songId)) {
+    public static void removeSongFromFavourites(long songId) {
+    	if(favSongIds.contains(songId)) {
+    		playlistRepo.removeSongFromPlaylistAt(favSongIds.indexOf(songId), PlaylistUtils.FAVOURITES);
+            favSongIds.remove(songId);
+    	}
+    }
+    
+    public static void addSongToFavourites(PlaylistSongsModel song) {
+    	playlistRepo.addSongToPlaylistAt(song, PlaylistUtils.FAVOURITES);
+        favSongIds.add(Long.parseLong(song.getSongId()));
+    }
+    
+    public static boolean isFavouriteSong(long songId) {
+        if(favSongIds.contains(songId)) {
         	return true;
         }
         return false;

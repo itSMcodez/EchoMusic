@@ -131,10 +131,9 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
                             }
                             
                             if(item.getItemId() == R.id.add_to_fav_menu_item) {
-                                PlaylistsRepository playlistRepo = PlaylistsRepository.getInstance(BaseApplication.getApplication());
                                 PlaylistSongsModel playlistSong = new PlaylistSongsModel(song.getPath(), song.getTitle(),
                                      song.getArtist(), song.getDuration(), song.getAlbum(), song.getAlbumId(), song.getSongId());
-                                playlistRepo.addSongToPlaylistAt(playlistSong, PlaylistUtils.FAVOURITES);
+                                MusicUtils.addSongToFavourites(playlistSong);
                             }
                             
                             if(item.getItemId() == R.id.add_to_playlist_menu_item) {
