@@ -87,5 +87,11 @@
             
         </activity>
         
+        <activity
+            android:name="CrashHandlerActivity"
+            android:exported="true">
+            
+        </activity>
+        
     </application>
 </manifest>
