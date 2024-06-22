@@ -8,40 +8,58 @@ import com.itsmcodez.echomusic.common.SortOrder;
 import com.itsmcodez.echomusic.models.ArtistsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class ArtistsRepository {
     private static Application application;
     private static ArtistsRepository instance;
     private ArrayList<ArtistsModel> artists;
     private MutableLiveData<ArrayList<ArtistsModel>> allArtists;
+    private ExecutorService executor = Executors.newFixedThreadPool(4);
     
     private ArtistsRepository(){
         artists = new ArrayList<>();
         allArtists = new MutableLiveData<>();
-        queryArtists(artists, SortOrder.ASCENDING);
+        Future<ArrayList<ArtistsModel>> artistsFuture = executor.submit(queryArtists(SortOrder.ASCENDING));
+        try {
+            artists = artistsFuture.get();
+    		allArtists.setValue(removeDuplicates(artists));
+    	} catch(Exception err) {
+    		err.printStackTrace();
+    	}
     }
     
-    private void queryArtists(ArrayList<ArtistsModel> artists, SortOrder sortOrder) {
+    private Callable<ArrayList<ArtistsModel>> queryArtists(SortOrder sortOrder) {
     	
         if(artists.size() > 0) {
         	artists.clear();
         }
         
-        Uri artistsUri = MediaProperties.MEDIA_STORE_EXTERNAL_URI;
-        String[] projection = { MediaProperties.COLUMN_ARTIST};
-        String selection = MediaProperties.IS_MUSIC;
+        ArrayList<ArtistsModel> artists = new ArrayList<>();
+        Callable<ArrayList<ArtistsModel>> artistsCallable = () -> {
         
-        String songsSortOrder = sortOrder == SortOrder.ASCENDING ? MediaProperties.SORT_ARTIST_TITLE_ASC : MediaProperties.SORT_ARTIST_TITLE_DESC;
-        
-        Cursor cursor = application.getContentResolver().query(artistsUri, projection, selection, null, songsSortOrder);
-        if(cursor.moveToFirst()) {
-        	while(cursor.moveToNext()) {
-                String artist = cursor.getString(0);
-                artists.add(new ArtistsModel(artist));
+            Uri artistsUri = MediaProperties.MEDIA_STORE_EXTERNAL_URI;
+            String[] projection = { MediaProperties.COLUMN_ARTIST};
+            String selection = MediaProperties.IS_MUSIC;
+            
+            String songsSortOrder = sortOrder == SortOrder.ASCENDING ? MediaProperties.SORT_ARTIST_TITLE_ASC : MediaProperties.SORT_ARTIST_TITLE_DESC;
+            
+            Cursor cursor = application.getContentResolver().query(artistsUri, projection, selection, null, songsSortOrder);
+            if(cursor.moveToFirst()) {
+                while(cursor.moveToNext()) {
+                    String artist = cursor.getString(0);
+                    artists.add(new ArtistsModel(artist));
+                }
+                cursor.close();
             }
-            cursor.close();
-        }
-        allArtists.setValue(removeDuplicates(artists));
+            
+            return artists;
+        };
+            
+        return artistsCallable;
     }
     
     public static synchronized ArtistsRepository getInstance(Application application) {
