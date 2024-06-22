@@ -3,7 +3,6 @@ import android.app.Application;
 import android.content.ContentUris;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import com.itsmcodez.echomusic.common.MediaProperties;
 import com.itsmcodez.echomusic.common.SortOrder;
@@ -31,10 +30,8 @@ public class SongsRepository {
         try {
             songs = songsFuture.get();
     		allSongs.setValue(songs);
-            Log.d("SongsRepository", "Success");
     	} catch(Exception err) {
     		err.printStackTrace();
-            Log.d("SongsRepository", "Fail");
     	}
     }
     
@@ -106,10 +103,8 @@ public class SongsRepository {
             try {
                 songs = songsFuture.get();
                 allSongs.setValue(songs);
-                Log.d("SongsRepository", "Success");
             } catch(Exception err) {
                 err.printStackTrace();
-                Log.d("SongsRepository", "Fail");
             }
             return;
         }
@@ -119,10 +114,8 @@ public class SongsRepository {
             try {
                 songs = songsFuture.get();
                 allSongs.setValue(songs);
-                Log.d("SongsRepository", "Success");
             } catch(Exception err) {
                 err.printStackTrace();
-                Log.d("SongsRepository", "Fail");
             }
             return;
         }
@@ -132,10 +125,8 @@ public class SongsRepository {
             try {
                 songs = songsFuture.get();
                 allSongs.setValue(songs);
-                Log.d("SongsRepository", "Success");
             } catch(Exception err) {
                 err.printStackTrace();
-                Log.d("SongsRepository", "Fail");
             }
             return;
         }
@@ -145,10 +136,8 @@ public class SongsRepository {
             try {
                 songs = songsFuture.get();
                 allSongs.setValue(songs);
-                Log.d("SongsRepository", "Success");
             } catch(Exception err) {
                 err.printStackTrace();
-                Log.d("SongsRepository", "Fail");
             }
             return;
         }
@@ -158,10 +147,8 @@ public class SongsRepository {
             try {
                 songs = songsFuture.get();
                 allSongs.setValue(songs);
-                Log.d("SongsRepository", "Success");
             } catch(Exception err) {
                 err.printStackTrace();
-                Log.d("SongsRepository", "Fail");
             }
             return;
         }
