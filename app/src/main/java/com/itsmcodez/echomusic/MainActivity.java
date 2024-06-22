@@ -197,8 +197,14 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         if(binding != null && mediaController.getCurrentMediaItem() != null) {
                             // Player progress
-                            binding.progress.setMax((int)mediaController.getDuration());
-                            binding.progress.setProgress((int)mediaController.getCurrentPosition());
+                            String max = "0";
+                            String progress = "0";
+                            if(mediaController.getDuration() > 0 || mediaController.getCurrentPosition() > 0) {
+                                max = String.valueOf(mediaController.getDuration());
+                                progress = String.valueOf(mediaController.getCurrentPosition());
+                            }
+                            binding.progress.setMax(Integer.parseInt(max));
+                            binding.progress.setProgress(Integer.parseInt(progress));
                         }
                         new Handler().postDelayed(this, 1000);
                     }

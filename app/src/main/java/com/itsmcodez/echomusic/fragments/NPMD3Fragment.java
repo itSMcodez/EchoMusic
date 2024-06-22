@@ -357,9 +357,15 @@ public class NPMD3Fragment extends Fragment {
                     public void run() {
                         if(binding != null && mediaController.getCurrentMediaItem() != null) {
                             // Player progress
-                            binding.seekBar.setMax((int)mediaController.getDuration());
+                            String max = "0";
+                            String progress = "0";
+                            if(mediaController.getDuration() > 0 || mediaController.getCurrentPosition() > 0) {
+                                max = String.valueOf(mediaController.getDuration());
+                                progress = String.valueOf(mediaController.getCurrentPosition());
+                            }
+                            binding.seekBar.setMax(Integer.parseInt(max));
                             binding.duration.setText(mediaController.getDuration() <= 0 ? "00:00" : MusicUtils.getReadableDuration(mediaController.getDuration()));
-                            binding.seekBar.setProgress((int)mediaController.getCurrentPosition());
+                            binding.seekBar.setProgress(Integer.parseInt(progress));
                             binding.currentDuration.setText(MusicUtils.getReadableDuration(mediaController.getCurrentPosition()));
                         }
                         new Handler().postDelayed(this, 1000);
