@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -352,11 +351,11 @@ public class NPMD3Fragment extends Fragment {
     
     private void updateProgress() {
         if(mediaController != null) {
+            
             getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if(binding != null && mediaController.getCurrentMediaItem() != null) {
-                            // Player progress
                             String max = "0";
                             String progress = "0";
                             if(mediaController.getDuration() > 0 || mediaController.getCurrentPosition() > 0) {
@@ -364,11 +363,24 @@ public class NPMD3Fragment extends Fragment {
                                 progress = String.valueOf(mediaController.getCurrentPosition());
                             }
                             binding.seekBar.setMax(Integer.parseInt(max));
-                            binding.duration.setText(mediaController.getDuration() <= 0 ? "00:00" : MusicUtils.getReadableDuration(mediaController.getDuration()));
                             binding.seekBar.setProgress(Integer.parseInt(progress));
+                        }
+                        if(binding != null) {
+                        	binding.seekBar.postDelayed(this, 1000);
+                        }
+                    }
+            });
+            
+            getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(binding != null && mediaController.getCurrentMediaItem() != null) {
+                            binding.duration.setText(mediaController.getDuration() <= 0 ? "00:00" : MusicUtils.getReadableDuration(mediaController.getDuration()));
                             binding.currentDuration.setText(MusicUtils.getReadableDuration(mediaController.getCurrentPosition()));
                         }
-                        new Handler().postDelayed(this, 1000);
+                        if(binding != null) {
+                        	binding.duration.postDelayed(this, 1000);
+                        }
                     }
             });
         }

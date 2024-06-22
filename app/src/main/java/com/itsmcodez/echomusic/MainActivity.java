@@ -4,7 +4,6 @@ package com.itsmcodez.echomusic;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -192,11 +191,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateProgress() {
         if(mediaController != null) {
+            
             runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if(binding != null && mediaController.getCurrentMediaItem() != null) {
-                            // Player progress
                             String max = "0";
                             String progress = "0";
                             if(mediaController.getDuration() > 0 || mediaController.getCurrentPosition() > 0) {
@@ -206,7 +205,9 @@ public class MainActivity extends AppCompatActivity {
                             binding.progress.setMax(Integer.parseInt(max));
                             binding.progress.setProgress(Integer.parseInt(progress));
                         }
-                        new Handler().postDelayed(this, 1000);
+                        if(binding != null) {
+                        	binding.progress.postDelayed(this, 1000);
+                        }
                     }
             });
         }
