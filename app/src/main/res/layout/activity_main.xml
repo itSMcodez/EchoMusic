@@ -106,6 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_centerInParent="true"
                     app:indicatorTrackGapSize="0dp"
+                    app:indicatorColor="@color/colorAccent"
                     android:id="@+id/progress"/>
                 
                 <ImageView
