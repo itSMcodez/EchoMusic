@@ -1,5 +1,8 @@
 package com.itsmcodez.echomusic.adapters;
 
+import android.content.res.ColorStateList;
+import androidx.media3.common.MediaItem;
+import com.itsmcodez.echomusic.common.CurrentSong;
 import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,9 +22,11 @@ import com.itsmcodez.echomusic.BaseApplication;
 import com.itsmcodez.echomusic.PlaylistSongsActivity;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.callbacks.OnClickEvents;
+import com.itsmcodez.echomusic.common.OnUpdateCurrentSong;
 import com.itsmcodez.echomusic.databinding.LayoutPlaylistSongItemBinding;
 import com.itsmcodez.echomusic.databinding.LayoutRecyclerviewBinding;
 import com.itsmcodez.echomusic.markups.Adapter;
+import com.itsmcodez.echomusic.markups.Model;
 import com.itsmcodez.echomusic.models.ListOfPlaylistModel;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
@@ -33,14 +38,27 @@ public class PlaylistSongsAdapter extends RecyclerView.Adapter<PlaylistSongsAdap
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<PlaylistSongsModel> songs;
+    private ArrayList<String> songTitles;
     private int playlistPosition;
     private OnClickEvents.OnItemClickListener onItemClickListener;
-
+    private boolean isCurrentSongIndicatorOn = false;
+    private String currentlyPlayedSongTitle = "";
+    private String recentlyPlayedSongTitle = "";
+    private int currentlyPlayedSongPos = -1;
+    private int recentlyPlayedSongPos = -1;
+    private ColorStateList textColors;
+    private CurrentSong currentSong;
+    
     public PlaylistSongsAdapter(Context context, LayoutInflater inflater, int playlistPosition, ArrayList<PlaylistSongsModel> songs) {
         this.context = context;
         this.inflater = inflater;
         this.songs = songs;
         this.playlistPosition = playlistPosition;
+        currentSong = CurrentSong.getInstance();
+        songTitles = new ArrayList<>();
+        for(PlaylistSongsModel song : songs) {
+        	songTitles.add(song.getTitle());
+        }
     }
 
     public static class PlaylistSongsViewHolder extends RecyclerView.ViewHolder {
@@ -67,6 +85,21 @@ public class PlaylistSongsAdapter extends RecyclerView.Adapter<PlaylistSongsAdap
     @Override
     public void onBindViewHolder(PlaylistSongsViewHolder viewHolder, final int position) {
         PlaylistSongsModel song = songs.get(position);
+        
+        // Set active state for current song
+        if(textColors == null) {
+        	textColors = viewHolder.title.getTextColors();
+        }
+        if(currentSong.getCurrentSong() != null) {
+        	if(currentSong.getCurrentSong().mediaMetadata.title.toString().equals(song.getTitle())) {
+                onUpdateCurrentSong.onUpdate(song, position);
+                viewHolder.title.setTextColor(context.getColor(R.color.colorAccent));
+            } else {
+                if(textColors != null) {
+                    viewHolder.title.setTextColor(textColors);
+                }
+            }
+        }
         
         viewHolder.title.setText(" - " + song.getTitle());
         
@@ -161,4 +194,50 @@ public class PlaylistSongsAdapter extends RecyclerView.Adapter<PlaylistSongsAdap
     public void setOnItemClickListener(OnClickEvents.OnItemClickListener onItemClickListener) {
     	this.onItemClickListener = onItemClickListener;
     }
+    
+    /* Now Playing Logic */
+    private void showCurrentSongIndicator(PlaylistSongsModel song, int position) {
+    	if(!isCurrentSongIndicatorOn) {
+            isCurrentSongIndicatorOn = true;
+        }
+        if(currentlyPlayedSongPos == -1) {
+            currentlyPlayedSongPos = position;
+        } else if(currentlyPlayedSongPos != -1 && currentlyPlayedSongPos != position) {
+            recentlyPlayedSongPos = currentlyPlayedSongPos;
+            currentlyPlayedSongPos = position;
+        }
+        if(currentlyPlayedSongTitle.isEmpty()) {
+            currentlyPlayedSongTitle = song.getTitle();
+        } else if(!currentlyPlayedSongTitle.isEmpty() && !currentlyPlayedSongTitle.equals(song.getTitle())) {
+            recentlyPlayedSongTitle = currentlyPlayedSongTitle;
+            currentlyPlayedSongTitle = song.getTitle();
+        }
+    }
+    
+    public OnUpdateCurrentSong onUpdateCurrentSong = new OnUpdateCurrentSong() {
+        
+        @Override
+        public void onUpdate(Model _song, int position) {
+            PlaylistSongsModel song = (PlaylistSongsModel) _song;
+            if(currentSong.getCurrentSong() != null) {
+                if(!isCurrentSongIndicatorOn) {
+                    isCurrentSongIndicatorOn = true;
+                }
+                showCurrentSongIndicator(song, position);
+            }
+        }
+        
+        @Override
+        public void updateCurrentSong(MediaItem song) {
+            isCurrentSongIndicatorOn = true;
+            currentSong.setCurrentSong(song);
+            String songTitle = currentSong.getCurrentSong().mediaMetadata.title.toString();
+            if(songTitles.contains(songTitle)) {
+                int songPos = songTitles.indexOf(songTitle);
+                notifyItemChanged(songPos);
+                notifyDataSetChanged();
+            }
+        }
+        
+    };
 }

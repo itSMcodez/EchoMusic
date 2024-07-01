@@ -7,6 +7,15 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.media3.common.MediaItem;
+import androidx.media3.session.MediaController;
+import androidx.media3.session.SessionToken;
+import android.content.ComponentName;
+import com.itsmcodez.echomusic.services.MusicService;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.itsmcodez.echomusic.common.PlayerStateObserver;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.itsmcodez.echomusic.callbacks.OnPlayerStateChange;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.itsmcodez.echomusic.AlbumArtistSongsActivity;
@@ -20,6 +29,62 @@ public class ArtistsFragment extends Fragment {
     private FragmentArtistsBinding binding;
     private ArtistsAdapter artistsAdapter;
     private ArtistsViewModel artistsViewModel;
+    private MediaController mediaController;
+    private ListenableFuture<MediaController> controllerFuture;
+    private OnPlayerStateChange playerStateCallback;
+    
+    @Override
+    public void onStart() {
+        super.onStart();
+        SessionToken sessionToken = new SessionToken(getContext(), new ComponentName(getContext(), MusicService.class));
+        controllerFuture = new MediaController.Builder(getContext(), sessionToken).buildAsync();
+        controllerFuture.addListener(() -> {
+                if(controllerFuture.isDone()) {
+                    try {
+                        mediaController = controllerFuture.get();
+                        if(mediaController != null && mediaController.getCurrentMediaItem() != null) {
+                            if(artistsAdapter != null) {
+                            	artistsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaController.getCurrentMediaItem());
+                            }
+                        }
+                    } catch(Exception err) {
+                        err.printStackTrace();
+                        mediaController = null;
+                    }
+                }
+        }, MoreExecutors.directExecutor());
+        
+        // Player state callback
+        playerStateCallback = new OnPlayerStateChange() {
+            @Override
+            public void onPlaybackStateChanged(int playbackState) {
+                if(artistsAdapter != null) {
+                    artistsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaController.getCurrentMediaItem());
+                }
+            }
+            
+            @Override
+            public void onMediaItemTransition(MediaItem mediaItem, int reason) {
+                if(artistsAdapter != null) {
+                    artistsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaItem);
+                }
+            }
+            
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                // TODO: Implement this method
+            }
+        };
+        PlayerStateObserver.registerCallback(playerStateCallback);
+    }
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        MediaController.releaseFuture(controllerFuture);
+        PlayerStateObserver.unregisterCallback(playerStateCallback);
+        playerStateCallback = null;
+    }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.media3.common.MediaItem;
+import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.SessionToken;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,7 +33,9 @@ import com.itsmcodez.echomusic.PlayerActivity;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.adapters.ListOfPlaylistAdapter;
 import com.itsmcodez.echomusic.adapters.SongsAdapter;
+import com.itsmcodez.echomusic.callbacks.OnPlayerStateChange;
 import com.itsmcodez.echomusic.common.MediaItemsQueue;
+import com.itsmcodez.echomusic.common.PlayerStateObserver;
 import com.itsmcodez.echomusic.common.SortOrder;
 import com.itsmcodez.echomusic.databinding.FragmentSongsBinding;
 import com.itsmcodez.echomusic.databinding.LayoutRecyclerviewBinding;
@@ -57,6 +60,7 @@ public class SongsFragment extends Fragment {
     private ArrayList<SongsModel> songs = new ArrayList<>();
     private MediaController mediaController;
     private ListenableFuture<MediaController> controllerFuture;
+    private OnPlayerStateChange playerStateCallback;
     
     @Override
     public void onStart() {
@@ -64,22 +68,51 @@ public class SongsFragment extends Fragment {
         SessionToken sessionToken = new SessionToken(getContext(), new ComponentName(getContext(), MusicService.class));
         controllerFuture = new MediaController.Builder(getContext(), sessionToken).buildAsync();
         controllerFuture.addListener(() -> {
-                
                 if(controllerFuture.isDone()) {
                     try {
                         mediaController = controllerFuture.get();
+                        if(mediaController != null && mediaController.getCurrentMediaItem() != null) {
+                            if(songsAdapter != null) {
+                            	songsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaController.getCurrentMediaItem());
+                            }
+                        }
                     } catch(Exception err) {
                         err.printStackTrace();
                         mediaController = null;
                     }
                 }
         }, MoreExecutors.directExecutor());
+        
+        // Player state callback
+        playerStateCallback = new OnPlayerStateChange() {
+            @Override
+            public void onPlaybackStateChanged(int playbackState) {
+                if(songsAdapter != null) {
+                    songsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaController.getCurrentMediaItem());
+                }
+            }
+            
+            @Override
+            public void onMediaItemTransition(MediaItem mediaItem, int reason) {
+                if(songsAdapter != null) {
+                    songsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaItem);
+                }
+            }
+            
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                // TODO: Implement this method
+            }
+        };
+        PlayerStateObserver.registerCallback(playerStateCallback);
     }
     
     @Override
     public void onStop() {
         super.onStop();
         MediaController.releaseFuture(controllerFuture);
+        PlayerStateObserver.unregisterCallback(playerStateCallback);
+        playerStateCallback = null;
     }
     
     @Override
@@ -183,6 +216,8 @@ public class SongsFragment extends Fragment {
                 public void onChanged(ArrayList<SongsModel> allSongs) {
                     songs = allSongs;
                 	songsAdapter = new SongsAdapter(container.getContext(), getLayoutInflater(), allSongs);
+                    binding.recyclerView.setAdapter(songsAdapter);
+                    
                     songsAdapter.setOnPlayNextClickListener((song) -> {
                             mediaController.addMediaItem(mediaController.getCurrentMediaItem() != null ? mediaController.getCurrentMediaItemIndex()+1 : 0, MusicUtils.makeMediaItem(song));
                             if(mediaController.getMediaItemCount() != 0 && mediaController.getCurrentMediaItem() != null) {
@@ -192,7 +227,6 @@ public class SongsFragment extends Fragment {
                             } else MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
                             Toast.makeText(getContext(), getString(R.string.msg_add_song_to_playing_queue_success, song.getTitle()), Toast.LENGTH_SHORT).show();
                     });
-                    binding.recyclerView.setAdapter(songsAdapter);
                     
                     songsAdapter.setOnItemClickListener((view, _song, position) -> {
                             SongsModel song = (SongsModel) _song;

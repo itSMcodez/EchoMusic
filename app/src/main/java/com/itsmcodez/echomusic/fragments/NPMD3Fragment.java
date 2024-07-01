@@ -70,6 +70,9 @@ public class NPMD3Fragment extends Fragment {
                             updateUI(mediaController.getCurrentMediaItem());
                             binding.playPauseBt.setImageDrawable(mediaController.isPlaying() ? getContext().getDrawable(R.drawable.ic_pause_circle) : getContext().getDrawable(R.drawable.ic_play_circle));
                             updateProgress();
+                            if(nowPlayingQueueItemsAdapter != null) {
+                            	nowPlayingQueueItemsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaController.getCurrentMediaItem());
+                            }
                         }
                     } catch(Exception err) {
                         err.printStackTrace();
@@ -91,6 +94,9 @@ public class NPMD3Fragment extends Fragment {
             public void onMediaItemTransition(MediaItem mediaItem, int reason) {
                 updateUI(mediaItem);
                 updateProgress();
+                if(nowPlayingQueueItemsAdapter != null) {
+                    nowPlayingQueueItemsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaItem);
+                }
             }
             
             @Override

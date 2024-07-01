@@ -3,6 +3,7 @@ package com.itsmcodez.echomusic.adapters;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.media3.common.MediaItem;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
@@ -22,9 +24,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itsmcodez.echomusic.BaseApplication;
 import com.itsmcodez.echomusic.R;
 import com.itsmcodez.echomusic.callbacks.OnClickEvents;
+import com.itsmcodez.echomusic.common.CurrentSong;
+import com.itsmcodez.echomusic.common.OnUpdateCurrentSong;
 import com.itsmcodez.echomusic.databinding.LayoutRecyclerviewBinding;
 import com.itsmcodez.echomusic.databinding.LayoutSongItemBinding;
 import com.itsmcodez.echomusic.markups.Adapter;
+import com.itsmcodez.echomusic.markups.Model;
 import com.itsmcodez.echomusic.models.ListOfPlaylistModel;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
@@ -41,17 +46,30 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<SongsModel> songs;
+    private ArrayList<String> songTitles;
     private OnClickEvents.OnItemClickListener onItemClickListener;
     private OnClickEvents.OnItemLongClickListener onItemLongClickListener;
     private SparseBooleanArray selectionMap = new SparseBooleanArray();
     private ArrayList<Integer> selectedIndices = new ArrayList<>();
     private boolean isSelectModeOn = false;
     private int selectedIndex = -1;
+    private boolean isCurrentSongIndicatorOn = false;
+    private String currentlyPlayedSongTitle = "";
+    private String recentlyPlayedSongTitle = "";
+    private int currentlyPlayedSongPos = -1;
+    private int recentlyPlayedSongPos = -1;
+    private ColorStateList textColors;
+    private CurrentSong currentSong;
 
     public SongsAdapter(Context context, LayoutInflater inflater, ArrayList<SongsModel> songs) {
         this.context = context;
         this.inflater = inflater;
         this.songs = songs;
+        currentSong = CurrentSong.getInstance();
+        songTitles = new ArrayList<>();
+        for(SongsModel song : songs) {
+        	songTitles.add(song.getTitle());
+        }
     }
 
     public static class SongsViewHolder extends RecyclerView.ViewHolder {
@@ -92,6 +110,23 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
         // Set itemView active state for selection -> change background to grey if selected or otherwise
         viewHolder.itemView.setActivated(selectionMap.get(position, false));
         viewHolder.itemMenu.setVisibility(selectionMap.get(position, false) ? View.GONE : View.VISIBLE);
+        
+        // Set active state for current song
+        if(textColors == null) {
+        	textColors = viewHolder.title.getTextColors();
+        }
+        if(currentSong.getCurrentSong() != null) {
+        	if(currentSong.getCurrentSong().mediaMetadata.title.toString().equals(song.getTitle())) {
+                onUpdateCurrentSong.onUpdate(song, position);
+                viewHolder.title.setTextColor(context.getColor(R.color.colorAccent));
+                viewHolder.artist.setTextColor(context.getColor(R.color.colorAccent));
+            } else {
+                if(textColors != null) {
+                    viewHolder.title.setTextColor(textColors);
+                    viewHolder.artist.setTextColor(textColors);
+                }
+            }
+        }
         
         viewHolder.title.setText(song.getTitle());
         viewHolder.artist.setText(song.getArtist());
@@ -232,6 +267,56 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
     public boolean isSelectModeOn() {
     	return this.isSelectModeOn;
     }
+    
+    public boolean isCurrentSongIndicatorOn() {
+    	return this.isCurrentSongIndicatorOn;
+    }
+    
+    /* Now Playing Logic */
+    private void showCurrentSongIndicator(SongsModel song, int position) {
+    	if(!isCurrentSongIndicatorOn) {
+            isCurrentSongIndicatorOn = true;
+        }
+        if(currentlyPlayedSongPos == -1) {
+            currentlyPlayedSongPos = position;
+        } else if(currentlyPlayedSongPos != -1 && currentlyPlayedSongPos != position) {
+            recentlyPlayedSongPos = currentlyPlayedSongPos;
+            currentlyPlayedSongPos = position;
+        }
+        if(currentlyPlayedSongTitle.isEmpty()) {
+            currentlyPlayedSongTitle = song.getTitle();
+        } else if(!currentlyPlayedSongTitle.isEmpty() && !currentlyPlayedSongTitle.equals(song.getTitle())) {
+            recentlyPlayedSongTitle = currentlyPlayedSongTitle;
+            currentlyPlayedSongTitle = song.getTitle();
+        }
+    }
+    
+    public OnUpdateCurrentSong onUpdateCurrentSong = new OnUpdateCurrentSong() {
+        
+        @Override
+        public void onUpdate(Model _song, int position) {
+            SongsModel song = (SongsModel) _song;
+            if(currentSong.getCurrentSong() != null) {
+                if(!isCurrentSongIndicatorOn) {
+                    isCurrentSongIndicatorOn = true;
+                }
+                showCurrentSongIndicator(song, position);
+            }
+        }
+        
+        @Override
+        public void updateCurrentSong(MediaItem song) {
+            isCurrentSongIndicatorOn = true;
+            currentSong.setCurrentSong(song);
+            String songTitle = currentSong.getCurrentSong().mediaMetadata.title.toString();
+            if(songTitles.contains(songTitle)) {
+                int songPos = songTitles.indexOf(songTitle);
+                notifyItemChanged(songPos);
+                notifyDataSetChanged();
+            }
+        }
+        
+    };
     
     /* Multiple selection logic */
     @Override
