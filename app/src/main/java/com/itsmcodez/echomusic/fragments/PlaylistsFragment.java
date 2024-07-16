@@ -81,13 +81,13 @@ public class PlaylistsFragment extends Fragment {
         
         // Favourite songs function
         binding.favBt.setOnClickListener(view -> {
-                // Create Favourites playlist if it doesn't exist
-                if(playlistsViewModel.getPlaylists().size() == 0 || !playlistsViewModel.getPlaylists().get(PlaylistUtils.FAVOURITES).getTitle().equals("Favourites")) {
-                    PlaylistsModel favourites = new PlaylistsModel("Favourites", new ArrayList<PlaylistSongsModel>(), 0, 0);
-                    playlistsViewModel.addNewPlaylistAt(favourites, PlaylistUtils.FAVOURITES);
-                }
                 startActivity(new Intent(container.getContext(), PlaylistSongsActivity.class).putExtra("title", "Favourites").putExtra("position", PlaylistUtils.FAVOURITES));
         });
+        // Create Favourites playlist if it doesn't exist
+        if(playlistsViewModel.getPlaylists().size() == 0 || !playlistsViewModel.getPlaylists().get(PlaylistUtils.FAVOURITES).getTitle().equals("Favourites")) {
+            PlaylistsModel favourites = new PlaylistsModel("Favourites", new ArrayList<PlaylistSongsModel>(), 0, 0);
+            playlistsViewModel.addNewPlaylistAt(favourites, PlaylistUtils.FAVOURITES);
+        }
         
         // Observe LiveData
         playlistsViewModel.getAllPlaylists().observe(getViewLifecycleOwner(), new Observer<ArrayList<PlaylistsModel>>(){

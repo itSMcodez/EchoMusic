@@ -24,9 +24,13 @@ public final class MusicUtils {
     
     static {
         // Query favourite songs
-        favouriteSongs = playlistRepo.getPlaylists().get(PlaylistUtils.FAVOURITES).getSongs();
-        for(PlaylistSongsModel song : favouriteSongs) {
-            favSongIds.add(Long.parseLong(song.getSongId()));
+        if(playlistRepo.getPlaylists().size() != 0) {
+            favouriteSongs = playlistRepo.getPlaylists().get(PlaylistUtils.FAVOURITES).getTitle().equals("Favourites") ? playlistRepo.getPlaylists().get(PlaylistUtils.FAVOURITES).getSongs() : new ArrayList<>();
+            if(favouriteSongs.size() != 0) {
+                for(PlaylistSongsModel song : favouriteSongs) {
+                    favSongIds.add(Long.parseLong(song.getSongId()));
+                }
+            }
         }
     }
     
