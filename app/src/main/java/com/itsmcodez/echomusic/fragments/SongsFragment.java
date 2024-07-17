@@ -210,6 +210,10 @@ public class SongsFragment extends Fragment {
         
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext(), RecyclerView.VERTICAL, false));
         
+        binding.nowPlayingFab.setOnClickListener(view -> {
+                binding.recyclerView.scrollToPosition(songsAdapter.getCurrentlyPlayedSongPos());
+        });
+        
         // Observe LiveData
         songsViewModel.getAllSongs().observe(getViewLifecycleOwner(), new Observer<ArrayList<SongsModel>>() {
                 @Override

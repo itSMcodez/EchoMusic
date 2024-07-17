@@ -291,6 +291,10 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
         }
     }
     
+    public int getCurrentlyPlayedSongPos() {
+    	return this.currentlyPlayedSongPos;
+    }
+    
     public OnUpdateCurrentSong onUpdateCurrentSong = new OnUpdateCurrentSong() {
         
         @Override
@@ -311,6 +315,8 @@ OnClickEvents.OnMultiSelectListener, OnClickEvents.OnMultiSelectListener.OnSelec
             String songTitle = currentSong.getCurrentSong().mediaMetadata.title.toString();
             if(songTitles.contains(songTitle)) {
                 int songPos = songTitles.indexOf(songTitle);
+                // make sure current song position is updated
+                currentlyPlayedSongPos = songPos;
                 notifyItemChanged(songPos);
                 notifyDataSetChanged();
             }
