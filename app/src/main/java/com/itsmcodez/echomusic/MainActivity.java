@@ -196,14 +196,16 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if(binding != null && mediaController.getCurrentMediaItem() != null) {
-                            String max = "0";
-                            String progress = "0";
-                            if(mediaController.getDuration() > 0 || mediaController.getCurrentPosition() > 0) {
-                                max = String.valueOf(mediaController.getDuration());
-                                progress = String.valueOf(mediaController.getCurrentPosition());
+                            try {
+                            	String max = String.valueOf(mediaController.getDuration());
+                                String progress = String.valueOf(mediaController.getCurrentPosition());
+                                binding.progress.setMax(Integer.parseInt(max));
+                           		binding.progress.setProgress(Integer.parseInt(progress));
+                            } catch (Exception e) {
+                            	binding.progress.setMax(100);
+                           		binding.progress.setProgress(0);
                             }
-                            binding.progress.setMax(Integer.parseInt(max));
-                            binding.progress.setProgress(Integer.parseInt(progress));
+                            
                         }
                         if(binding != null) {
                         	binding.progress.postDelayed(this, 1000);
