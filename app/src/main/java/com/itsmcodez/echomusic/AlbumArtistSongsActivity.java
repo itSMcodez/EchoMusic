@@ -113,7 +113,7 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(intent.getStringExtra("title"));
         
         // shuffleAllBt logic
-        binding.shuffleAllBt.setOnClickListener(view -> {
+        binding.shuffleAllFab.setOnClickListener(view -> {
                 if(!mediaController.getShuffleModeEnabled()) {
                 	mediaController.setShuffleModeEnabled(true);
                     Toast.makeText(this, getString(R.string.msg_shuffle_on), Toast.LENGTH_SHORT).show();
@@ -122,7 +122,7 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
         });
         
         // playAllBt logic
-        binding.playAllBt.setOnClickListener(view -> {
+        binding.playAllFab.setOnClickListener(view -> {
                 if(mediaController.getShuffleModeEnabled()) {
                 	mediaController.setShuffleModeEnabled(false);
                     Toast.makeText(this, getString(R.string.msg_shuffle_off), Toast.LENGTH_SHORT).show();
