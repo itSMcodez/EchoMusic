@@ -75,12 +75,12 @@ public class PlaylistsFragment extends Fragment {
         binding.recyclerView.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
         
         // Add playlist function
-        binding.addPlaylistBt.setOnClickListener(view -> {
+        binding.addPlaylistFab.setOnClickListener(view -> {
                 showAddPlaylistDialog(container.getContext());
         });
         
         // Favourite songs function
-        binding.favBt.setOnClickListener(view -> {
+        binding.favouritesFab.setOnClickListener(view -> {
                 startActivity(new Intent(container.getContext(), PlaylistSongsActivity.class).putExtra("title", "Favourites").putExtra("position", PlaylistUtils.FAVOURITES));
         });
         // Create Favourites playlist if it doesn't exist
