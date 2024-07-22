@@ -48,7 +48,6 @@ public final class MusicUtils {
     
     public static ArrayList<MediaItem> makeMediaItems(ArrayList<SongsModel> songs) {
     	ArrayList<MediaItem> mediaItems = new ArrayList<>();
-        MediaItemsQueue.setNowPlayingQueue(songs);
         for(SongsModel song : songs) {
             Uri path = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             Uri songUri = ContentUris.withAppendedId(path, Long.parseLong(song.getSongId()));
@@ -69,13 +68,12 @@ public final class MusicUtils {
             .build();
             mediaItems.add(mediaItem);
         }
-        
+        MediaItemsQueue.setNowPlayingQueue(songs);
         return mediaItems;
     }
     
     public static ArrayList<MediaItem> makeMediaItems(ArrayList<PlaylistSongsModel> songs, String tag) {
     	ArrayList<MediaItem> mediaItems = new ArrayList<>();
-        MediaItemsQueue.setNowPlayingQueue(songs, tag);
         for(PlaylistSongsModel song : songs) {
             Uri path = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             Uri songUri = ContentUris.withAppendedId(path, Long.parseLong(song.getSongId()));
@@ -96,7 +94,7 @@ public final class MusicUtils {
             .build();
             mediaItems.add(mediaItem);
         }
-        
+        MediaItemsQueue.setNowPlayingQueue(songs, tag);
         return mediaItems;
     }
     
