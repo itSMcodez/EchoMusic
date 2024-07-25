@@ -31,4 +31,14 @@
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/now_playing_fab"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_gravity="bottom|end"
+        app:srcCompat="@drawable/ic_adjust"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        style="?attr/floatingActionButtonSmallSurfaceStyle"/>
+    
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

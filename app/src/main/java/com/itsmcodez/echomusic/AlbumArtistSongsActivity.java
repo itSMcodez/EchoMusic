@@ -1,5 +1,6 @@
 package com.itsmcodez.echomusic;
 
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,10 +8,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.media3.common.MediaItem;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.SessionToken;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,12 +23,18 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.itsmcodez.echomusic.adapters.ListOfPlaylistAdapter;
 import com.itsmcodez.echomusic.adapters.SongsAdapter;
+import com.itsmcodez.echomusic.callbacks.OnPlayerStateChange;
+import com.itsmcodez.echomusic.common.MediaItemsQueue;
+import com.itsmcodez.echomusic.common.PlayerStateObserver;
+import com.itsmcodez.echomusic.common.SortOrder;
 import com.itsmcodez.echomusic.databinding.ActivityAlbumArtistSongsBinding;
 import com.itsmcodez.echomusic.databinding.LayoutRecyclerviewBinding;
 import com.itsmcodez.echomusic.models.ListOfPlaylistModel;
+import com.itsmcodez.echomusic.models.NowPlayingQueueItemsModel;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.models.PlaylistsModel;
 import com.itsmcodez.echomusic.models.SongsModel;
+import com.itsmcodez.echomusic.preferences.Settings;
 import com.itsmcodez.echomusic.repositories.PlaylistsRepository;
 import com.itsmcodez.echomusic.services.MusicService;
 import com.itsmcodez.echomusic.utils.ArtworkUtils;
@@ -40,6 +49,7 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
     private ArrayList<SongsModel> songs = new ArrayList<>();
     private MediaController mediaController;
     private ListenableFuture<MediaController> controllerFuture;
+    private OnPlayerStateChange playerStateCallback;
     
     @Override
     protected void onStart() {
@@ -51,12 +61,40 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
                 if(controllerFuture.isDone()) {
                     try {
                         mediaController = controllerFuture.get();
+                        if(mediaController != null && mediaController.getCurrentMediaItem() != null) {
+                            if(songsAdapter != null) {
+                            	songsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaController.getCurrentMediaItem());
+                            }
+                        }
                     } catch(Exception err) {
                         err.printStackTrace();
                         mediaController = null;
                     }
                 }
         }, MoreExecutors.directExecutor());
+        
+        // Player state callback
+        playerStateCallback = new OnPlayerStateChange() {
+            @Override
+            public void onPlaybackStateChanged(int playbackState) {
+                if(songsAdapter != null) {
+                    songsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaController.getCurrentMediaItem());
+                }
+            }
+            
+            @Override
+            public void onMediaItemTransition(MediaItem mediaItem, int reason) {
+                if(songsAdapter != null) {
+                    songsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaItem);
+                }
+            }
+            
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                // TODO: Implement this method
+            }
+        };
+        PlayerStateObserver.registerCallback(playerStateCallback);
     }
     
     @Override
@@ -74,6 +112,24 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(intent.getStringExtra("title"));
         
+        // shuffleAllBt logic
+        binding.shuffleAllFab.setOnClickListener(view -> {
+                if(!mediaController.getShuffleModeEnabled()) {
+                	mediaController.setShuffleModeEnabled(true);
+                    Toast.makeText(this, getString(R.string.msg_shuffle_on), Toast.LENGTH_SHORT).show();
+                }
+                mediaController.setMediaItems(MusicUtils.makeMediaItems(songs));
+        });
+        
+        // playAllBt logic
+        binding.playAllFab.setOnClickListener(view -> {
+                if(mediaController.getShuffleModeEnabled()) {
+                	mediaController.setShuffleModeEnabled(false);
+                    Toast.makeText(this, getString(R.string.msg_shuffle_off), Toast.LENGTH_SHORT).show();
+                }
+                mediaController.setMediaItems(MusicUtils.makeMediaItems(songs));
+        });
+        
         // RecyclerView and ViewModel
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         songsViewModel = new ViewModelProvider(this).get(SongsViewModel.class);
@@ -85,12 +141,19 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
                     // filter songs to match album/artist name
                 	ArrayList<SongsModel> filteredList = new ArrayList<>();
                     if(intent.getStringExtra("from").equals("album")) {
+                        // Cover Art
+                        binding.albumArtwork.setImageURI(ArtworkUtils.getArtworkFrom(Long.parseLong(intent.getStringExtra("album_id"))));
+                        if(binding.albumArtwork.getDrawable() == null) {
+                            binding.albumArtwork.setImageDrawable(getDrawable(R.drawable.ic_library_music_outline));
+                        }
                     	for(SongsModel song : allSongs) {
                             if(song.getAlbum().equals(intent.getStringExtra("title"))) {
                                 filteredList.add(song);
                             }
                         }
                     } else if(intent.getStringExtra("from").equals("artist")) {
+                        // Cover Art
+                        binding.albumArtwork.setImageResource(R.drawable.ic_artist_artwork);
                     	for(SongsModel song : allSongs) {
                             if(song.getArtist().equals(intent.getStringExtra("title"))) {
                                 filteredList.add(song);
@@ -111,22 +174,22 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
                     binding.info.setText(getResources().getQuantityString(R.plurals.playlist_songs_count, songs.size(), songs.size()) + " " + MusicUtils.getReadableDuration(songsDuration));
                     
                     songsAdapter = new SongsAdapter(AlbumArtistSongsActivity.this, getLayoutInflater(), songs);
+                    songsAdapter.setOnPlayNextClickListener((song) -> {
+                            mediaController.addMediaItem(mediaController.getCurrentMediaItem() != null ? mediaController.getCurrentMediaItemIndex()+1 : 0, MusicUtils.makeMediaItem(song));
+                            if(mediaController.getMediaItemCount() != 0 && mediaController.getCurrentMediaItem() != null) {
+                                if(MediaItemsQueue.getNowPlayingQueue().size() == 0) {
+                                	MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
+                                } else MediaItemsQueue.getNowPlayingQueue().add(mediaController.getCurrentMediaItemIndex()+1, new NowPlayingQueueItemsModel(song.getTitle()));
+                            } else MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
+                            Toast.makeText(AlbumArtistSongsActivity.this, getString(R.string.msg_add_song_to_playing_queue_success, song.getTitle()), Toast.LENGTH_SHORT).show();
+                    });
                     binding.recyclerView.setAdapter(songsAdapter);
                     
                     songsAdapter.setOnItemClickListener((view, _song, position) -> {
+                            // Update MediaItems
                             mediaController.setMediaItems(MusicUtils.makeMediaItems(songs), position, 0);
-                            if(!mediaController.isPlaying()) {
-                                mediaController.prepare();
-                                mediaController.play();
-                            }
                             startActivity(new Intent(AlbumArtistSongsActivity.this, PlayerActivity.class));
                     });
-                    
-                    // Cover Art
-                    binding.albumArtwork.setImageURI(ArtworkUtils.getArtworkFrom(Long.parseLong(intent.getStringExtra("album_id"))));
-                    if(binding.albumArtwork.getDrawable() == null) {
-                    	binding.albumArtwork.setImageDrawable(getDrawable(R.drawable.ic_library_music_outline));
-                    }
                 }
         });
     }
@@ -135,15 +198,53 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         this.binding = null;
-        if(!mediaController.isPlaying()) {
-        	mediaController.release();
-            stopService(new Intent(this, MusicService.class));
-        }
+    }
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        MediaController.releaseFuture(controllerFuture);
+        PlayerStateObserver.unregisterCallback(playerStateCallback);
+        playerStateCallback = null;
     }
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_activity_album_artist_songs, menu);
+        
+        final String SORT_ORDER = Settings.getSongsSortOrder();
+        switch(SORT_ORDER){
+            
+            case "SORT_ASC" : {
+                menu.findItem(R.id.sort_asc).setChecked(true);
+                songsViewModel.sortSongs(SortOrder.ASCENDING);
+            }
+            break;
+            
+            case "SORT_DESC" : {
+                menu.findItem(R.id.sort_desc).setChecked(true);
+                songsViewModel.sortSongs(SortOrder.DESCENDING);
+            }
+            break;
+            
+            case "SORT_SIZE" : {
+                menu.findItem(R.id.sort_size).setChecked(true);
+                songsViewModel.sortSongs(SortOrder.SIZE);
+            }
+            break;
+            
+            case "SORT_DURATION" : {
+                menu.findItem(R.id.sort_duration).setChecked(true);
+                songsViewModel.sortSongs(SortOrder.DURATION);
+            }
+            break;
+            
+            default: {
+                menu.findItem(R.id.sort_default).setChecked(true);
+                songsViewModel.sortSongs(SortOrder.DEFAULT);
+            }
+        }
+        
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -190,6 +291,67 @@ public class AlbumArtistSongsActivity extends AppCompatActivity {
             });
             
         	return true;
+        }
+        
+        if(item.getItemId() == R.id.add_songs_to_queue_menu_item) {
+        	AlertDialog dialog = new MaterialAlertDialogBuilder(AlbumArtistSongsActivity.this)
+                .setTitle(R.string.add_to_queue)
+                .setMessage(getString(R.string.msg_add_songs_to_playing_queue, songs.size()))
+                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                })
+                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mediaController.addMediaItems(MusicUtils.makeMediaItems(songs));
+                            for(SongsModel song : songs) {
+                                MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
+                            }
+                            Toast.makeText(AlbumArtistSongsActivity.this, getString(R.string.msg_add_songs_to_queue_success, songs.size()), Toast.LENGTH_SHORT).show();
+                        }
+                })
+                .create();
+                dialog.show();
+            
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_desc) {
+        	songsViewModel.sortSongs(SortOrder.DESCENDING);
+            Settings.setSongsSortOrder(SortOrder.DESCENDING);
+            item.setChecked(true);
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_asc) {
+        	songsViewModel.sortSongs(SortOrder.ASCENDING);
+            Settings.setSongsSortOrder(SortOrder.ASCENDING);
+            item.setChecked(true);
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_size) {
+        	songsViewModel.sortSongs(SortOrder.SIZE);
+            Settings.setSongsSortOrder(SortOrder.SIZE);
+            item.setChecked(true);
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_duration) {
+        	songsViewModel.sortSongs(SortOrder.DURATION);
+            Settings.setSongsSortOrder(SortOrder.DURATION);
+            item.setChecked(true);
+            return true;
+        }
+        
+        if(item.getItemId() == R.id.sort_default) {
+        	songsViewModel.sortSongs(SortOrder.DEFAULT);
+            Settings.setSongsSortOrder(SortOrder.DEFAULT);
+            item.setChecked(true);
+            return true;
         }
         
         return super.onOptionsItemSelected(item);

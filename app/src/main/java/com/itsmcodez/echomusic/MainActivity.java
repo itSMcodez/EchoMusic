@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
@@ -13,6 +14,17 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.media3.common.MediaItem;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.session.MediaController;
+import androidx.media3.session.SessionToken;
+import android.content.ComponentName;
+import com.bumptech.glide.Glide;
+import com.itsmcodez.echomusic.callbacks.OnPlayerStateChange;
+import com.itsmcodez.echomusic.common.PlayerStateObserver;
+import com.itsmcodez.echomusic.services.MusicService;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.itsmcodez.echomusic.databinding.ActivityMainBinding;
 import com.itsmcodez.echomusic.fragments.AlbumsFragment;
 import com.itsmcodez.echomusic.fragments.ArtistsFragment;
@@ -21,7 +33,66 @@ import com.itsmcodez.echomusic.fragments.SongsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-
+    private MediaController mediaController;
+    private ListenableFuture<MediaController> controllerFuture;
+    private OnPlayerStateChange playerStateCallback;
+    
+    @Override
+    public void onStart() {
+        super.onStart();
+        SessionToken sessionToken = new SessionToken(this, new ComponentName(this, MusicService.class));
+        controllerFuture = new MediaController.Builder(this, sessionToken).buildAsync();
+        controllerFuture.addListener(() -> {
+                
+                if(controllerFuture.isDone()) {
+                    try {
+                        mediaController = controllerFuture.get();
+                        // update UI if music is being played
+                        if(mediaController != null && mediaController.getCurrentMediaItem() != null) {
+                            updateUI(mediaController.getCurrentMediaItem());
+                            binding.playPauseBt.setImageDrawable(mediaController.isPlaying() ? getDrawable(R.drawable.ic_pause_outline) : getDrawable(R.drawable.ic_play_outline));
+                            updateProgress();
+                        }
+                    } catch(Exception err) {
+                        err.printStackTrace();
+                        mediaController = null;
+                    }
+                }
+        }, MoreExecutors.directExecutor());
+        
+        // Player state callback
+        playerStateCallback = new OnPlayerStateChange() {
+            @Override
+            public void onPlaybackStateChanged(int playbackState) {
+                if(playbackState == ExoPlayer.STATE_READY) {
+                    binding.playPauseBt.setImageDrawable(getDrawable(R.drawable.ic_pause_outline));
+                } else binding.playPauseBt.setImageDrawable(getDrawable(R.drawable.ic_play_outline));
+            }
+            
+            @Override
+            public void onMediaItemTransition(MediaItem mediaItem, int reason) {
+                updateUI(mediaItem);
+                updateProgress();
+            }
+            
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                if(isPlaying) {
+                	binding.playPauseBt.setImageDrawable(getDrawable(R.drawable.ic_pause_outline));
+                } else binding.playPauseBt.setImageDrawable(getDrawable(R.drawable.ic_play_outline));
+            }
+        };
+        PlayerStateObserver.registerCallback(playerStateCallback);
+    }
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        MediaController.releaseFuture(controllerFuture);
+        PlayerStateObserver.unregisterCallback(playerStateCallback);
+        playerStateCallback = null;
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +113,39 @@ public class MainActivity extends AppCompatActivity {
         
         // Mini controller
         binding.miniController.setOnClickListener(view -> {
+                if(mediaController.getMediaItemCount() == 0 && mediaController.getCurrentMediaItem() == null) {
+                    Toast.makeText(this, R.string.msg_select_song_to_play, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 startActivity(new Intent(MainActivity.this, PlayerActivity.class));
+        });
+        
+        // skipNextBt
+        binding.skipNextBt.setOnClickListener(view -> {
+                if(mediaController.getMediaItemCount() == 0 && mediaController.getCurrentMediaItem() == null) {
+                    Toast.makeText(this, R.string.msg_select_song_to_play, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(mediaController.getPlayWhenReady() || mediaController.getMediaItemCount() != 0) {
+                	if(mediaController.hasNextMediaItem()) {
+                		mediaController.seekToNextMediaItem();
+                	}
+                }
+        });
+        
+        // playPauseBt
+        binding.playPauseBt.setOnClickListener(view -> {
+                if(mediaController.getMediaItemCount() == 0 && mediaController.getCurrentMediaItem() == null) {
+                    Toast.makeText(this, R.string.msg_select_song_to_play, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(mediaController.getPlayWhenReady() || mediaController.getMediaItemCount() != 0) {
+                	if(mediaController.isPlaying()) {
+                		mediaController.pause();
+                	} else {
+                        mediaController.play();
+                    }
+                }
         });
         
         // Fragments
@@ -84,6 +187,46 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentHolder, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void updateProgress() {
+        if(mediaController != null) {
+            
+            runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(binding != null && mediaController.getCurrentMediaItem() != null) {
+                            try {
+                            	String max = String.valueOf(mediaController.getDuration());
+                                String progress = String.valueOf(mediaController.getCurrentPosition());
+                                binding.progress.setMax(Integer.parseInt(max));
+                           		binding.progress.setProgress(Integer.parseInt(progress));
+                            } catch (Exception e) {
+                            	binding.progress.setMax(100);
+                           		binding.progress.setProgress(0);
+                            }
+                            
+                        }
+                        if(binding != null) {
+                        	binding.progress.postDelayed(this, 1000);
+                        }
+                    }
+            });
+        }
+    }
+    
+    private void updateUI(MediaItem mediaItem) {
+        if(!binding.title.isSelected()) {
+        	binding.title.setSelected(true);
+        }
+        if(!binding.artist.isSelected()) {
+        	binding.artist.setSelected(true);
+        }
+        binding.title.setText(mediaItem.mediaMetadata.title);
+        binding.artist.setText(mediaItem.mediaMetadata.artist);
+        Glide.with(MainActivity.this).load(mediaItem.mediaMetadata.artworkUri)
+            .error(R.drawable.ic_music_note_outline)
+            .into(binding.albumArtwork);
     }
     
     @Override

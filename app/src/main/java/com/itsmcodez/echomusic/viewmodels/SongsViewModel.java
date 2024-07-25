@@ -1,6 +1,7 @@
 package com.itsmcodez.echomusic.viewmodels;
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
+import com.itsmcodez.echomusic.common.SortOrder;
 import com.itsmcodez.echomusic.repositories.SongsRepository;
 import java.util.ArrayList;
 import com.itsmcodez.echomusic.models.SongsModel;
@@ -26,5 +27,11 @@ public class SongsViewModel extends AndroidViewModel {
     
     public MutableLiveData<ArrayList<SongsModel>> getAllSongs() {
     	return this.allSongs;
+    }
+    
+    public void sortSongs(SortOrder sortOrder) {
+    	songsRepository.sortSongs(sortOrder);
+        songs = songsRepository.getSongs();
+        allSongs = songsRepository.getAllSongs();
     }
 }

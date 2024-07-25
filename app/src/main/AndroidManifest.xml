@@ -12,10 +12,15 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MANAGE_MEDIA"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
     
     <application 
         android:name="BaseApplication"
         android:appCategory="audio"
+        android:largeHeap="true"
+        android:usesCleartextTraffic="true"
         android:allowBackup="true" 
         android:icon="@mipmap/ic_launcher" 
         android:roundIcon="@mipmap/ic_launcher" 
@@ -81,6 +86,10 @@
             android:launchMode="singleTop">
             
         </activity>
+        
+        <activity
+            android:name="CrashHandlerActivity"
+            android:exported="true"/>
         
     </application>
 </manifest>

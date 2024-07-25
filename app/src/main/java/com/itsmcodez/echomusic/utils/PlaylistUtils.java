@@ -12,6 +12,7 @@ import java.util.Collections;
 
 public final class PlaylistUtils {
     private static ArrayList<PlaylistsModel> allPlaylists;
+    public static int FAVOURITES = 0;
     
     public static ArrayList<PlaylistsModel> getAllPlaylists(Application application) {
     	allPlaylists = getPlaylistsFromDB(application);
@@ -44,6 +45,10 @@ public final class PlaylistUtils {
     
     public static void addSongToPlaylistAt(Application application, PlaylistSongsModel song, int position) {
     	allPlaylists = getPlaylistsFromDB(application);
+        if((position == FAVOURITES && allPlaylists.size() == 0) || (position == FAVOURITES && allPlaylists.size() != 0 && !allPlaylists.get(FAVOURITES).getTitle().equals("Favourites"))) {
+        	PlaylistsModel favourites = new PlaylistsModel("Favourites", new ArrayList<PlaylistSongsModel>(), 0, 0);
+            addNewPlaylistAt(application, favourites, FAVOURITES);
+        }
         ArrayList<PlaylistSongsModel> songs = allPlaylists.get(position).getSongs() != null ? allPlaylists.get(position).getSongs() : new ArrayList<>();
         ArrayList<String> titles = new ArrayList<>();
         for(PlaylistSongsModel _song : songs) {
@@ -55,6 +60,11 @@ public final class PlaylistUtils {
             songs.add(song);
             Toast.makeText(application, application.getString(R.string.msg_add_to_playlist_success, song.getTitle(), allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
         }
+        
+        // clear @titles to reduce memory usage
+        titles.clear();
+        titles = null;
+        
         var playlistDuration = 0l;
         var sum = 0l;
         for(PlaylistSongsModel _song : songs) {
@@ -120,6 +130,11 @@ public final class PlaylistUtils {
             }
             songsAdded++;
         }
+        
+        // clear @titles to reduce memory usage
+        titles.clear();
+        titles = null;
+        
         Toast.makeText(application, application.getString(R.string.msg_add_songs_to_playlist_success, songsAdded, allPlaylists.get(position).getTitle()), Toast.LENGTH_LONG).show();
         var playlistDuration = 0l;
         var sum = 0l;

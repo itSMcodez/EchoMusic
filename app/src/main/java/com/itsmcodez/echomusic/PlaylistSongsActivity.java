@@ -1,5 +1,6 @@
 package com.itsmcodez.echomusic;
 
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.media3.common.MediaItem;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.SessionToken;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -20,7 +22,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.itsmcodez.echomusic.adapters.PlaylistSongsAdapter;
+import com.itsmcodez.echomusic.callbacks.OnPlayerStateChange;
+import com.itsmcodez.echomusic.common.MediaItemsQueue;
+import com.itsmcodez.echomusic.common.PlayerStateObserver;
 import com.itsmcodez.echomusic.databinding.ActivityPlaylistSongsBinding;
+import com.itsmcodez.echomusic.models.NowPlayingQueueItemsModel;
 import com.itsmcodez.echomusic.models.PlaylistSongsModel;
 import com.itsmcodez.echomusic.services.MusicService;
 import com.itsmcodez.echomusic.utils.MusicUtils;
@@ -32,9 +38,11 @@ import java.util.Collections;
 public class PlaylistSongsActivity extends AppCompatActivity {
     private ActivityPlaylistSongsBinding binding;
     private PlaylistSongsAdapter playlistSongsAdapter;
+    private ArrayList<PlaylistSongsModel> songs = new ArrayList<>();
     private static PlaylistSongsViewModel playlistSongsViewModel;
     private MediaController mediaController;
     private ListenableFuture<MediaController> controllerFuture;
+    private OnPlayerStateChange playerStateCallback;
     
     @Override
     protected void onStart() {
@@ -46,12 +54,40 @@ public class PlaylistSongsActivity extends AppCompatActivity {
                 if(controllerFuture.isDone()) {
                     try {
                         mediaController = controllerFuture.get();
+                        if(mediaController != null && mediaController.getCurrentMediaItem() != null) {
+                            if(playlistSongsAdapter != null) {
+                            	playlistSongsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaController.getCurrentMediaItem());
+                            }
+                        }
                     } catch(Exception err) {
                         err.printStackTrace();
                         mediaController = null;
                     }
                 }
         }, MoreExecutors.directExecutor());
+        
+        // Player state callback
+        playerStateCallback = new OnPlayerStateChange() {
+            @Override
+            public void onPlaybackStateChanged(int playbackState) {
+                if(playlistSongsAdapter != null) {
+                    playlistSongsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaController.getCurrentMediaItem());
+                }
+            }
+            
+            @Override
+            public void onMediaItemTransition(MediaItem mediaItem, int reason) {
+                if(playlistSongsAdapter != null) {
+                    playlistSongsAdapter.onUpdateCurrentSong.updateCurrentSong(mediaItem);
+                }
+            }
+            
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                // TODO: Implement this method
+            }
+        };
+        PlayerStateObserver.registerCallback(playerStateCallback);
     }
     
     @Override
@@ -64,6 +100,24 @@ public class PlaylistSongsActivity extends AppCompatActivity {
         // ActionBar
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
+        // shuffleAllBt logic
+        binding.shuffleAllFab.setOnClickListener(view -> {
+                if(!mediaController.getShuffleModeEnabled()) {
+                	mediaController.setShuffleModeEnabled(true);
+                    Toast.makeText(this, getString(R.string.msg_shuffle_on), Toast.LENGTH_SHORT).show();
+                }
+                mediaController.setMediaItems(MusicUtils.makeMediaItems(songs, "Playlist songs"));
+        });
+        
+        // playAllBt logic
+        binding.playAllFab.setOnClickListener(view -> {
+                if(mediaController.getShuffleModeEnabled()) {
+                	mediaController.setShuffleModeEnabled(false);
+                    Toast.makeText(this, getString(R.string.msg_shuffle_off), Toast.LENGTH_SHORT).show();
+                }
+                mediaController.setMediaItems(MusicUtils.makeMediaItems(songs, "Playlist songs"));
+        });
         
         // Intent keys
         Intent intent = getIntent();
@@ -79,16 +133,14 @@ public class PlaylistSongsActivity extends AppCompatActivity {
         playlistSongsViewModel.getAllSongs(playlistPosition).observe(this, new Observer<ArrayList<PlaylistSongsModel>>(){
                 @Override
                 public void onChanged(ArrayList<PlaylistSongsModel> allSongs) {
-                    
+                    // get playlist songs
+                    songs = allSongs;
                 	playlistSongsAdapter = new PlaylistSongsAdapter(PlaylistSongsActivity.this, getLayoutInflater(), playlistPosition, allSongs);
                     binding.recyclerView.setAdapter(playlistSongsAdapter);
                     
                     playlistSongsAdapter.setOnItemClickListener((view, _song, position) -> {
+                            // Update MediaItems
                             mediaController.setMediaItems(MusicUtils.makeMediaItems(allSongs, "Playlist Songs"), position, 0);
-                            if(!mediaController.isPlaying()) {
-                                mediaController.prepare();
-                                mediaController.play();
-                            }
                             startActivity(new Intent(PlaylistSongsActivity.this, PlayerActivity.class));
                     });
                     
@@ -121,7 +173,7 @@ public class PlaylistSongsActivity extends AppCompatActivity {
                                 playlistSongsViewModel.swapPlaylistSongPosAt(playlistPosition, draggedItemIndex, targetIndex);
                                 // Update adapter's contents after swapping 
                                 Collections.swap(allSongs, draggedItemIndex, targetIndex);
-                                playlistSongsAdapter.notifyItemMoved(draggedItemIndex, targetIndex);
+                                recyclerView.getAdapter().notifyItemMoved(draggedItemIndex, targetIndex);
                                 return true;
                             }
                             
@@ -141,10 +193,14 @@ public class PlaylistSongsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         this.binding = null;
-        if(!mediaController.isPlaying()) {
-        	mediaController.release();
-            stopService(new Intent(this, MusicService.class));
-        }
+    }
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        MediaController.releaseFuture(controllerFuture);
+        PlayerStateObserver.unregisterCallback(playerStateCallback);
+        playerStateCallback = null;
     }
     
     @Override
@@ -157,7 +213,28 @@ public class PlaylistSongsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         
         if(item.getItemId() == R.id.add_pl_songs_to_queue_menu_item) {
-        	
+            AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.add_to_queue)
+            .setMessage(getString(R.string.msg_add_songs_to_playing_queue, songs.size()))
+            .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener(){
+                @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+            })
+            .setPositiveButton(R.string.add, new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mediaController.addMediaItems(MusicUtils.makeMediaItems(songs, "Playlist songs"));
+                        for(PlaylistSongsModel song : songs) {
+                            MediaItemsQueue.getNowPlayingQueue().add(new NowPlayingQueueItemsModel(song.getTitle()));
+                        }
+                        Toast.makeText(PlaylistSongsActivity.this, getString(R.string.msg_add_songs_to_queue_success, songs.size()), Toast.LENGTH_SHORT).show();
+                    }
+            })
+            .create();
+            dialog.show();
+            
             return true;
         }
         

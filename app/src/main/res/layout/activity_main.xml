@@ -58,8 +58,9 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:singleLine="true"
-                android:ellipsize="end"
-                android:text="Song title"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:text="@string/msg_select_song_to_play"
                 android:typeface="serif"
                 android:textStyle="bold"
                 android:id="@+id/title" />
@@ -68,8 +69,9 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:singleLine="true"
-                android:ellipsize="end"
-                android:text="Artist"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:text="@string/msg_select_song_to_play"
                 android:typeface="sans"
                 android:id="@+id/artist" />
             
@@ -103,6 +105,8 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_centerInParent="true"
+                    app:indicatorTrackGapSize="0dp"
+                    app:indicatorColor="@color/colorAccent"
                     android:id="@+id/progress"/>
                 
                 <ImageView
